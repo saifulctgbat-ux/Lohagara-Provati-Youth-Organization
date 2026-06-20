@@ -152,6 +152,87 @@ tr:hover td{background:#f8fafc;cursor:pointer}
 footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);padding:12px 18px;text-align:center;color:rgba(255,255,255,.28);font-size:10px;font-family:'Inter',sans-serif}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+
+/* ══ NEW: TOAST ══ */
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--n);color:var(--gl);padding:10px 18px;border-radius:30px;font-size:12.5px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:300;opacity:0;pointer-events:none;transition:all .3s;font-family:'Hind Siliguri',sans-serif;border:1px solid rgba(212,160,23,.35)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ══ NEW: PRINT BUTTON ══ */
+.pbtn{background:transparent;border:1.5px solid var(--bd);color:var(--n);border-radius:9px;padding:8px 12px;font-family:'Hind Siliguri',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.pbtn:hover{background:var(--n);color:var(--gl);border-color:var(--n)}
+.actions-row{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+
+/* ══ NEW: LIST SEARCH/FILTER ══ */
+.lf-bar{display:flex;gap:8px;padding:12px 15px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.lf-in{flex:1;min-width:140px;padding:9px 12px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Hind Siliguri',sans-serif;font-size:13px;color:var(--n);background:var(--lt)}
+.lf-in:focus{outline:none;border-color:var(--nm);background:#fff}
+.lf-sel{padding:9px 10px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Hind Siliguri',sans-serif;font-size:12px;color:var(--n);background:var(--lt)}
+.lf-count{font-size:10.5px;color:var(--sl);padding:8px 15px 0;font-family:'Inter',sans-serif}
+
+/* ══ NEW: MATURITY TAB ══ */
+.mat-hero{background:linear-gradient(135deg,var(--n),var(--nm) 55%,var(--g));border-radius:16px;padding:22px 19px;text-align:center;margin-bottom:13px;box-shadow:0 8px 32px rgba(15,32,68,.3);position:relative;overflow:hidden}
+.mat-hero::before{content:'';position:absolute;top:-40%;right:-15%;width:220px;height:220px;background:radial-gradient(circle,rgba(212,160,23,.25),transparent 70%);border-radius:50%}
+.mat-eyebrow{color:rgba(255,255,255,.55);font-size:10.5px;font-weight:600;letter-spacing:1px;font-family:'Inter',sans-serif;position:relative}
+.mat-figure{color:var(--gl);font-size:30px;font-weight:800;font-family:'Inter',sans-serif;letter-spacing:-.5px;margin:6px 0 4px;position:relative}
+.mat-sub{color:rgba(255,255,255,.65);font-size:11.5px;position:relative}
+.mat-progress-wrap{margin-top:16px;position:relative}
+.mat-progress-bar{height:8px;background:rgba(255,255,255,.15);border-radius:6px;overflow:hidden}
+.mat-progress-fill{height:100%;background:linear-gradient(90deg,var(--g),var(--gl));border-radius:6px;transition:width .6s ease}
+.mat-progress-label{display:flex;justify-content:space-between;color:rgba(255,255,255,.5);font-size:9.5px;margin-top:5px;font-family:'Inter',sans-serif}
+
+.mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+@media(max-width:420px){.mat-grid{grid-template-columns:1fr}}
+.mat-card{background:#fff;border-radius:12px;padding:13px;border:1px solid var(--bd);box-shadow:0 2px 8px rgba(15,32,68,.06)}
+.mat-card-label{font-size:10px;color:var(--sl);font-weight:500;margin-bottom:4px}
+.mat-card-val{font-size:16px;font-weight:800;color:var(--n);font-family:'Inter',sans-serif}
+.mat-card-val.gold{color:var(--g)}
+
+.mat-personal{background:linear-gradient(135deg,var(--gp),#fff);border:1.5px solid var(--g);border-radius:14px;padding:16px;margin-top:4px}
+.mat-personal-title{font-size:12.5px;font-weight:700;color:var(--n);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.mat-personal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(212,160,23,.4)}
+.mat-personal-row:last-child{border-bottom:none}
+.mat-personal-row span:first-child{font-size:11.5px;color:var(--sl)}
+.mat-personal-row span:last-child{font-size:13.5px;font-weight:700;color:var(--n);font-family:'Inter',sans-serif}
+.mat-personal-row .hl{color:#92400e;font-size:16px}
+
+/* ══ NEW: LOAN DETAIL CARD EXPANSION ══ */
+.loan-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd)}
+.ld-item{font-size:9.5px;color:var(--sl)}
+.ld-item b{display:block;font-size:11px;color:var(--n);font-weight:700;margin-top:1px;font-family:'Inter',sans-serif}
+.inst-frac{font-size:9px;color:var(--sl);font-family:'Inter',sans-serif;margin-top:2px}
+.remark-box{font-size:10px;color:#92400e;background:var(--gp);padding:6px 9px;border-radius:7px;margin-top:8px;line-height:1.5}
+
+/* ══ NEW: EXPENSE TABLE WITH DESC ══ */
+.exp-desc{font-size:9.5px;color:var(--sl);font-style:italic}
+
+/* ══ NEW: RECON TABLE ══ */
+.recon-split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);border-radius:10px;overflow:hidden;margin-top:4px}
+@media(max-width:420px){.recon-split{grid-template-columns:1fr}}
+.recon-col{background:#fff;padding:13px}
+.recon-col-title{font-size:11px;font-weight:700;color:var(--n);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;font-family:'Inter',sans-serif}
+.recon-row{display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px;border-bottom:1px solid var(--lt)}
+.recon-row span:last-child{font-weight:700;color:var(--n);font-family:'Inter',sans-serif}
+.recon-total{display:flex;justify-content:space-between;padding:9px 0 0;margin-top:5px;border-top:2px solid var(--n);font-size:12.5px;font-weight:800;color:var(--n)}
+.recon-balanced{text-align:center;padding:11px;background:var(--grb);color:var(--gr);font-weight:700;font-size:12.5px;border-radius:9px;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+
+/* ══ NEW: TAB SCROLL (9 tabs now) ══ */
+.tabs{flex-wrap:nowrap}
+.tb{min-width:auto;padding:8px 10px;font-size:10.8px}
+
+/* ══ NEW: skeleton / empty state ══ */
+.empty-state{text-align:center;padding:30px 15px;color:var(--sl);font-size:12.5px}
+.empty-state-icon{font-size:30px;margin-bottom:8px;opacity:.5}
+
+/* ══ PRINT STYLES ══ */
+@media print{
+  .hd,.tabs,.actions-row,footer,.sw{display:none!important}
+  body{background:#fff!important}
+  .tp{display:none!important}
+  .tp.print-active{display:block!important}
+  .card{box-shadow:none;border:1px solid #ccc}
+  .main{padding:0;max-width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -177,7 +258,9 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
     <button class="tb" onclick="tab('monthly')">📅 মাসিক</button>
     <button class="tb" onclick="tab('cng')">🚗 CNG</button>
     <button class="tb" onclick="tab('loan')">🏦 লোন</button>
+    <button class="tb" onclick="tab('maturity')">🎯 মেয়াদপূর্তি</button>
     <button class="tb" onclick="tab('pl')">📉 P&L</button>
+    <button class="tb" onclick="tab('expense')">💸 খরচ</button>
     <button class="tb" onclick="tab('list')">👥 তালিকা</button>
   </div>
 
@@ -260,6 +343,22 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
         </div>
       </div>
 
+      <div class="cb" style="padding-top:0">
+        <div class="mat-personal" style="margin-top:13px">
+          <div class="mat-personal-title">🎯 মেয়াদপূর্তিতে আনুমানিক প্রাপ্য (৬০ মাস)</div>
+          <div class="mat-personal-row">
+            <span>বর্তমান পর্যন্ত জমা</span>
+            <span id="m-current-dep">—</span>
+          </div>
+          <div class="mat-personal-row">
+            <span>মেয়াদপূর্তিতে আনুমানিক মোট প্রাপ্য</span>
+            <span class="hl" id="m-final-recv">—</span>
+          </div>
+        </div>
+        <div class="actions-row">
+          <button class="pbtn" onclick="printMember()">🖨️ স্টেটমেন্ট প্রিন্ট / PDF</button>
+        </div>
+      </div>
     </div><!-- /mc -->
   </div>
 
@@ -300,6 +399,27 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
         </table>
       </div>
     </div>
+
+    <!-- NEW: Fund Reconciliation -->
+    <div class="card">
+      <div class="ch"><span>🧮</span><span class="cht">ফান্ড রিকনসিলিয়েশন</span><span class="chr">Sources vs Deployment</span></div>
+      <div class="cb">
+        <div class="recon-split">
+          <div class="recon-col">
+            <div class="recon-col-title">আয়ের উৎস</div>
+            <div id="recon-income"></div>
+            <div class="recon-total"><span>মোট আয়</span><span id="recon-total-income">—</span></div>
+          </div>
+          <div class="recon-col">
+            <div class="recon-col-title">ফান্ড বিনিয়োগ</div>
+            <div id="recon-deployment"></div>
+            <div class="recon-total"><span>মোট বিনিয়োগ</span><span id="recon-total-deployment">—</span></div>
+          </div>
+        </div>
+        <div class="recon-balanced">✔ পুরোপুরি মিলেছে · BALANCED</div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="ch"><span>🏛</span><span class="cht">সংগঠন বিবরণ</span></div>
       <div class="cb">
@@ -356,7 +476,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
       <div>
         <div class="kbl">মোট লোন বিতরণ</div>
         <div class="kbv" id="loan-invest">—</div>
-        <div class="kbs">১৮টি লোন · ৪৩ জন সদস্য</div>
+        <div class="kbs">১৮টি লোন · ১৬ জন সদস্য · ১৮% সুদ হার</div>
       </div>
       <div>
         <div class="kbb" id="loan-collected-badge">আদায়: —</div>
@@ -364,6 +484,66 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
       </div>
     </div>
     <div class="cng-grid" id="loangrid"></div>
+  </div>
+
+  <!-- ══ MATURITY (NEW) ══ -->
+  <div class="tp" id="tp-maturity">
+    <div class="mat-hero">
+      <div class="mat-eyebrow">৬০ মাস মেয়াদ শেষে প্রজেক্টেড মোট পেআউট</div>
+      <div class="mat-figure" id="mat-payout">—</div>
+      <div class="mat-sub">বর্তমান লাভের হার অনুযায়ী অনুমান · ১২৫টি শেয়ার</div>
+      <div class="mat-progress-wrap">
+        <div class="mat-progress-bar"><div class="mat-progress-fill" id="mat-progress-fill" style="width:0%"></div></div>
+        <div class="mat-progress-label">
+          <span id="mat-progress-text">৩৭ / ৬০ মাস সম্পন্ন</span>
+          <span id="mat-progress-pct">62%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-grid">
+      <div class="mat-card">
+        <div class="mat-card-label">বর্তমান শেয়ার মূল্য (শুধু জমা)</div>
+        <div class="mat-card-val" id="mat-current-share">—</div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-card-label">বর্তমান শেয়ার মূল্য (লাভসহ)</div>
+        <div class="mat-card-val gold" id="mat-current-total-share">—</div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-card-label">প্রতি শেয়ার লাভ (এ পর্যন্ত)</div>
+        <div class="mat-card-val" id="mat-profit-per-share">—</div>
+      </div>
+      <div class="mat-card">
+        <div class="mat-card-label">প্রজেক্টেড চূড়ান্ত শেয়ার মূল্য</div>
+        <div class="mat-card-val gold" id="mat-final-share">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span>📐</span><span class="cht">হিসাবের ভিত্তি</span></div>
+      <div class="cb">
+        <table class="inf">
+          <tr><td>মোট প্রকৃত সদস্য আদায়</td><td id="mat-total-collection">—</td></tr>
+          <tr><td>CNG/লোন থেকে লাভ</td><td id="mat-cng-loan-profit">—</td></tr>
+          <tr><td>জরিমানা আদায়</td><td id="mat-fine">—</td></tr>
+          <tr><td>DPS+FDR+অন্যান্য বিনিয়োগ লাভ</td><td id="mat-invest-profit">—</td></tr>
+          <tr><td>বিয়োগ: মোট খরচ</td><td style="color:var(--rd)" id="mat-expense">—</td></tr>
+          <tr><td style="font-weight:700;color:var(--n)">নিট সংগঠন ফান্ড</td><td style="font-weight:700;color:var(--n)" id="mat-net-fund">—</td></tr>
+          <tr><td>মোট শেয়ার সংখ্যা</td><td id="mat-shares">১২৫</td></tr>
+          <tr><td>বণ্টনযোগ্য নিট লাভ</td><td id="mat-distributable">—</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="mat-personal">
+      <div class="mat-personal-title">🔍 আপনার সদস্য নম্বর দিয়ে আনুমানিক প্রাপ্য জানুন</div>
+      <div class="srow" style="margin-bottom:0">
+        <input class="sin" id="mat-minput" type="number" placeholder="সদস্য নম্বর লিখুন" min="1" inputmode="numeric">
+        <button class="sbt" onclick="lookupMaturity()">দেখুন</button>
+      </div>
+      <div id="mat-personal-result"></div>
+    </div>
   </div>
 
   <!-- ══ P&L ══ -->
@@ -395,10 +575,53 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
     </div>
   </div>
 
+  <!-- ══ EXPENSE (NEW) ══ -->
+  <div class="tp" id="tp-expense">
+    <div class="kban">
+      <div>
+        <div class="kbl">মোট পরিচালনা ব্যয়</div>
+        <div class="kbv" id="exp-total">—</div>
+        <div class="kbs">জুন ২০২৩ – জুন ২০২৬</div>
+      </div>
+      <div class="kbb">৬ অর্থবছর</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span>💸</span><span class="cht">খরচের বিস্তারিত বিবরণ</span></div>
+      <div class="cb" style="padding:0">
+        <div class="tw">
+          <table>
+            <thead><tr><th>বছর</th><th>মাস</th><th>বিবরণ</th><th>পরিমাণ</th></tr></thead>
+            <tbody id="exptbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><span>📊</span><span class="cht">বছরভিত্তিক সারসংক্ষেপ</span></div>
+      <div class="cb" style="padding:0">
+        <div class="tw">
+          <table>
+            <thead><tr><th>বছর</th><th>মোট খরচ</th></tr></thead>
+            <tbody id="expyeartbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ LIST ══ -->
   <div class="tp" id="tp-list">
-    <div class="card">
-      <div class="ch"><span>👥</span><span class="cht">সদস্য তালিকা</span><span class="chr">৭৭ জন</span></div>
+    <div class="card" style="margin-bottom:13px">
+      <div class="ch"><span>👥</span><span class="cht">সদস্য তালিকা</span><span class="chr" id="list-count">৭৭ জন</span></div>
+      <div class="lf-bar">
+        <input class="lf-in" id="lf-search" type="text" placeholder="নাম দিয়ে খুঁজুন..." oninput="renderList()">
+        <select class="lf-sel" id="lf-filter" onchange="renderList()">
+          <option value="all">সকল সদস্য</option>
+          <option value="due">শুধু বকেয়া</option>
+          <option value="advance">শুধু অগ্রিম</option>
+          <option value="clear">পরিশোধিত</option>
+        </select>
+      </div>
       <div class="cb" style="padding:0">
         <div class="tw">
           <table>
@@ -406,37 +629,54 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
             <tbody id="ltbody"></tbody>
           </table>
         </div>
+        <div class="empty-state" id="list-empty" style="display:none">
+          <div class="empty-state-icon">🔍</div>
+          <div>কোনো সদস্য পাওয়া যায়নি</div>
+        </div>
       </div>
     </div>
   </div>
 
 </div>
 
+<div class="toast" id="toast"></div>
+
 <footer>
   লোহাগাড়া প্রভাতী যুব সংগঠন · সভাপতি: Saiful Islam · Bank Asia PLC · Kamar Pukur Par, Uzir Hat, Lohagara, Chittagong<br>
   <span style="opacity:.55">Data Source: Lohagara_Provati_Youth_Organization_DASHBOARD (FV).xlsx · Google Drive Synced</span>
 </footer>
 
+
 <script>
-const MEMBERS = {"1": {"id": 1, "name": "Monjurul Islam", "mobile": "01814824030", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 300, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "2": {"id": 2, "name": "Saiful Islam", "mobile": "01816724075", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "3": {"id": 3, "name": "Mohammad Tawhidul Islam", "mobile": "01846506898", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "4": {"id": 4, "name": "Amanat Khan", "mobile": "966551311461", "shares": 5, "entry_fee": 500, "total_deposit": 185000, "total_fine": 0, "expected": 185000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "5": {"id": 5, "name": "Nurunnabi Hosen Tanzid", "mobile": "01838848678", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "6": {"id": 6, "name": "Jashim Uddin", "mobile": "966538760537", "shares": 2, "entry_fee": 200, "total_deposit": 76000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 2000, "advance_months": 1}, "7": {"id": 7, "name": "Shibu Sankar Karmaker", "mobile": "01885946523", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "8": {"id": 8, "name": "Monsur", "mobile": "01608632799", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "9": {"id": 9, "name": "Monjur Alam", "mobile": "01811938007", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "10": {"id": 10, "name": "Rupal Kanti Karmaker", "mobile": "01812934934", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "11": {"id": 11, "name": "Yousof", "mobile": "01817380321", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "12": {"id": 12, "name": "Arjun Kanti Karmaker", "mobile": "01813143128", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "13": {"id": 13, "name": "Abdul Jabber", "mobile": "01814941801", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "14": {"id": 14, "name": "Mohammad Helal Uddin", "mobile": "01819700976", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "15": {"id": 15, "name": "Abul Kashem", "mobile": "01871777022", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "16": {"id": 16, "name": "Uzzal Karmaker", "mobile": "01724266205", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "17": {"id": 17, "name": "Jahedul Islam", "mobile": "971562765681", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "18": {"id": 18, "name": "Mohammad Alamgir", "mobile": "01885004312", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "19": {"id": 19, "name": "Kafil Uddin", "mobile": "966534770192", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "20": {"id": 20, "name": "Mohammudul Hoque", "mobile": "01816821801", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "21": {"id": 21, "name": "Nurul Amin", "mobile": "01820989105", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "22": {"id": 22, "name": "Abul Kashem", "mobile": "01873812598", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 150, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "23": {"id": 23, "name": "Belal Uddin", "mobile": "01869732349", "shares": 1, "entry_fee": 100, "total_deposit": 36000, "total_fine": 600, "expected": 37000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0}, "24": {"id": 24, "name": "Md. Helal Uddin", "mobile": "01860493163", "shares": 1, "entry_fee": 100, "total_deposit": 34000, "total_fine": 1500, "expected": 37000, "due_amount": 3000, "due_months": 3, "advance_amount": 0, "advance_months": 0}, "25": {"id": 25, "name": "Md.Hamid", "mobile": "01870876309", "shares": 1, "entry_fee": 100, "total_deposit": 38000, "total_fine": 150, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 1000, "advance_months": 1}, "26": {"id": 26, "name": "Samsul Alam", "mobile": "01865394799", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 150, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "27": {"id": 27, "name": "Riad Hossen", "mobile": "01882217274", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "28": {"id": 28, "name": "Md. Sohel Islam", "mobile": "01858538010", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "29": {"id": 29, "name": "Idrish Alam", "mobile": "01858538010", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "30": {"id": 30, "name": "Jahed", "mobile": "966562024068", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "31": {"id": 31, "name": "Sahidul Islam", "mobile": "966549955548", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "32": {"id": 32, "name": "Md. Sohel Uddin", "mobile": "01822020050", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 900, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "33": {"id": 33, "name": "Mohammad Faruk", "mobile": "01831797810", "shares": 1, "entry_fee": 100, "total_deposit": 36000, "total_fine": 600, "expected": 37000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0}, "34": {"id": 34, "name": "Didarul Islam", "mobile": "971562663270", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "35": {"id": 35, "name": "Mohammad Fahim", "mobile": "01873808231", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "36": {"id": 36, "name": "Delower Hossain", "mobile": "971561572487", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "37": {"id": 37, "name": "Abdul Malek", "mobile": "01879352117", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "38": {"id": 38, "name": "Khalil Uddin", "mobile": "01871777022", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "39": {"id": 39, "name": "Mohammad Abul Hashem", "mobile": "01873807617", "shares": 2, "entry_fee": 200, "total_deposit": 70000, "total_fine": 1000, "expected": 74000, "due_amount": 4000, "due_months": 2, "advance_amount": 0, "advance_months": 0}, "40": {"id": 40, "name": "Abdul Karim", "mobile": "971569774500", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "41": {"id": 41, "name": "Mohammad Kaisar", "mobile": "01830621990", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 1100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "42": {"id": 42, "name": "Korshed Alam", "mobile": "01819474787", "shares": 6, "entry_fee": 600, "total_deposit": 222000, "total_fine": 0, "expected": 222000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "43": {"id": 43, "name": "Emon Hasan", "mobile": "971503520518", "shares": 2, "entry_fee": 200, "total_deposit": 68000, "total_fine": 700, "expected": 74000, "due_amount": 6000, "due_months": 3, "advance_amount": 0, "advance_months": 0}, "44": {"id": 44, "name": "Tawhidul Islam", "mobile": "971500914943", "shares": 2, "entry_fee": 200, "total_deposit": 68000, "total_fine": 1000, "expected": 74000, "due_amount": 6000, "due_months": 3, "advance_amount": 0, "advance_months": 0}, "45": {"id": 45, "name": "Sahidul Islam", "mobile": "01840409753", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 850, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "46": {"id": 46, "name": "Amir Hossen", "mobile": "01871081769", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 1400, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "47": {"id": 47, "name": "Mohammad Abdullah Al Rafi", "mobile": "01882916447", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "48": {"id": 48, "name": "Nurul Huda Misbah", "mobile": "01814836702", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "49": {"id": 49, "name": "Aminul Hoque", "mobile": "01834470639", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 200, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "50": {"id": 50, "name": "Shekh Ahmed Roki", "mobile": "01829921642", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "51": {"id": 51, "name": "Md. Sahjahan", "mobile": "01889786926", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "52": {"id": 52, "name": "Babul Hossen", "mobile": "01833903155", "shares": 1, "entry_fee": 100, "total_deposit": 34000, "total_fine": 750, "expected": 37000, "due_amount": 3000, "due_months": 3, "advance_amount": 0, "advance_months": 0}, "53": {"id": 53, "name": "Khair Ahmed", "mobile": "01879053879", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "54": {"id": 54, "name": "Md. Lutfar Rahman", "mobile": "01835820064", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 200, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "55": {"id": 55, "name": "Abu Bakker", "mobile": "01884985097", "shares": 2, "entry_fee": 200, "total_deposit": 76000, "total_fine": 1850, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 2000, "advance_months": 1}, "56": {"id": 56, "name": "Abdullah Al Mumid", "mobile": "01585430658", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 700, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "57": {"id": 57, "name": "Sujan Kanti Karmaker", "mobile": "01814785317", "shares": 1, "entry_fee": 100, "total_deposit": 35000, "total_fine": 750, "expected": 37000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0}, "58": {"id": 58, "name": "Prokash Kanti Nath", "mobile": "01728125764", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "59": {"id": 59, "name": "Abdul Sabur", "mobile": "01817246488", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "60": {"id": 60, "name": "Ridowanul Hoque", "mobile": "01866911987", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "61": {"id": 61, "name": "Mohammad Toyab", "mobile": "01817504865", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "62": {"id": 62, "name": "Nurul Amin", "mobile": "01885316318", "shares": 1, "entry_fee": 100, "total_deposit": 33000, "total_fine": 1000, "expected": 37000, "due_amount": 4000, "due_months": 4, "advance_amount": 0, "advance_months": 0}, "63": {"id": 63, "name": "Joy Sankar Karmaker", "mobile": "01827204517", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "64": {"id": 64, "name": "Mohammad Sahjahan", "mobile": "01883600834", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "65": {"id": 65, "name": "Akter Hossen", "mobile": "01861821214", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "66": {"id": 66, "name": "Ehsanul Kabir", "mobile": "01874410224", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "67": {"id": 67, "name": "Mohammad Sayed Uddin Forhad", "mobile": "971585735180", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "68": {"id": 68, "name": "Mohammad Ziabul Hoque", "mobile": "971502927559", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "69": {"id": 69, "name": "Mohammad Yousof", "mobile": "971561607784", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "70": {"id": 70, "name": "Mohammad Osman Goni", "mobile": "01814123764", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "71": {"id": 71, "name": "Iqbal Hossen", "mobile": "01849738787", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "72": {"id": 72, "name": "Debasish Karmaker", "mobile": "01863367162", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "73": {"id": 73, "name": "Salim Uddin", "mobile": "01883366846", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 400, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "74": {"id": 74, "name": "Mujibur Rahman", "mobile": "966504512844", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 3000, "advance_months": 3}, "75": {"id": 75, "name": "Md. Borhan Uddin", "mobile": "01839146237", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 4000, "advance_months": 4}, "76": {"id": 76, "name": "Mokter Ahmed", "mobile": "966551311461", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}, "77": {"id": 77, "name": "Nepal Kanti Karmaker", "mobile": "01812606740", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 950, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0}};
-const MONTHLY = [{"month": "Jun-23", "regular": 124000, "advance": 0, "due": 0, "fine": 0, "cng": 0, "expense": 6400}, {"month": "Jul-23", "regular": 124000, "advance": 4000, "due": 0, "fine": 0, "cng": 0, "expense": 300}, {"month": "Aug-23", "regular": 122000, "advance": 0, "due": 0, "fine": 50, "cng": 0, "expense": 0}, {"month": "Sep-23", "regular": 118000, "advance": 11000, "due": 1000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Oct-23", "regular": 109000, "advance": 0, "due": 5000, "fine": 300, "cng": 0, "expense": 0}, {"month": "Nov-23", "regular": 108000, "advance": 0, "due": 7000, "fine": 350, "cng": 0, "expense": 0}, {"month": "Dec-23", "regular": 108000, "advance": 11000, "due": 10000, "fine": 500, "cng": 0, "expense": 0}, {"month": "Jan-24", "regular": 112000, "advance": 0, "due": 11000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Feb-24", "regular": 116000, "advance": 0, "due": 2000, "fine": 100, "cng": 0, "expense": 0}, {"month": "Mar-24", "regular": 119000, "advance": 11000, "due": 3000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Apr-24", "regular": 108000, "advance": 0, "due": 2000, "fine": 200, "cng": 0, "expense": 0}, {"month": "May-24", "regular": 104000, "advance": 4000, "due": 32000, "fine": 3800, "cng": 0, "expense": 0}, {"month": "Jun-24", "regular": 115000, "advance": 6000, "due": 12000, "fine": 600, "cng": 0, "expense": 0}, {"month": "Jul-24", "regular": 114000, "advance": 11000, "due": 8000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Aug-24", "regular": 108000, "advance": 8000, "due": 8000, "fine": 1350, "cng": 0, "expense": 0}, {"month": "Sep-24", "regular": 108000, "advance": 3000, "due": 7000, "fine": 400, "cng": 0, "expense": 1000}, {"month": "Oct-24", "regular": 109000, "advance": 6000, "due": 5000, "fine": 250, "cng": 0, "expense": 1000}, {"month": "Nov-24", "regular": 111000, "advance": 2000, "due": 14000, "fine": 700, "cng": 0, "expense": 1300}, {"month": "Dec-24", "regular": 105000, "advance": 8000, "due": 4000, "fine": 200, "cng": 0, "expense": 1000}, {"month": "Jan-25", "regular": 113000, "advance": 14000, "due": 20000, "fine": 1000, "cng": 30000, "expense": 1000}, {"month": "Feb-25", "regular": 113000, "advance": 2000, "due": 12000, "fine": 750, "cng": 30000, "expense": 1250}, {"month": "Mar-25", "regular": 108000, "advance": 4000, "due": 3000, "fine": 150, "cng": 45000, "expense": 1400}, {"month": "Apr-25", "regular": 104000, "advance": 5000, "due": 10000, "fine": 500, "cng": 45000, "expense": 1000}, {"month": "May-25", "regular": 108000, "advance": 8000, "due": 18000, "fine": 950, "cng": 55000, "expense": 1000}, {"month": "Jun-25", "regular": 107000, "advance": 5000, "due": 7000, "fine": 350, "cng": 40000, "expense": 1000}, {"month": "Jul-25", "regular": 102000, "advance": 12000, "due": 12000, "fine": 450, "cng": 55000, "expense": 1250}, {"month": "Aug-25", "regular": 108000, "advance": 2000, "due": 24000, "fine": 1250, "cng": 55000, "expense": 4000}, {"month": "Sep-25", "regular": 105000, "advance": 10000, "due": 5000, "fine": 250, "cng": 55000, "expense": 3250}, {"month": "Oct-25", "regular": 108000, "advance": 3000, "due": 9000, "fine": 800, "cng": 55000, "expense": 1250}, {"month": "Nov-25", "regular": 114000, "advance": 5000, "due": 11000, "fine": 550, "cng": 66000, "expense": 1000}, {"month": "Dec-25", "regular": 109000, "advance": 0, "due": 10000, "fine": 500, "cng": 72000, "expense": 1000}, {"month": "Jan-26", "regular": 114000, "advance": 8000, "due": 3000, "fine": 150, "cng": 66000, "expense": 50697}, {"month": "Feb-26", "regular": 105000, "advance": 4000, "due": 10000, "fine": 500, "cng": 73000, "expense": 1000}, {"month": "Mar-26", "regular": 106000, "advance": 12000, "due": 8000, "fine": 400, "cng": 55000, "expense": 1000}, {"month": "Apr-26", "regular": 107000, "advance": 13000, "due": 20000, "fine": 1000, "cng": 118500, "expense": 100}, {"month": "May-26", "regular": 101000, "advance": 1000, "due": 5000, "fine": 300, "cng": 74000, "expense": 200}, {"month": "Jun-26", "regular": 107000, "advance": 5000, "due": 13000, "fine": 650, "cng": 68000, "expense": 1600}];
-const CNG     = [{"id": 1, "driver": "Zohir Ahmed", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 255000, "remaining": 183000, "status": "চলমান"}, {"id": 2, "driver": "Abu Taher", "type": "CNG", "invest": 250000, "total_payable": 294500, "collected": 242000, "remaining": 52500, "status": "চলমান"}, {"id": 3, "driver": "Zahedul Islam", "type": "CNG", "invest": 150000, "total_payable": 169000, "collected": 169000, "remaining": 0, "status": "সম্পন্ন"}, {"id": 4, "driver": "Sajal Barua", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 185000, "remaining": 253000, "status": "চলমান"}, {"id": 5, "driver": "Nurul Abser", "type": "CNG", "invest": 300000, "total_payable": 375000, "collected": 85000, "remaining": 290000, "status": "চলমান"}, {"id": 6, "driver": "Abdul Malek", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 67500, "remaining": 270000, "status": "চলমান"}, {"id": 7, "driver": "Kamal Uddin", "type": "Auto", "invest": 100000, "total_payable": 112500, "collected": 18000, "remaining": 94500, "status": "চলমান"}, {"id": 8, "driver": "Mohammad Yousof", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 36000, "remaining": 301500, "status": "চলমান"}];
-const LOAN    = [{"id": 1, "borrower": "Mohammad Faruk", "invest": 80000, "total_payable": 94400, "collected": 94400, "remaining": 0, "status": "সম্পন্ন"}, {"id": 2, "borrower": "Samsul Alam", "invest": 100000, "total_payable": 127000, "collected": 27000, "remaining": 100000, "status": "চলমান"}, {"id": 3, "borrower": "Abul Kashem", "invest": 10000, "total_payable": 12700, "collected": 2700, "remaining": 10000, "status": "চলমান"}, {"id": 4, "borrower": "Mohammad Abul Hashem", "invest": 100000, "total_payable": 118000, "collected": 118000, "remaining": 0, "status": "সম্পন্ন"}, {"id": 5, "borrower": "Mohammad Kaisar", "invest": 10000, "total_payable": 11800, "collected": 11800, "remaining": 0, "status": "সম্পন্ন"}, {"id": 6, "borrower": "Sahidul Islam", "invest": 150000, "total_payable": 177000, "collected": 176000, "remaining": 1000, "status": "চলমান"}, {"id": 7, "borrower": "Emon Hasan", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন"}, {"id": 8, "borrower": "Shibu Sankar Karmaker", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন"}, {"id": 9, "borrower": "Monjur Alam", "invest": 200000, "total_payable": 236000, "collected": 233500, "remaining": 2500, "status": "চলমান"}, {"id": 10, "borrower": "Mohammad Kaisar", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান"}, {"id": 11, "borrower": "Md. Helal Uddin", "invest": 25000, "total_payable": 25000, "collected": 0, "remaining": 25000, "status": "চলমান"}, {"id": 12, "borrower": "Joy Sankar Karmaker", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান"}, {"id": 13, "borrower": "Mohammad Abul Hashem", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান"}, {"id": 14, "borrower": "Emon Hasan", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান"}, {"id": 15, "borrower": "Aminul Hoque", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান"}, {"id": 16, "borrower": "Nurul Amin", "invest": 10000, "total_payable": 10000, "collected": 0, "remaining": 10000, "status": "চলমান"}, {"id": 17, "borrower": "Abdul Sabur", "invest": 200000, "total_payable": 200000, "collected": 0, "remaining": 200000, "status": "চলমান"}, {"id": 18, "borrower": "Abdul Sabur", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান"}];
+const MEMBERS = {"1": {"id": 1, "name": "Monjurul Islam", "mobile": "01814824030", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 300, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "2": {"id": 2, "name": "Saiful Islam", "mobile": "01816724075", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "3": {"id": 3, "name": "Mohammad Tawhidul Islam", "mobile": "01846506898", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "4": {"id": 4, "name": "Amanat Khan", "mobile": "966551311461", "shares": 5, "entry_fee": 500, "total_deposit": 185000, "total_fine": 0, "expected": 185000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 192937}, "5": {"id": 5, "name": "Nurunnabi Hosen Tanzid", "mobile": "01838848678", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "6": {"id": 6, "name": "Jashim Uddin", "mobile": "966538760537", "shares": 2, "entry_fee": 200, "total_deposit": 76000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 2000, "advance_months": 1, "final_receivable": 79174.8}, "7": {"id": 7, "name": "Shibu Sankar Karmaker", "mobile": "01885946523", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "8": {"id": 8, "name": "Monsur", "mobile": "01608632799", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "9": {"id": 9, "name": "Monjur Alam", "mobile": "01811938007", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "10": {"id": 10, "name": "Rupal Kanti Karmaker", "mobile": "01812934934", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "11": {"id": 11, "name": "Yousof", "mobile": "01817380321", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "12": {"id": 12, "name": "Arjun Kanti Karmaker", "mobile": "01813143128", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "13": {"id": 13, "name": "Abdul Jabber", "mobile": "01814941801", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "14": {"id": 14, "name": "Mohammad Helal Uddin", "mobile": "01819700976", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "15": {"id": 15, "name": "Abul Kashem", "mobile": "01871777022", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "16": {"id": 16, "name": "Uzzal Karmaker", "mobile": "01724266205", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "17": {"id": 17, "name": "Jahedul Islam", "mobile": "971562765681", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "18": {"id": 18, "name": "Mohammad Alamgir", "mobile": "01885004312", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "19": {"id": 19, "name": "Kafil Uddin", "mobile": "966534770192", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "20": {"id": 20, "name": "Mohammudul Hoque", "mobile": "01816821801", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "21": {"id": 21, "name": "Nurul Amin", "mobile": "01820989105", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "22": {"id": 22, "name": "Abul Kashem", "mobile": "01873812598", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 150, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "23": {"id": 23, "name": "Belal Uddin", "mobile": "01869732349", "shares": 1, "entry_fee": 100, "total_deposit": 36000, "total_fine": 600, "expected": 37000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 37587.4}, "24": {"id": 24, "name": "Md. Helal Uddin", "mobile": "01860493163", "shares": 1, "entry_fee": 100, "total_deposit": 34000, "total_fine": 1500, "expected": 37000, "due_amount": 3000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 35587.4}, "25": {"id": 25, "name": "Md.Hamid", "mobile": "01870876309", "shares": 1, "entry_fee": 100, "total_deposit": 38000, "total_fine": 150, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 1000, "advance_months": 1, "final_receivable": 39587.4}, "26": {"id": 26, "name": "Samsul Alam", "mobile": "01865394799", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 150, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "27": {"id": 27, "name": "Riad Hossen", "mobile": "01882217274", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "28": {"id": 28, "name": "Md. Sohel Islam", "mobile": "01858538010", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "29": {"id": 29, "name": "Idrish Alam", "mobile": "01858538010", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "30": {"id": 30, "name": "Jahed", "mobile": "966562024068", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 300, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "31": {"id": 31, "name": "Sahidul Islam", "mobile": "966549955548", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "32": {"id": 32, "name": "Md. Sohel Uddin", "mobile": "01822020050", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 900, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "33": {"id": 33, "name": "Mohammad Faruk", "mobile": "01831797810", "shares": 1, "entry_fee": 100, "total_deposit": 36000, "total_fine": 600, "expected": 37000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 37587.4}, "34": {"id": 34, "name": "Didarul Islam", "mobile": "971562663270", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "35": {"id": 35, "name": "Mohammad Fahim", "mobile": "01873808231", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "36": {"id": 36, "name": "Delower Hossain", "mobile": "971561572487", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "37": {"id": 37, "name": "Abdul Malek", "mobile": "01879352117", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "38": {"id": 38, "name": "Khalil Uddin", "mobile": "01871777022", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "39": {"id": 39, "name": "Mohammad Abul Hashem", "mobile": "01873807617", "shares": 2, "entry_fee": 200, "total_deposit": 70000, "total_fine": 1000, "expected": 74000, "due_amount": 4000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 73174.8}, "40": {"id": 40, "name": "Abdul Karim", "mobile": "971569774500", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "41": {"id": 41, "name": "Mohammad Kaisar", "mobile": "01830621990", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 1100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "42": {"id": 42, "name": "Korshed Alam", "mobile": "01819474787", "shares": 6, "entry_fee": 600, "total_deposit": 222000, "total_fine": 0, "expected": 222000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 231524.4}, "43": {"id": 43, "name": "Emon Hasan", "mobile": "971503520518", "shares": 2, "entry_fee": 200, "total_deposit": 68000, "total_fine": 700, "expected": 74000, "due_amount": 6000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 71174.8}, "44": {"id": 44, "name": "Tawhidul Islam", "mobile": "971500914943", "shares": 2, "entry_fee": 200, "total_deposit": 68000, "total_fine": 1000, "expected": 74000, "due_amount": 6000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 71174.8}, "45": {"id": 45, "name": "Sahidul Islam", "mobile": "01840409753", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 850, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "46": {"id": 46, "name": "Amir Hossen", "mobile": "01871081769", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 1400, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "47": {"id": 47, "name": "Mohammad Abdullah Al Rafi", "mobile": "01882916447", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "48": {"id": 48, "name": "Nurul Huda Misbah", "mobile": "01814836702", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "49": {"id": 49, "name": "Aminul Hoque", "mobile": "01834470639", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 200, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "50": {"id": 50, "name": "Shekh Ahmed Roki", "mobile": "01829921642", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "51": {"id": 51, "name": "Md. Sahjahan", "mobile": "01889786926", "shares": 3, "entry_fee": 300, "total_deposit": 111000, "total_fine": 0, "expected": 111000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 115762.2}, "52": {"id": 52, "name": "Babul Hossen", "mobile": "01833903155", "shares": 1, "entry_fee": 100, "total_deposit": 34000, "total_fine": 750, "expected": 37000, "due_amount": 3000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 35587.4}, "53": {"id": 53, "name": "Khair Ahmed", "mobile": "01879053879", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "54": {"id": 54, "name": "Md. Lutfar Rahman", "mobile": "01835820064", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 200, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "55": {"id": 55, "name": "Abu Bakker", "mobile": "01884985097", "shares": 2, "entry_fee": 200, "total_deposit": 76000, "total_fine": 1850, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 2000, "advance_months": 1, "final_receivable": 79174.8}, "56": {"id": 56, "name": "Abdullah Al Mumid", "mobile": "01585430658", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 700, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "57": {"id": 57, "name": "Sujan Kanti Karmaker", "mobile": "01814785317", "shares": 1, "entry_fee": 100, "total_deposit": 35000, "total_fine": 750, "expected": 37000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 36587.4}, "58": {"id": 58, "name": "Prokash Kanti Nath", "mobile": "01728125764", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "59": {"id": 59, "name": "Abdul Sabur", "mobile": "01817246488", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "60": {"id": 60, "name": "Ridowanul Hoque", "mobile": "01866911987", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 100, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "61": {"id": 61, "name": "Mohammad Toyab", "mobile": "01817504865", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "62": {"id": 62, "name": "Nurul Amin", "mobile": "01885316318", "shares": 1, "entry_fee": 100, "total_deposit": 33000, "total_fine": 1000, "expected": 37000, "due_amount": 4000, "due_months": 4, "advance_amount": 0, "advance_months": 0, "final_receivable": 34587.4}, "63": {"id": 63, "name": "Joy Sankar Karmaker", "mobile": "01827204517", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "64": {"id": 64, "name": "Mohammad Sahjahan", "mobile": "01883600834", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "65": {"id": 65, "name": "Akter Hossen", "mobile": "01861821214", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "66": {"id": 66, "name": "Ehsanul Kabir", "mobile": "01874410224", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "67": {"id": 67, "name": "Mohammad Sayed Uddin Forhad", "mobile": "971585735180", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 250, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "68": {"id": 68, "name": "Mohammad Ziabul Hoque", "mobile": "971502927559", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "69": {"id": 69, "name": "Mohammad Yousof", "mobile": "971561607784", "shares": 2, "entry_fee": 200, "total_deposit": 74000, "total_fine": 0, "expected": 74000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 77174.8}, "70": {"id": 70, "name": "Mohammad Osman Goni", "mobile": "01814123764", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "71": {"id": 71, "name": "Iqbal Hossen", "mobile": "01849738787", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 100, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "72": {"id": 72, "name": "Debasish Karmaker", "mobile": "01863367162", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "73": {"id": 73, "name": "Salim Uddin", "mobile": "01883366846", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 400, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "74": {"id": 74, "name": "Mujibur Rahman", "mobile": "966504512844", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 3000, "advance_months": 3, "final_receivable": 41587.4}, "75": {"id": 75, "name": "Md. Borhan Uddin", "mobile": "01839146237", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 4000, "advance_months": 4, "final_receivable": 42587.4}, "76": {"id": 76, "name": "Mokter Ahmed", "mobile": "966551311461", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 50, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}, "77": {"id": 77, "name": "Nepal Kanti Karmaker", "mobile": "01812606740", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 950, "expected": 37000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 38587.4}};
+const MONTHLY = [{"month": "Jun-23", "regular": 124000, "advance": 0, "due": 0, "fine": 0, "cng": 0, "expense": 6400}, {"month": "Jul-23", "regular": 124000, "advance": 4000, "due": 0, "fine": 0, "cng": 0, "expense": 300}, {"month": "Aug-23", "regular": 122000, "advance": 0, "due": 0, "fine": 50, "cng": 0, "expense": 0}, {"month": "Sep-23", "regular": 118000, "advance": 11000, "due": 1000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Oct-23", "regular": 109000, "advance": 0, "due": 5000, "fine": 300, "cng": 0, "expense": 0}, {"month": "Nov-23", "regular": 108000, "advance": 0, "due": 7000, "fine": 350, "cng": 0, "expense": 0}, {"month": "Dec-23", "regular": 108000, "advance": 11000, "due": 10000, "fine": 500, "cng": 0, "expense": 0}, {"month": "Jan-24", "regular": 112000, "advance": 0, "due": 11000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Feb-24", "regular": 116000, "advance": 0, "due": 2000, "fine": 100, "cng": 0, "expense": 0}, {"month": "Mar-24", "regular": 119000, "advance": 11000, "due": 3000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Apr-24", "regular": 108000, "advance": 0, "due": 2000, "fine": 200, "cng": 0, "expense": 0}, {"month": "May-24", "regular": 104000, "advance": 4000, "due": 32000, "fine": 3800, "cng": 0, "expense": 0}, {"month": "Jun-24", "regular": 115000, "advance": 6000, "due": 12000, "fine": 600, "cng": 0, "expense": 0}, {"month": "Jul-24", "regular": 114000, "advance": 11000, "due": 8000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Aug-24", "regular": 108000, "advance": 8000, "due": 8000, "fine": 1350, "cng": 0, "expense": 0}, {"month": "Sep-24", "regular": 108000, "advance": 3000, "due": 7000, "fine": 400, "cng": 0, "expense": 1000}, {"month": "Oct-24", "regular": 109000, "advance": 6000, "due": 5000, "fine": 250, "cng": 0, "expense": 1000}, {"month": "Nov-24", "regular": 111000, "advance": 2000, "due": 14000, "fine": 700, "cng": 0, "expense": 1300}, {"month": "Dec-24", "regular": 105000, "advance": 8000, "due": 4000, "fine": 200, "cng": 0, "expense": 1000}, {"month": "Jan-25", "regular": 113000, "advance": 14000, "due": 20000, "fine": 1000, "cng": 30000, "expense": 1000}, {"month": "Feb-25", "regular": 113000, "advance": 2000, "due": 12000, "fine": 750, "cng": 30000, "expense": 1250}, {"month": "Mar-25", "regular": 108000, "advance": 4000, "due": 3000, "fine": 150, "cng": 45000, "expense": 1400}, {"month": "Apr-25", "regular": 104000, "advance": 5000, "due": 10000, "fine": 500, "cng": 45000, "expense": 1000}, {"month": "May-25", "regular": 108000, "advance": 8000, "due": 18000, "fine": 950, "cng": 55000, "expense": 1000}, {"month": "Jun-25", "regular": 107000, "advance": 5000, "due": 7000, "fine": 350, "cng": 40000, "expense": 1000}, {"month": "Jul-25", "regular": 102000, "advance": 12000, "due": 12000, "fine": 450, "cng": 55000, "expense": 1250}, {"month": "Aug-25", "regular": 108000, "advance": 2000, "due": 24000, "fine": 1250, "cng": 55000, "expense": 4000}, {"month": "Sep-25", "regular": 105000, "advance": 10000, "due": 5000, "fine": 250, "cng": 55000, "expense": 3250}, {"month": "Oct-25", "regular": 108000, "advance": 3000, "due": 9000, "fine": 800, "cng": 55000, "expense": 1250}, {"month": "Nov-25", "regular": 114000, "advance": 5000, "due": 11000, "fine": 550, "cng": 66000, "expense": 1000}, {"month": "Dec-25", "regular": 109000, "advance": 0, "due": 10000, "fine": 500, "cng": 72000, "expense": 1000}, {"month": "Jan-26", "regular": 114000, "advance": 8000, "due": 3000, "fine": 150, "cng": 66000, "expense": 50697}, {"month": "Feb-26", "regular": 105000, "advance": 4000, "due": 10000, "fine": 500, "cng": 73000, "expense": 1000}, {"month": "Mar-26", "regular": 106000, "advance": 12000, "due": 8000, "fine": 400, "cng": 55000, "expense": 1000}, {"month": "Apr-26", "regular": 107000, "advance": 13000, "due": 20000, "fine": 1000, "cng": 118500, "expense": 100}, {"month": "May-26", "regular": 101000, "advance": 1000, "due": 5000, "fine": 300, "cng": 74000, "expense": 200}, {"month": "Jun-26", "regular": 107000, "advance": 5000, "due": 13000, "fine": 650, "cng": 68000, "expense": 100}];
+const CNG     = [{"id": 1, "driver": "Zohir Ahmed", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 255000, "remaining": 183000, "status": "চলমান", "total_installments": 24, "paid_installments": 18}, {"id": 2, "driver": "Abu Taher", "type": "CNG", "invest": 250000, "total_payable": 294500, "collected": 242000, "remaining": 52500, "status": "চলমান", "total_installments": 24, "paid_installments": 18}, {"id": 3, "driver": "Zahedul Islam", "type": "CNG", "invest": 150000, "total_payable": 169000, "collected": 169000, "remaining": 0, "status": "সম্পন্ন", "total_installments": 12, "paid_installments": 15}, {"id": 4, "driver": "Sajal Barua", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 185000, "remaining": 253000, "status": "চলমান", "total_installments": 24, "paid_installments": 13}, {"id": 5, "driver": "Nurul Abser", "type": "CNG", "invest": 300000, "total_payable": 375000, "collected": 85000, "remaining": 290000, "status": "চলমান", "total_installments": 24, "paid_installments": 7}, {"id": 6, "driver": "Abdul Malek", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 67500, "remaining": 270000, "status": "চলমান", "total_installments": 12, "paid_installments": 6}, {"id": 7, "driver": "Kamal Uddin", "type": "Auto", "invest": 100000, "total_payable": 112500, "collected": 18000, "remaining": 94500, "status": "চলমান", "total_installments": 12, "paid_installments": 3}, {"id": 8, "driver": "Mohammad Yousof", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 36000, "remaining": 301500, "status": "চলমান", "total_installments": 12, "paid_installments": 3}];
+const LOAN    = [{"id": 1, "borrower": "Mohammad Faruk", "member_id": 33, "mobile": "1831797810", "invest": 80000, "total_payable": 94400, "collected": 94400, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "28 Mar 2024", "guarantor": "62,32,45,44,43", "interest_rate": 0.18, "duration": "0 Years 10 Months 4 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 2, "borrower": "Samsul Alam", "member_id": 26, "mobile": "1865394799", "invest": 100000, "total_payable": 127000, "collected": 27000, "remaining": 100000, "status": "চলমান", "disbursement_date": "02 May 2024", "guarantor": "05,53,14,07,26", "interest_rate": 0.18, "duration": "1 Years 6 Months 1 Days", "remarks": "Payment Received: 03/11/2025 _ Payment-27000/="}, {"id": 3, "borrower": "Abul Kashem", "member_id": 22, "mobile": "1873812598", "invest": 10000, "total_payable": 12700, "collected": 2700, "remaining": 10000, "status": "চলমান", "disbursement_date": "13 Jun 2024", "guarantor": "22", "interest_rate": 0.18, "duration": "1 Years 2 Months 15 Days", "remarks": "Payment Received: 28/08/2025 _ Payment-2700/="}, {"id": 4, "borrower": "Mohammad Abul Hashem", "member_id": 39, "mobile": "1873807617", "invest": 100000, "total_payable": 118000, "collected": 118000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "14 Jan 2025", "guarantor": "42", "interest_rate": 0.18, "duration": "1 Years 0 Months 0 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 5, "borrower": "Mohammad Kaisar", "member_id": 41, "mobile": "1830621990", "invest": 10000, "total_payable": 11800, "collected": 11800, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "19 Jan 2025", "guarantor": "41", "interest_rate": 0.18, "duration": "0 Years 8 Months 4 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 6, "borrower": "Sahidul Islam", "member_id": 45, "mobile": "1840409753", "invest": 150000, "total_payable": 177000, "collected": 176000, "remaining": 1000, "status": "চলমান", "disbursement_date": "19 Feb 2025", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "1 Years 0 Months 8 Days", "remarks": "Loan account has been successfully Closed. Tk.1000 Discounted & Approved."}, {"id": 7, "borrower": "Emon Hasan", "member_id": 43, "mobile": "971503520518", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "17 Mar 2025", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "0 Years 11 Months 10 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 8, "borrower": "Shibu Sankar Karmaker", "member_id": 7, "mobile": "1885946523", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "24 Jun 2025", "guarantor": "10,06", "interest_rate": 0.18, "duration": "0 Years 11 Months 14 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 9, "borrower": "Monjur Alam", "member_id": 9, "mobile": "1811938007", "invest": 200000, "total_payable": 236000, "collected": 233500, "remaining": 2500, "status": "চলমান", "disbursement_date": "14 Aug 2025", "guarantor": "11,13,35", "interest_rate": 0.18, "duration": "0 Years 10 Months 0 Days", "remarks": "Loan account has been successfully Closed. Tk.2500 Discounted & Approved."}, {"id": 10, "borrower": "Mohammad Kaisar", "member_id": 41, "mobile": "1830621990", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান", "disbursement_date": "23 Sep 2025", "guarantor": "41", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 11, "borrower": "Md. Helal Uddin", "member_id": 24, "mobile": "1860493163", "invest": 25000, "total_payable": 25000, "collected": 0, "remaining": 25000, "status": "চলমান", "disbursement_date": "11 Nov 2025", "guarantor": "24", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 12, "borrower": "Joy Sankar Karmaker", "member_id": 63, "mobile": "1827204517", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "14 Jan 2026", "guarantor": "23", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 13, "borrower": "Mohammad Abul Hashem", "member_id": 39, "mobile": "1873807617", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান", "disbursement_date": "14 Jan 2026", "guarantor": "", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 14, "borrower": "Emon Hasan", "member_id": 43, "mobile": "00971545640821", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "28 Feb 2026", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 15, "borrower": "Aminul Hoque", "member_id": 49, "mobile": "1834470639", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "12 May 2026", "guarantor": "54,52", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 16, "borrower": "Nurul Amin", "member_id": 62, "mobile": "1885316318", "invest": 10000, "total_payable": 10000, "collected": 0, "remaining": 10000, "status": "চলমান", "disbursement_date": "14 May 2026", "guarantor": "62", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 17, "borrower": "Abdul Sabur", "member_id": 59, "mobile": "1817246488", "invest": 200000, "total_payable": 200000, "collected": 0, "remaining": 200000, "status": "চলমান", "disbursement_date": "14 Jun 2026", "guarantor": "10,60,70,75", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 18, "borrower": "Abdul Sabur", "member_id": 59, "mobile": "1817246488", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "14 Jun 2026", "guarantor": "4", "interest_rate": 0.18, "duration": "—", "remarks": ""}];
+const EXPENSES = [{"year": 2023, "month": "June", "description": "", "amount": 6400}, {"year": 2023, "month": "July", "description": "", "amount": 300}, {"year": 2024, "month": "September", "description": "", "amount": 1000}, {"year": 2024, "month": "October", "description": "", "amount": 1000}, {"year": 2024, "month": "November", "description": "", "amount": 1300}, {"year": 2024, "month": "December", "description": "", "amount": 1000}, {"year": 2025, "month": "January", "description": "", "amount": 1000}, {"year": 2025, "month": "February", "description": "", "amount": 1250}, {"year": 2025, "month": "March", "description": "", "amount": 1400}, {"year": 2025, "month": "April", "description": "", "amount": 1000}, {"year": 2025, "month": "May", "description": "", "amount": 1000}, {"year": 2025, "month": "June", "description": "", "amount": 1000}, {"year": 2025, "month": "July", "description": "", "amount": 1250}, {"year": 2025, "month": "August", "description": "", "amount": 4000}, {"year": 2025, "month": "September", "description": "", "amount": 3250}, {"year": 2025, "month": "October", "description": "", "amount": 1250}, {"year": 2025, "month": "November", "description": "", "amount": 1000}, {"year": 2025, "month": "December", "description": "", "amount": 1000}, {"year": 2026, "month": "January", "description": "Picnic Expense", "amount": 50697}, {"year": 2026, "month": "February", "description": "", "amount": 1000}, {"year": 2026, "month": "March", "description": "", "amount": 1000}, {"year": 2026, "month": "April", "description": "Print Cost", "amount": 100}, {"year": 2026, "month": "May", "description": "Form Print & Snacks", "amount": 200}, {"year": 2026, "month": "June", "description": "Snacks", "amount": 100}];
 const KPI     = {"net_fund": 4559303, "total_members": 77, "total_shares": 125, "per_share": 1000, "total_months": 37, "regular_collection": 4081000, "advance_collection": 198000, "due_collection": 331000, "fine_collection": 20800, "loan_receivable": 703600, "cng_invest": 2100000, "cng_payable": 2502000, "cng_collected": 1057500, "cng_remaining": 1444500, "loan_invest": 1485000, "loan_collected": 781400, "entry_fee": 12500, "total_expenses": 83997, "dps_invest": 1850000, "fdr_invest": 500000, "savings_balance": 463203, "member_total_deposit": 4610000, "member_total_expected": 4625000, "member_total_due": 30000, "member_total_advance": 15000, "member_total_fine": 20800};
 const PL      = {"items": [{"label": "DPS প্রফিট", "amount": 0, "note": "DPS Current Value – Opening"}, {"label": "FDR প্রফিট", "amount": 87222, "note": "FDR Current Value – Opening"}, {"label": "CNG / অটো রিকশা প্রফিট", "amount": 19000, "note": "Total Payable minus Investment"}, {"label": "লোন থেকে প্রাপ্ত লভ্যাংশ", "amount": 141400, "note": "Till-date payable interest earned"}, {"label": "জরিমানা আদায়", "amount": 20800, "note": "Total fine received"}, {"label": "ভর্তি ফি আদায়", "amount": 12500, "note": "Entry fee collection"}], "gross_profit": 280922, "total_expense": 83997, "net_profit": 196925, "eps": 1575.4};
+const SHARE_MATURITY = {"total_collection": 4619500, "cng_loan_profit": 126900, "fine_collected": 20800, "investment_profit": 87221.84, "total_expenses": 82497, "net_fund": 4771924.84, "total_shares": 125, "net_profit_distributable": 198425, "profit_per_share": 1587.4, "expected_deposit_per_share_60m": 60000, "current_share_value_deposit": 36856, "current_total_share_value": 38443.4, "estimated_final_share_value_60m": 61322.83, "projected_total_payout": 7665354.17};
+const FUND_RECON = {"income": [{"label": "নিয়মিত সদস্য আদায়", "amount": 4081000}, {"label": "অগ্রিম আদায়", "amount": 198000}, {"label": "বকেয়া আদায়", "amount": 328000}, {"label": "জরিমানা আদায়", "amount": 20800}, {"label": "ভর্তি ফি আদায়", "amount": 12500}], "deployment": [{"label": "DPS বিনিয়োগ", "amount": 1850000}, {"label": "FDR বিনিয়োগ", "amount": 500000}, {"label": "ব্যাংক সঞ্চয় স্থিতি", "amount": 461703}, {"label": "CNG বকেয়া প্রাপ্য", "amount": 1042500}, {"label": "লোন বকেয়া প্রাপ্য", "amount": 703600}], "total_income": 4640300, "total_deployment": 4640300, "variance": 0, "actual_net_fund": 4557803};
 
 // ── utils ──
 const fmt  = n => (!n||n==0)?'৳ 0':'৳ '+Math.round(n).toLocaleString('en-IN');
 const fmtS = n => fmt(n);
 const $ = id => document.getElementById(id);
-
 // ── tab ──
+const TAB_NAMES=['member','org','monthly','cng','loan','maturity','pl','expense','list'];
 function tab(name){
-  const names=['member','org','monthly','cng','loan','pl','list'];
-  document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('active',names[i]===name));
+  document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('active',TAB_NAMES[i]===name));
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   $('tp-'+name).classList.add('active');
   if(name==='monthly') buildChart();
+}
+
+// ── toast ──
+let toastTimer=null;
+function showToast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('on'),2200);
 }
 
 // ── lookup ──
@@ -461,6 +701,10 @@ function lookup(){
   $('m-shares').textContent=m.shares;
   $('m-entry').textContent=fmt(m.entry_fee);
   $('m-fine').textContent=fmt(m.total_fine);
+
+  // Maturity projection
+  $('m-current-dep').textContent=fmt(m.total_deposit);
+  $('m-final-recv').textContent=fmt(m.final_receivable);
 
   // Due / Advance / Clear cells
   const icDue=$('ic-due'), icAdv=$('ic-adv'), icClr=$('ic-clear');
@@ -510,6 +754,16 @@ function lookup(){
 }
 $('minput').addEventListener('keydown',e=>{if(e.key==='Enter')lookup();});
 
+// ── print member statement ──
+function printMember(){
+  const v=parseInt($('minput').value);
+  if(!v||!MEMBERS[v]){showToast('আগে একজন সদস্য খুঁজুন');return;}
+  document.querySelectorAll('.tp').forEach(p=>p.classList.remove('print-active'));
+  $('tp-member').classList.add('print-active');
+  window.print();
+}
+
+
 // ── KPI render ──
 function renderKPI(){
   $('k-net').textContent=fmt(KPI.net_fund);
@@ -541,6 +795,18 @@ function renderKPI(){
   $('loan-invest').textContent=fmt(KPI.loan_invest);
   $('loan-collected-badge').textContent='আদায়: '+fmt(KPI.loan_collected);
   $('loan-remaining-badge').textContent='বাকি: '+fmt(KPI.loan_receivable);
+
+  // Fund Reconciliation
+  const ri=$('recon-income'), rd=$('recon-deployment');
+  ri.innerHTML=''; rd.innerHTML='';
+  FUND_RECON.income.forEach(it=>{
+    ri.insertAdjacentHTML('beforeend',`<div class="recon-row"><span>${it.label}</span><span>${fmt(it.amount)}</span></div>`);
+  });
+  FUND_RECON.deployment.forEach(it=>{
+    rd.insertAdjacentHTML('beforeend',`<div class="recon-row"><span>${it.label}</span><span>${fmt(it.amount)}</span></div>`);
+  });
+  $('recon-total-income').textContent=fmt(FUND_RECON.total_income);
+  $('recon-total-deployment').textContent=fmt(FUND_RECON.total_deployment);
 }
 
 // ── P&L render ──
@@ -592,6 +858,7 @@ function buildChart(){
   });
 }
 
+
 // ── CNG cards ──
 function renderCNG(){
   const g=$('cnggrid'); g.innerHTML='';
@@ -608,36 +875,61 @@ function renderCNG(){
       <div class="cng-row"><span>আদায়</span><span style="color:var(--gr)">${fmt(c.collected)}</span></div>
       <div class="cng-row"><span>বাকি</span><span style="color:${done?'var(--gr)':'var(--rd)'}">${fmt(c.remaining)}</span></div>
       <div class="pb"><div class="pf ${done?'done':''}" style="width:${pct}%"></div></div>
-      <div class="ppct">${pct}% পরিশোধিত</div>`;
+      <div class="ppct">${pct}% পরিশোধিত</div>
+      <div class="inst-frac">📋 ${c.paid_installments} / ${c.total_installments} কিস্তি পরিশোধিত</div>`;
     g.appendChild(d);
   });
 }
 
-// ── Loan cards ──
+// ── Loan cards (enriched) ──
 function renderLoan(){
   const g=$('loangrid'); g.innerHTML='';
   LOAN.forEach(c=>{
     const pct=c.total_payable>0?Math.round((c.collected/c.total_payable)*100):0;
     const done=c.remaining===0;
+    const mob=String(c.mobile||'').replace(/\D/g,'');
+    const mobDisp=mob.length>=8?'0'+mob.slice(-10):'—';
     const d=document.createElement('div'); d.className='cng-card';
     d.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between">
-      <span class="cng-type cng">লোন</span>
+      <span class="cng-type cng">লোন #${c.id}</span>
       <span class="cstatus ${done?'done':'run'}">${c.status}</span></div>
-      <div class="cng-driver">${c.borrower}</div>
+      <div class="cng-driver">${c.borrower} <span style="font-weight:400;color:var(--sl);font-size:10px">(সদস্য #${c.member_id})</span></div>
       <div class="cng-row"><span>লোনের পরিমাণ</span><span>${fmt(c.invest)}</span></div>
-      <div class="cng-row"><span>মোট পরিশোধযোগ্য</span><span>${fmt(c.total_payable)}</span></div>
+      <div class="cng-row"><span>মোট পরিশোধযোগ্য</span><span>${c.total_payable?fmt(c.total_payable):'নির্ধারিত হয়নি'}</span></div>
       <div class="cng-row"><span>আদায়</span><span style="color:var(--gr)">${fmt(c.collected)}</span></div>
       <div class="cng-row"><span>বাকি</span><span style="color:${done?'var(--gr)':'var(--rd)'}">${fmt(c.remaining)}</span></div>
       <div class="pb"><div class="pf ${done?'done':''}" style="width:${pct}%"></div></div>
-      <div class="ppct">${pct}% পরিশোধিত</div>`;
+      <div class="ppct">${pct}% পরিশোধিত</div>
+      <div class="loan-detail-grid">
+        <div class="ld-item">মোবাইল<b>${mobDisp}</b></div>
+        <div class="ld-item">সুদের হার<b>${(c.interest_rate*100).toFixed(0)}%</b></div>
+        <div class="ld-item">বিতরণের তারিখ<b>${c.disbursement_date||'—'}</b></div>
+        <div class="ld-item">গ্যারান্টর (সদস্য#)<b>${c.guarantor||'—'}</b></div>
+      </div>
+      ${c.remarks?`<div class="remark-box">📝 ${c.remarks}</div>`:''}`;
     g.appendChild(d);
   });
 }
 
-// ── Member list table ──
+// ── Member list table (search + filter) ──
 function renderList(){
   const tb=$('ltbody'); tb.innerHTML='';
-  Object.entries(MEMBERS).sort((a,b)=>+a[0]-+b[0]).forEach(([id,m])=>{
+  const q=($('lf-search').value||'').trim().toLowerCase();
+  const filter=$('lf-filter').value;
+  let entries=Object.entries(MEMBERS).sort((a,b)=>+a[0]-+b[0]);
+
+  entries=entries.filter(([id,m])=>{
+    if(q && !m.name.toLowerCase().includes(q) && !String(id).includes(q)) return false;
+    if(filter==='due' && !(m.due_amount>0)) return false;
+    if(filter==='advance' && !(m.advance_amount>0)) return false;
+    if(filter==='clear' && (m.due_amount>0 || m.advance_amount>0)) return false;
+    return true;
+  });
+
+  $('list-count').textContent=entries.length+' জন';
+  $('list-empty').style.display=entries.length?'none':'block';
+
+  entries.forEach(([id,m])=>{
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:var(--sl);font-size:10.5px">${String(id).padStart(2,'0')}</td>
       <td class="tdn" style="font-size:11px">${m.name}</td>
@@ -651,12 +943,85 @@ function renderList(){
   });
 }
 
+
+// ── Maturity (Share Maturity Projection) tab ──
+function renderMaturity(){
+  const sm=SHARE_MATURITY;
+  $('mat-payout').textContent=fmt(sm.projected_total_payout);
+  $('mat-current-share').textContent=fmt(sm.current_share_value_deposit);
+  $('mat-current-total-share').textContent=fmt(sm.current_total_share_value);
+  $('mat-profit-per-share').textContent=fmt(sm.profit_per_share);
+  $('mat-final-share').textContent=fmt(sm.estimated_final_share_value_60m);
+
+  $('mat-total-collection').textContent=fmt(sm.total_collection);
+  $('mat-cng-loan-profit').textContent=fmt(sm.cng_loan_profit);
+  $('mat-fine').textContent=fmt(sm.fine_collected);
+  $('mat-invest-profit').textContent=fmt(sm.investment_profit);
+  $('mat-expense').textContent='− '+fmt(sm.total_expenses);
+  $('mat-net-fund').textContent=fmt(sm.net_fund);
+  $('mat-distributable').textContent=fmt(sm.net_profit_distributable);
+
+  const monthsDone=KPI.total_months;
+  const totalMonths=60;
+  const pct=Math.min(100,Math.round((monthsDone/totalMonths)*100));
+  $('mat-progress-fill').style.width=pct+'%';
+  $('mat-progress-text').textContent=monthsDone+' / '+totalMonths+' মাস সম্পন্ন';
+  $('mat-progress-pct').textContent=pct+'%';
+}
+
+function lookupMaturity(){
+  const v=parseInt($('mat-minput').value);
+  const box=$('mat-personal-result');
+  if(!v||!MEMBERS[v]){
+    box.innerHTML='<div class="empty-state" style="padding:14px 0"><div class="empty-state-icon">❌</div>এই নম্বরের সদস্য পাওয়া যায়নি</div>';
+    return;
+  }
+  const m=MEMBERS[v];
+  box.innerHTML=`
+    <div class="mat-personal-row" style="margin-top:10px;border-top:1.5px solid rgba(212,160,23,.5);padding-top:12px">
+      <span>${m.name} (#${v}) — বর্তমান জমা</span>
+      <span>${fmt(m.total_deposit)}</span>
+    </div>
+    <div class="mat-personal-row">
+      <span>আনুমানিক মেয়াদপূর্তি প্রাপ্য</span>
+      <span class="hl">${fmt(m.final_receivable)}</span>
+    </div>`;
+}
+$('mat-minput').addEventListener('keydown',e=>{if(e.key==='Enter')lookupMaturity();});
+
+// ── Expense tab ──
+function renderExpense(){
+  const tb=$('exptbody'); tb.innerHTML='';
+  let total=0;
+  const yearTotals={};
+  [...EXPENSES].reverse().forEach(e=>{
+    total+=e.amount;
+    yearTotals[e.year]=(yearTotals[e.year]||0)+e.amount;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-weight:600;color:var(--n)">${e.year}</td>
+      <td>${e.month}</td>
+      <td class="exp-desc">${e.description||'সাধারণ পরিচালনা ব্যয়'}</td>
+      <td class="tdr">${e.amount.toLocaleString('en-IN')}</td>`;
+    tb.appendChild(tr);
+  });
+  $('exp-total').textContent=fmt(total);
+
+  const ytb=$('expyeartbody'); ytb.innerHTML='';
+  Object.keys(yearTotals).sort((a,b)=>b-a).forEach(y=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-weight:600;color:var(--n)">${y}</td><td class="tdr">${fmt(yearTotals[y])}</td>`;
+    ytb.appendChild(tr);
+  });
+}
+
 // ── INIT ──
 try{
-  renderKPI(); renderMonthly(); renderCNG(); renderLoan(); renderPL(); renderList();
+  renderKPI(); renderMonthly(); renderCNG(); renderLoan(); renderPL();
+  renderMaturity(); renderExpense(); renderList();
 }catch(e){
   document.body.insertAdjacentHTML('afterbegin','<div style="background:#fee2e2;color:#991b1b;padding:14px;font-size:13px;font-family:monospace;white-space:pre-wrap">Init Error: '+e.message+'</div>');
 }
+
 </script>
 </body>
 </html>
