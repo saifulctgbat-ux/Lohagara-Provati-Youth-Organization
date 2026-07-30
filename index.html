@@ -18,9 +18,44 @@
   --am:#d97706;--amb:#fffbeb;
   --sl:#475569;--bd:#e2e8f0;--lt:#f8fafc;
   --r:14px;
+
+  /* ══ Prabhati Design System — theme tokens (additive, non-breaking) ══ */
+  --page-bg:#eef1f8;
+  --card-bg:#ffffff;
+  --card-bg-2:#f8fafc;
+  --text:#1e293b;
+  --text-2:#334155;
+  --header-grad:linear-gradient(135deg,#0a1628,#0f2044 60%,#1a3a6b);
+  --body-grad:linear-gradient(160deg,#0a1628,#0f2044 40%,#1a3a6b);
+  --shadow-sm:0 2px 8px rgba(15,32,68,.08);
+  --shadow-md:0 4px 24px rgba(15,32,68,.13);
+  --shadow-lg:0 8px 40px rgba(15,32,68,.18);
+  --focus-ring:0 0 0 3px rgba(212,160,23,.45);
+  --dur-fast:150ms;--dur-base:220ms;--dur-slow:380ms;
+  --ease:cubic-bezier(.4,0,.2,1);
+  color-scheme: light;
 }
+[data-theme="dark"]{
+  --page-bg:#0b1220;
+  --card-bg:#131d33;
+  --card-bg-2:#0f1830;
+  --text:#e6ebf5;
+  --text-2:#b8c3da;
+  --bd:#233152;
+  --lt:#0f1830;
+  --shadow-sm:0 2px 10px rgba(0,0,0,.35);
+  --shadow-md:0 6px 26px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 44px rgba(0,0,0,.55);
+  color-scheme: dark;
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+html{scroll-behavior:smooth}
+*:focus-visible{outline:2px solid var(--g);outline-offset:2px;border-radius:6px}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'Hind Siliguri','Inter',sans-serif;background:linear-gradient(160deg,#0a1628,#0f2044 40%,#1a3a6b);min-height:100vh;color:#1e293b;-webkit-text-size-adjust:100%}
+body{font-family:'Hind Siliguri','Inter',sans-serif;background:var(--body-grad);min-height:100vh;color:var(--text);-webkit-text-size-adjust:100%;transition:background var(--dur-slow) var(--ease),color var(--dur-slow) var(--ease)}
 button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action:manipulation}
 .tb,.sbt{touch-action:manipulation}
 
@@ -36,7 +71,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .hct{color:rgba(255,255,255,.35);font-size:9px;font-family:'Inter',sans-serif;margin-top:3px}
 
 /* MAIN */
-.main{max-width:760px;margin:0 auto;padding:14px 13px 48px}
+.main{max-width:760px;margin:0 auto;padding:14px 13px 48px;background:var(--page-bg);border-radius:0 0 18px 18px}
 
 /* TABS */
 .tabs{display:flex;gap:4px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin-bottom:14px;border:1px solid rgba(255,255,255,.1);overflow-x:auto}
@@ -46,7 +81,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .tp{display:none}.tp.active{display:block}
 
 /* CARD */
-.card{background:#fff;border-radius:var(--r);box-shadow:0 4px 24px rgba(15,32,68,.13);overflow:hidden;margin-bottom:13px}
+.card{background:var(--card-bg);border-radius:var(--r);box-shadow:0 4px 24px rgba(15,32,68,.13);overflow:hidden;margin-bottom:13px}
 .ch{background:linear-gradient(135deg,var(--n),var(--nm));padding:12px 15px;display:flex;align-items:center;gap:8px}
 .cht{color:var(--gl);font-size:13.5px;font-weight:700}
 .chr{color:rgba(255,255,255,.38);font-size:10px;margin-left:auto;font-family:'Inter',sans-serif}
@@ -62,14 +97,14 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 /* STATS */
 .sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:13px}
 @media(max-width:450px){.sg{grid-template-columns:repeat(2,1fr)}}
-.sc{background:#fff;border-radius:10px;padding:11px 9px;text-align:center;box-shadow:0 2px 8px rgba(15,32,68,.08);border:1px solid var(--bd)}
+.sc{background:var(--card-bg);border-radius:10px;padding:11px 9px;text-align:center;box-shadow:0 2px 8px rgba(15,32,68,.08);border:1px solid var(--bd)}
 .si{font-size:18px;margin-bottom:2px}
 .sv{font-size:15px;font-weight:800;color:var(--n);font-family:'Inter',sans-serif;line-height:1.1}
 .sv.red{color:var(--rd)}.sv.amb{color:var(--am)}.sv.grn{color:var(--gr)}
 .sl2{font-size:9px;color:var(--sl);margin-top:2px;font-weight:500}
 
 /* SEARCH */
-.sw{background:#fff;border-radius:var(--r);box-shadow:0 4px 24px rgba(15,32,68,.13);padding:15px;margin-bottom:13px}
+.sw{background:var(--card-bg);border-radius:var(--r);box-shadow:0 4px 24px rgba(15,32,68,.13);padding:15px;margin-bottom:13px}
 .slab{font-size:12.5px;font-weight:600;color:var(--n);margin-bottom:8px}
 .srow{display:flex;gap:8px}
 .sin{flex:1;padding:12px 13px;border:2px solid var(--bd);border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:15px;color:var(--n);background:var(--lt);transition:border-color .2s}
@@ -80,7 +115,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .em.on{display:block}
 
 /* MEMBER CARD */
-.mc{background:#fff;border-radius:var(--r);box-shadow:0 8px 40px rgba(15,32,68,.18);overflow:hidden;margin-top:13px;display:none}
+.mc{background:var(--card-bg);border-radius:var(--r);box-shadow:0 8px 40px rgba(15,32,68,.18);overflow:hidden;margin-top:13px;display:none}
 .mc.on{display:block;animation:su .3s ease}
 @keyframes su{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .mch{background:linear-gradient(135deg,var(--n),var(--nm));padding:15px 15px 12px;position:relative}
@@ -95,7 +130,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 /* INFO GRID */
 .ig{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd)}
 @media(max-width:360px){.ig{grid-template-columns:1fr}}
-.ic{background:#fff;padding:11px 13px}
+.ic{background:var(--card-bg);padding:11px 13px}
 .icl{font-size:9px;color:var(--sl);font-weight:500;letter-spacing:.3px;text-transform:uppercase;font-family:'Inter',sans-serif}
 .icv{font-size:15px;font-weight:800;color:var(--n);margin-top:2px;font-family:'Inter',sans-serif}
 .icv.g{color:var(--gr)}.icv.r{color:var(--rd)}.icv.a{color:var(--am)}
@@ -118,7 +153,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:11.5px;font-family:'Inter',sans-serif}
 th{background:var(--n);color:var(--gl);padding:8px 9px;text-align:left;white-space:nowrap;font-size:9.5px;letter-spacing:.5px}
-td{padding:7px 9px;border-bottom:1px solid var(--bd);color:#334155}
+td{padding:7px 9px;border-bottom:1px solid var(--bd);color:var(--text-2)}
 tr:hover td{background:#f8fafc;cursor:pointer}
 .tdn{font-weight:600;color:var(--n)}.tdg{color:var(--gr);font-weight:600}
 .tdr{color:var(--rd);font-weight:600}.tda{color:var(--am);font-weight:600}
@@ -133,7 +168,7 @@ tr:hover td{background:#f8fafc;cursor:pointer}
 /* CNG */
 .cng-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:420px){.cng-grid{grid-template-columns:1fr}}
-.cng-card{background:#fff;border-radius:11px;border:1px solid var(--bd);padding:12px;box-shadow:0 2px 8px rgba(15,32,68,.08)}
+.cng-card{background:var(--card-bg);border-radius:11px;border:1px solid var(--bd);padding:12px;box-shadow:0 2px 8px rgba(15,32,68,.08)}
 .cng-driver{font-size:12.5px;font-weight:700;color:var(--n);margin:5px 0 6px}
 .cng-type{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:12px;font-family:'Inter',sans-serif}
 .cng-type.cng{background:#eff6ff;color:#1d4ed8}.cng-type.auto{background:var(--grb);color:var(--gr)}
@@ -183,7 +218,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 
 .mat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
 @media(max-width:420px){.mat-grid{grid-template-columns:1fr}}
-.mat-card{background:#fff;border-radius:12px;padding:13px;border:1px solid var(--bd);box-shadow:0 2px 8px rgba(15,32,68,.06)}
+.mat-card{background:var(--card-bg);border-radius:12px;padding:13px;border:1px solid var(--bd);box-shadow:0 2px 8px rgba(15,32,68,.06)}
 .mat-card-label{font-size:10px;color:var(--sl);font-weight:500;margin-bottom:4px}
 .mat-card-val{font-size:16px;font-weight:800;color:var(--n);font-family:'Inter',sans-serif}
 .mat-card-val.gold{color:var(--g)}
@@ -209,7 +244,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 .rec-sub{font-size:10.5px;color:var(--sl);font-family:'Inter',sans-serif;margin-top:1px}
 .rec-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 @media(max-width:420px){.rec-kpis{grid-template-columns:repeat(2,1fr)}}
-.rec-kpi{background:var(--lt);border:1px solid var(--bd);border-radius:10px;padding:9px 8px;text-align:center}
+.rec-kpi{background:var(--card-bg-2);border:1px solid var(--bd);border-radius:10px;padding:9px 8px;text-align:center}
 .rec-kpi-l{font-size:9px;color:var(--sl);font-family:'Inter',sans-serif}
 .rec-kpi-v{font-size:14px;font-weight:800;color:var(--n);font-family:'Inter',sans-serif;margin-top:2px}
 .rec-kpi-v.g{color:var(--gr)}.rec-kpi-v.r{color:var(--rd)}
@@ -229,7 +264,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 /* ══ NEW: RECON TABLE ══ */
 .recon-split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bd);border-radius:10px;overflow:hidden;margin-top:4px}
 @media(max-width:420px){.recon-split{grid-template-columns:1fr}}
-.recon-col{background:#fff;padding:13px}
+.recon-col{background:var(--card-bg);padding:13px}
 .recon-col-title{font-size:11px;font-weight:700;color:var(--n);margin-bottom:9px;text-transform:uppercase;letter-spacing:.4px;font-family:'Inter',sans-serif}
 .recon-row{display:flex;justify-content:space-between;padding:6px 0;font-size:11.5px;border-bottom:1px solid var(--lt)}
 .recon-row span:last-child{font-weight:700;color:var(--n);font-family:'Inter',sans-serif}
@@ -434,6 +469,108 @@ body::before{
 .lm-memo-wrap,.memo-preview-overlay{
   position:relative;z-index:1;
 }
+
+
+/* ══════════════════════════════════════════════════════════
+   PRABHATI DS — ADDITIVE POLISH LAYER (theme toggle, clock,
+   breadcrumb, micro-interactions, a11y). Nothing above is
+   removed; this layer only extends the existing system.
+   ══════════════════════════════════════════════════════════ */
+
+.theme-toggle{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+  color:var(--gl);width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  cursor:pointer;margin-bottom:6px;margin-left:auto;
+  transition:transform var(--dur-base) var(--ease),background var(--dur-base) var(--ease);
+}
+.theme-toggle:hover{background:rgba(255,255,255,.2);transform:rotate(15deg) scale(1.06)}
+.theme-toggle:active{transform:scale(.92)}
+
+.hclock{
+  max-width:760px;margin:6px auto 0;padding:0 15px 10px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;
+  color:rgba(255,255,255,.55);letter-spacing:.3px;
+}
+.hclock-dot{color:rgba(255,255,255,.3)}
+#live-time{color:var(--gl);font-variant-numeric:tabular-nums}
+
+.breadcrumb{
+  max-width:760px;margin:0 auto;padding:9px 15px;
+  font-family:'Hind Siliguri',sans-serif;font-size:11.5px;color:var(--sl);
+  background:var(--card-bg-2);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:6px;
+  transition:background var(--dur-slow) var(--ease),color var(--dur-slow) var(--ease);
+}
+.bc-home{font-weight:600;color:var(--n)}
+[data-theme="dark"] .bc-home{color:var(--gl)}
+.bc-sep{opacity:.5}
+#bc-current{font-weight:700;color:var(--g)}
+
+/* Smooth, professional micro-interactions (no flashy motion) */
+.card,.cng-card,.mat-card,.sc,.rec-kpi{
+  transition:transform var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease),background var(--dur-slow) var(--ease);
+}
+.card:hover,.cng-card:hover,.mat-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-lg);
+}
+.tb{transition:all var(--dur-base) var(--ease)}
+.sbt,.pbtn,.theme-toggle,button{transition:transform var(--dur-fast) var(--ease),opacity var(--dur-fast) var(--ease),background var(--dur-base) var(--ease)}
+.sbt:active,.pbtn:active{transform:scale(.97)}
+tr{transition:background var(--dur-fast) var(--ease)}
+
+/* Tab panel transition (fade + lift) — additive to existing .tp/.tp.active */
+.tp{opacity:0;transform:translateY(6px);transition:opacity var(--dur-base) var(--ease),transform var(--dur-base) var(--ease)}
+.tp.active{opacity:1;transform:translateY(0)}
+
+/* Card stagger-in on tab activation */
+.tp.active .card,.tp.active .cng-card,.tp.active .mat-card,.tp.active .sc{
+  animation:fadeSlideIn var(--dur-slow) var(--ease) both;
+}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Dark theme: table + inputs + text follow theme */
+[data-theme="dark"] table{color:var(--text)}
+[data-theme="dark"] tr:hover td{background:rgba(255,255,255,.04)}
+[data-theme="dark"] .sin,[data-theme="dark"] .lf-in,[data-theme="dark"] .lf-sel{
+  background:var(--card-bg-2);color:var(--text);border-color:var(--bd);
+}
+[data-theme="dark"] .icv,[data-theme="dark"] .cng-driver,[data-theme="dark"] .mat-card-val,
+[data-theme="dark"] .rec-kpi-v,[data-theme="dark"] .rec-name,[data-theme="dark"] .slab{color:var(--gl)}
+[data-theme="dark"] .icl,[data-theme="dark"] .cng-row,[data-theme="dark"] .rec-kpi-l,
+[data-theme="dark"] .sl2,[data-theme="dark"] .rec-sub{color:var(--text-2)}
+[data-theme="dark"] footer{background:rgba(0,0,0,.5)}
+[data-theme="dark"] .exp-desc,[data-theme="dark"] .rec-note{color:var(--text-2)}
+[data-theme="dark"] .rec-all-table td:first-child{background:var(--card-bg-2)}
+
+/* Accessibility: larger touch targets, readable minimums */
+.tb{min-height:38px}
+.pbtn,.sbt{min-height:40px}
+.theme-toggle{min-width:34px;min-height:34px}
+input,select,button{font-size:15px}
+
+/* Toast: smoother easing (values already fine, add easing var) */
+.toast{transition:all var(--dur-slow) var(--ease)}
+
+/* Tablet richness: a touch more breathing room ≥600px, per redesign notes */
+@media(min-width:600px){
+  .main{max-width:800px;padding:18px 20px 56px}
+  .hdi,.hclock,.breadcrumb{max-width:800px}
+  .sg{grid-template-columns:repeat(4,1fr)}
+  .cng-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:1024px){
+  .main{max-width:960px}
+  .hdi,.hclock,.breadcrumb{max-width:960px}
+}
+
+/* Print: keep header hidden as before; also hide new additive chrome */
+@media print{
+  .theme-toggle,.hclock,.breadcrumb{display:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -446,11 +583,24 @@ body::before{
       <div class="hs">LOHAGARA PROVATI YOUTH ORGANIZATION (LPYO) · সদস্য পোর্টাল</div>
     </div>
     <div class="hright">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="থিম পরিবর্তন করুন" title="Light / Dark">
+        <span id="theme-icon">🌙</span>
+      </button>
       <div class="hbadge">🟢 Synced</div>
       <div class="hct">Google Drive · Jun 2026</div>
     </div>
   </div>
+  <div class="hclock" aria-live="polite">
+    <span id="live-date">—</span>
+    <span class="hclock-dot">•</span>
+    <span id="live-day">—</span>
+    <span class="hclock-dot">•</span>
+    <span id="live-time">—</span>
+  </div>
 </header>
+<div class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
+  <span class="bc-home">🏠 হোম</span><span class="bc-sep">›</span><span id="bc-current">সদস্য</span>
+</div>
 
 <div class="main">
   <div class="tabs">
@@ -1960,6 +2110,387 @@ try{
 }catch(e){
   document.body.insertAdjacentHTML('afterbegin','<div style="background:#fee2e2;color:#991b1b;padding:14px;font-size:13px;font-family:monospace;white-space:pre-wrap">Init Error: '+e.message+'</div>');
 }
+
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// ADDITIVE ENHANCEMENT LAYER — theme, clock, breadcrumb.
+// Does not modify or replace any existing app logic/data above.
+// ══════════════════════════════════════════════════════════
+(function(){
+  // ---- Theme: load + apply saved preference ----
+  function applyTheme(mode){
+    document.documentElement.setAttribute('data-theme', mode);
+    var icon = document.getElementById('theme-icon');
+    if(icon) icon.textContent = (mode === 'dark') ? '☀️' : '🌙';
+    try{ localStorage.setItem('lpyo-theme', mode); }catch(e){}
+  }
+  window.toggleTheme = function(){
+    var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  };
+  var saved = 'light';
+  try{ saved = localStorage.getItem('lpyo-theme') || 'light'; }catch(e){}
+  applyTheme(saved);
+
+  // ---- Live date / time / day-of-week ----
+  var bnMonths = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  var bnDays = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tickClock(){
+    var now = new Date();
+    var dEl = document.getElementById('live-date');
+    var wEl = document.getElementById('live-day');
+    var tEl = document.getElementById('live-time');
+    if(dEl) dEl.textContent = now.getDate() + ' ' + bnMonths[now.getMonth()] + ' ' + now.getFullYear();
+    if(wEl) wEl.textContent = bnDays[now.getDay()];
+    if(tEl) tEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ---- Breadcrumb: reflect active tab label without touching tab() ----
+  var tabLabels = {
+    'member':'সদস্য','org':'সংগঠন','monthly':'মাসিক','cng':'CNG','loan':'লোন',
+    'memo':'লোন ও CNG রেকর্ড','maturity':'মেয়াদপূর্তি','pl':'P&L','expense':'খরচ','list':'তালিকা'
+  };
+  function syncBreadcrumb(){
+    var activeBtn = document.querySelector('.tb.active');
+    var bc = document.getElementById('bc-current');
+    if(!activeBtn || !bc) return;
+    var txt = activeBtn.textContent.replace(/^[^\u0980-\u09FF\w]*/, '').trim();
+    // fall back to mapped label using the onclick attr for reliability
+    var onclick = activeBtn.getAttribute('onclick') || '';
+    var m = onclick.match(/tab\('([a-z]+)'\)/);
+    if(m && tabLabels[m[1]]) txt = tabLabels[m[1]];
+    bc.textContent = txt;
+  }
+  // Observe the tab bar for class changes (active toggling) — non-invasive
+  var tabsBar = document.querySelector('.tabs');
+  if(tabsBar && window.MutationObserver){
+    var mo = new MutationObserver(syncBreadcrumb);
+    tabsBar.querySelectorAll('.tb').forEach(function(b){
+      mo.observe(b, { attributes:true, attributeFilter:['class'] });
+    });
+  }
+  syncBreadcrumb();
+
+  // ---- A11y polish: label the tab bar & buttons without altering behavior ----
+  if(tabsBar){
+    tabsBar.setAttribute('role','tablist');
+    tabsBar.querySelectorAll('.tb').forEach(function(b){
+      b.setAttribute('role','tab');
+    });
+  }
+})();
+</script>
+
+
+<style>
+
+/* ══════════════════════════════════════════════════════════
+   PREMIUM LAYER — Phase 1 (additive, non-destructive)
+   Sticky nav polish, scroll-top, search, command palette,
+   toasts/confirm/skeleton/empty/error states, print polish
+   ══════════════════════════════════════════════════════════ */
+
+/* Floating scroll-to-top */
+.fab-top{
+  position:fixed; right:16px; bottom:22px; z-index:200;
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--n),var(--nl));
+  color:var(--gl); border:2px solid var(--g);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px; cursor:pointer; box-shadow:var(--shadow-lg);
+  opacity:0; pointer-events:none; transform:translateY(12px) scale(.9);
+  transition:opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.fab-top.show{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.fab-top:active{transform:scale(.92)}
+
+/* Global search trigger pill (sits in header) */
+.gsearch-trigger{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+  color:#dbe3f5; border-radius:10px; padding:8px 12px; cursor:pointer;
+  font-size:13px; white-space:nowrap; transition:background var(--dur-fast) var(--ease);
+  margin-left:auto;
+}
+.gsearch-trigger:hover{background:rgba(255,255,255,.15)}
+.gsearch-trigger kbd{
+  background:rgba(255,255,255,.15); border-radius:5px; padding:1px 6px;
+  font-size:11px; font-family:inherit; border:1px solid rgba(255,255,255,.25);
+}
+
+/* Overlay shared by search + command palette */
+.ov-mask{
+  position:fixed;inset:0;background:rgba(6,12,26,.62);backdrop-filter:blur(3px);
+  z-index:500;display:none;align-items:flex-start;justify-content:center;padding-top:9vh;
+}
+.ov-mask.on{display:flex}
+.ov-box{
+  width:min(560px,92vw); background:var(--card-bg); border-radius:16px;
+  box-shadow:var(--shadow-lg); border:1px solid var(--bd); overflow:hidden;
+  max-height:74vh; display:flex; flex-direction:column;
+  animation:ovIn .18s var(--ease);
+}
+@keyframes ovIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+.ov-input-row{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--bd)}
+.ov-input-row span{font-size:18px;color:var(--sl)}
+.ov-input-row input{
+  flex:1;border:none;outline:none;background:transparent;font-size:16px;color:var(--text);
+  font-family:inherit;
+}
+.ov-list{overflow-y:auto;padding:6px}
+.ov-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 12px;border-radius:10px;cursor:pointer;color:var(--text);
+  transition:background var(--dur-fast) var(--ease);
+}
+.ov-item:hover,.ov-item.sel{background:var(--gp)}
+.ov-item small{color:var(--sl);font-size:12px}
+.ov-empty{padding:26px 16px;text-align:center;color:var(--sl);font-size:14px}
+.ov-sec-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--sl);padding:8px 12px 4px}
+
+/* Toasts (upgraded, stacked, typed) */
+.tstack{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:600;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(420px,92vw)}
+.tcard{
+  width:100%;display:flex;align-items:center;gap:10px;background:var(--n);color:#fff;
+  border-radius:12px;padding:12px 14px;box-shadow:var(--shadow-lg);font-size:13.5px;
+  border-left:4px solid var(--g); opacity:0; transform:translateY(10px);
+  transition:opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.tcard.show{opacity:1;transform:translateY(0)}
+.tcard.ok{border-left-color:var(--gr)}
+.tcard.err{border-left-color:var(--rd)}
+.tcard.warn{border-left-color:var(--am)}
+.tcard .ic{font-size:16px}
+
+/* Confirm dialog */
+.cf-mask{position:fixed;inset:0;background:rgba(6,12,26,.55);z-index:550;display:none;align-items:center;justify-content:center;padding:16px}
+.cf-mask.on{display:flex}
+.cf-box{width:min(380px,92vw);background:var(--card-bg);border-radius:16px;box-shadow:var(--shadow-lg);padding:22px;animation:ovIn .18s var(--ease)}
+.cf-title{font-weight:700;font-size:16px;color:var(--text);margin-bottom:8px}
+.cf-msg{font-size:13.5px;color:var(--text-2);line-height:1.5;margin-bottom:18px}
+.cf-row{display:flex;gap:10px;justify-content:flex-end}
+.cf-btn{border:none;border-radius:10px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.cf-cancel{background:var(--lt);color:var(--text-2)}
+.cf-ok{background:var(--rd);color:#fff}
+.cf-ok.primary{background:var(--n)}
+
+/* Skeleton loaders */
+@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
+.sk{border-radius:8px;background:linear-gradient(90deg,var(--bd) 25%,var(--lt) 50%,var(--bd) 75%);background-size:400px 100%;animation:shimmer 1.3s infinite linear}
+.sk-line{height:13px;margin:6px 0}
+.sk-card{height:74px;border-radius:14px;margin:8px 0}
+
+/* Empty / error states */
+.state-block{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:34px 18px;text-align:center;color:var(--sl)}
+.state-block .em{font-size:38px;line-height:1}
+.state-block .ti{font-weight:700;color:var(--text);font-size:14.5px}
+.state-block .sub{font-size:12.5px;max-width:280px}
+.state-block.err .em{color:var(--rd)}
+
+/* Print polish additions */
+@media print{
+  .fab-top,.gsearch-trigger,.ov-mask,.tstack,.cf-mask{display:none!important}
+}
+
+</style>
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+function el(tag,cls,html){ var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+function fmtNum(n){ try{ return fmt(n); }catch(e){ return String(n); } }
+
+/* ---------- 1. Floating scroll-to-top ---------- */
+var fab = el('div','fab-top','⬆');
+fab.setAttribute('title','উপরে ফিরুন');
+document.body.appendChild(fab);
+fab.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+window.addEventListener('scroll',function(){
+  if(window.scrollY>420) fab.classList.add('show'); else fab.classList.remove('show');
+},{passive:true});
+
+/* ---------- 2. Global search trigger in header ---------- */
+var hdi = document.querySelector('.hdi');
+if(hdi){
+  var trig = el('div','gsearch-trigger','🔍 <span>খুঁজুন</span><kbd>Ctrl K</kbd>');
+  hdi.appendChild(trig);
+  trig.addEventListener('click',openSearch);
+}
+
+/* ---------- Overlays root ---------- */
+var mask = el('div','ov-mask');
+mask.innerHTML =
+  '<div class="ov-box">'+
+    '<div class="ov-input-row"><span>🔍</span><input type="text" id="gs-input" placeholder="সদস্যের নাম, নম্বর বা মোবাইল লিখুন..." inputmode="search"></div>'+
+    '<div class="ov-list" id="gs-list"></div>'+
+  '</div>';
+document.body.appendChild(mask);
+var gsInput = mask.querySelector('#gs-input');
+var gsList  = mask.querySelector('#gs-list');
+
+function closeOverlay(){ mask.classList.remove('on'); gsInput.value=''; }
+mask.addEventListener('click',function(e){ if(e.target===mask) closeOverlay(); });
+
+function renderSearchEmpty(msg){
+  gsList.innerHTML = '<div class="ov-empty">'+(msg||'কোনো ফলাফল পাওয়া যায়নি')+'</div>';
+}
+
+function doSearch(q){
+  q = (q||'').trim().toLowerCase();
+  if(!q){ renderSearchEmpty('সদস্যের নাম বা নম্বর টাইপ করুন'); return; }
+  var results = [];
+  try{
+    Object.keys(MEMBERS).forEach(function(id){
+      var m = MEMBERS[id];
+      var hay = (id+' '+m.name+' '+(m.mobile||'')).toLowerCase();
+      if(hay.indexOf(q)!==-1) results.push({id:id,m:m});
+    });
+  }catch(e){}
+  if(!results.length){ renderSearchEmpty(); return; }
+  results = results.slice(0,30);
+  gsList.innerHTML = '<div class="ov-sec-label">সদস্য</div>' + results.map(function(r){
+    return '<div class="ov-item" data-id="'+r.id+'"><span>👤 '+r.m.name+'</span><small>#'+r.id+' · '+(r.m.shares||0)+' শেয়ার</small></div>';
+  }).join('');
+  Array.prototype.forEach.call(gsList.querySelectorAll('.ov-item'),function(node){
+    node.addEventListener('click',function(){
+      var id = node.getAttribute('data-id');
+      closeOverlay();
+      try{ tab('member'); }catch(e){}
+      var mi = document.getElementById('minput');
+      if(mi){ mi.value = id; }
+      try{ lookup(); }catch(e){}
+      try{ showToastX(MEMBERS[id].name+' — সদস্য পাওয়া গেছে','ok'); }catch(e){}
+    });
+  });
+}
+
+function openSearch(){
+  mask.classList.add('on');
+  setTimeout(function(){ gsInput.focus(); },30);
+  renderSearchEmpty('সদস্যের নাম বা নম্বর টাইপ করুন');
+}
+gsInput.addEventListener('input',function(){ doSearch(gsInput.value); });
+gsInput.addEventListener('keydown',function(e){ if(e.key==='Escape') closeOverlay(); });
+
+/* ---------- 3. Command Palette (Ctrl+K) ---------- */
+var cpMask = el('div','ov-mask');
+cpMask.innerHTML =
+  '<div class="ov-box">'+
+    '<div class="ov-input-row"><span>⌘</span><input type="text" id="cp-input" placeholder="একটি কমান্ড লিখুন বা নির্বাচন করুন..."></div>'+
+    '<div class="ov-list" id="cp-list"></div>'+
+  '</div>';
+document.body.appendChild(cpMask);
+var cpInput = cpMask.querySelector('#cp-input');
+var cpList  = cpMask.querySelector('#cp-list');
+
+var COMMANDS = [
+  {label:'📊 সংগঠন ট্যাব খুলুন', run:function(){ tab('org'); }},
+  {label:'📅 মাসিক ট্যাব খুলুন', run:function(){ tab('monthly'); }},
+  {label:'🚗 CNG ট্যাব খুলুন', run:function(){ tab('cng'); }},
+  {label:'🏦 লোন ট্যাব খুলুন', run:function(){ tab('loan'); }},
+  {label:'📂 লোন ও CNG রেকর্ড খুলুন', run:function(){ tab('memo'); }},
+  {label:'🎯 মেয়াদপূর্তি ট্যাব খুলুন', run:function(){ tab('maturity'); }},
+  {label:'📉 P&L ট্যাব খুলুন', run:function(){ tab('pl'); }},
+  {label:'💸 খরচ ট্যাব খুলুন', run:function(){ tab('expense'); }},
+  {label:'👥 তালিকা ট্যাব খুলুন', run:function(){ tab('list'); }},
+  {label:'🔍 সদস্য অনুসন্ধান ট্যাব খুলুন', run:function(){ tab('member'); }},
+  {label:'🌗 থিম পরিবর্তন করুন (Light/Dark)', run:function(){ try{ toggleTheme(); }catch(e){} }},
+  {label:'🖨️ প্রিন্ট করুন', run:function(){ window.print(); }},
+  {label:'⬆ উপরে ফিরুন', run:function(){ window.scrollTo({top:0,behavior:'smooth'}); }}
+];
+
+function renderCommands(q){
+  q=(q||'').trim().toLowerCase();
+  var items = COMMANDS.filter(function(c){ return !q || c.label.toLowerCase().indexOf(q)!==-1; });
+  if(!items.length){ cpList.innerHTML='<div class="ov-empty">কোনো কমান্ড পাওয়া যায়নি</div>'; return; }
+  cpList.innerHTML = items.map(function(c,i){ return '<div class="ov-item" data-i="'+i+'">'+c.label+'</div>'; }).join('');
+  Array.prototype.forEach.call(cpList.querySelectorAll('.ov-item'),function(node,i){
+    node.addEventListener('click',function(){ items[i].run(); closeCP(); });
+  });
+}
+function openCP(){ cpMask.classList.add('on'); renderCommands(''); setTimeout(function(){ cpInput.focus(); },30); }
+function closeCP(){ cpMask.classList.remove('on'); cpInput.value=''; }
+cpMask.addEventListener('click',function(e){ if(e.target===cpMask) closeCP(); });
+cpInput.addEventListener('input',function(){ renderCommands(cpInput.value); });
+cpInput.addEventListener('keydown',function(e){ if(e.key==='Escape') closeCP(); });
+
+document.addEventListener('keydown',function(e){
+  var k = e.key ? e.key.toLowerCase() : '';
+  if((e.ctrlKey||e.metaKey) && k==='k'){ e.preventDefault(); openCP(); return; }
+  if(k==='escape'){ closeOverlay(); closeCP(); }
+});
+
+/* ---------- 4. Toast stack (additive; keeps old showToast working) ---------- */
+var tstack = el('div','tstack');
+document.body.appendChild(tstack);
+window.showToastX = function(msg,type){
+  type = type||'info';
+  var icon = type==='ok'?'✅':type==='err'?'⚠️':type==='warn'?'⏳':'ℹ️';
+  var card = el('div','tcard '+type,'<span class="ic">'+icon+'</span><span>'+msg+'</span>');
+  tstack.appendChild(card);
+  requestAnimationFrame(function(){ card.classList.add('show'); });
+  setTimeout(function(){
+    card.classList.remove('show');
+    setTimeout(function(){ card.remove(); },250);
+  },2600);
+};
+/* keep legacy showToast() working, but also mirror into the new stack for consistent styling */
+if(window.showToast){
+  var _origShowToast = window.showToast;
+  window.showToast = function(msg){
+    try{ _origShowToast(msg); }catch(e){}
+    try{ showToastX(msg,'info'); }catch(e){}
+  };
+}
+
+/* ---------- 5. Confirm dialog helper ---------- */
+var cfMask = el('div','cf-mask');
+cfMask.innerHTML =
+  '<div class="cf-box">'+
+    '<div class="cf-title" id="cf-title">নিশ্চিত করুন</div>'+
+    '<div class="cf-msg" id="cf-msg"></div>'+
+    '<div class="cf-row">'+
+      '<button class="cf-btn cf-cancel" id="cf-cancel">বাতিল</button>'+
+      '<button class="cf-btn cf-ok" id="cf-ok">নিশ্চিত করুন</button>'+
+    '</div>'+
+  '</div>';
+document.body.appendChild(cfMask);
+window.confirmDialog = function(opts){
+  opts = opts||{};
+  cfMask.querySelector('#cf-title').textContent = opts.title || 'নিশ্চিত করুন';
+  cfMask.querySelector('#cf-msg').textContent = opts.message || 'আপনি কি নিশ্চিত?';
+  var okBtn = cfMask.querySelector('#cf-ok');
+  okBtn.textContent = opts.okLabel || 'নিশ্চিত করুন';
+  okBtn.className = 'cf-btn cf-ok'+(opts.danger===false?' primary':'');
+  cfMask.classList.add('on');
+  function cleanup(){ cfMask.classList.remove('on'); okBtn.removeEventListener('click',onOk); cancelBtn.removeEventListener('click',onCancel); }
+  var cancelBtn = cfMask.querySelector('#cf-cancel');
+  function onOk(){ cleanup(); if(opts.onConfirm) opts.onConfirm(); }
+  function onCancel(){ cleanup(); if(opts.onCancel) opts.onCancel(); }
+  okBtn.addEventListener('click',onOk);
+  cancelBtn.addEventListener('click',onCancel);
+};
+
+/* ---------- 6. Skeleton / empty / error state helpers (utility API) ---------- */
+window.uiSkeleton = function(n){
+  var wrap = el('div');
+  for(var i=0;i<(n||3);i++){ wrap.appendChild(el('div','sk sk-card')); }
+  return wrap;
+};
+window.uiEmptyState = function(title,sub){
+  return el('div','state-block','<div class="em">🗂️</div><div class="ti">'+(title||'কোনো তথ্য নেই')+'</div><div class="sub">'+(sub||'')+'</div>');
+};
+window.uiErrorState = function(title,sub){
+  return el('div','state-block err','<div class="em">⚠️</div><div class="ti">'+(title||'কিছু ভুল হয়েছে')+'</div><div class="sub">'+(sub||'')+'</div>');
+};
+
+})();
 
 </script>
 </body>
