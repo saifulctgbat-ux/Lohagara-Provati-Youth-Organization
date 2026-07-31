@@ -46,6 +46,12 @@
   --shadow-sm:0 2px 10px rgba(0,0,0,.35);
   --shadow-md:0 6px 26px rgba(0,0,0,.45);
   --shadow-lg:0 10px 44px rgba(0,0,0,.55);
+  /* ══ Fix: --n / --sl are used across the app as text colors (table
+     headers, labels, Monthly & Expense tabs, form inputs, etc). They were
+     never re-mapped for dark mode, so text stayed near-black on dark
+     backgrounds. Point them at the light-mode-safe text tokens instead. ══ */
+  --n:var(--text);
+  --sl:var(--text-2);
   color-scheme: dark;
 }
 @media (prefers-reduced-motion: reduce){
@@ -60,7 +66,23 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .tb,.sbt{touch-action:manipulation}
 
 /* HEADER */
-.hd{background:linear-gradient(135deg,#0a1628,#0f2044 60%,#1a3a6b);padding:13px 15px;border-bottom:3px solid var(--g);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+/* ══ বকেয়া সদস্য নিউজ টিকার (additive, non-breaking) ══ */
+.dues-ticker{position:sticky;top:0;z-index:101;display:flex;align-items:stretch;height:32px;background:linear-gradient(135deg,#7f1d1d,#dc2626 55%,#7f1d1d);box-shadow:0 2px 12px rgba(0,0,0,.35);overflow:hidden}
+[data-theme="dark"] .dues-ticker{background:linear-gradient(135deg,#450a0a,#b91c1c 55%,#450a0a)}
+.dues-ticker.dues-ticker-clear{background:linear-gradient(135deg,#14532d,#16a34a 55%,#14532d)}
+[data-theme="dark"] .dues-ticker.dues-ticker-clear{background:linear-gradient(135deg,#052e16,#15803d 55%,#052e16)}
+.dues-ticker-badge{display:flex;align-items:center;gap:4px;flex-shrink:0;background:rgba(0,0,0,.28);color:#fff;font-weight:800;font-size:10.5px;padding:0 10px;letter-spacing:.3px;font-family:'Hind Siliguri',sans-serif;white-space:nowrap}
+.dues-ticker-dot{animation:dues-ticker-blink 1.1s ease-in-out infinite}
+@keyframes dues-ticker-blink{0%,100%{opacity:1}50%{opacity:.25}}
+.dues-ticker-track{flex:1;overflow:hidden;white-space:nowrap;position:relative;display:flex;align-items:center;min-width:0}
+.dues-ticker-content{display:inline-flex;align-items:center;white-space:nowrap;will-change:transform;animation:dues-ticker-scroll var(--dues-ticker-dur,28s) linear infinite}
+.dues-ticker-item{padding:0 26px;font-size:12px;font-weight:600;color:#fff;font-family:'Hind Siliguri',sans-serif;white-space:nowrap}
+.dues-ticker-sep{padding:0 6px;color:rgba(255,255,255,.65);font-size:11px}
+@keyframes dues-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.dues-ticker-content{animation:none;overflow-x:auto}}
+@media print{.dues-ticker{display:none!important}}
+
+.hd{background:linear-gradient(135deg,#0a1628,#0f2044 60%,#1a3a6b);padding:13px 15px;border-bottom:3px solid var(--g);position:sticky;top:32px;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .hdi{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:11px}
 .logo{width:52px;height:52px;border-radius:50%;border:2.5px solid var(--g);object-fit:cover;flex-shrink:0;box-shadow:0 0 16px rgba(212,160,23,.45)}
 .ht{flex:1;min-width:0}
@@ -74,10 +96,10 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .main{max-width:760px;margin:0 auto;padding:14px 13px 48px;background:var(--page-bg);border-radius:0 0 18px 18px}
 
 /* TABS */
-.tabs{display:flex;gap:4px;background:rgba(255,255,255,.06);border-radius:12px;padding:4px;margin-bottom:14px;border:1px solid rgba(255,255,255,.1);overflow-x:auto}
-.tb{flex:1;min-width:54px;padding:8px 4px;border:none;border-radius:8px;font-family:'Hind Siliguri',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;color:rgba(255,255,255,.5);background:transparent;white-space:nowrap;transition:all .2s}
+.tabs{display:flex;gap:4px;background:var(--card-bg-2);border-radius:12px;padding:4px;margin-bottom:14px;border:1px solid var(--bd);overflow-x:auto}
+.tb{flex:1;min-width:54px;padding:8px 4px;border:none;border-radius:8px;font-family:'Hind Siliguri',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--text-2);background:transparent;white-space:nowrap;transition:all .2s}
 .tb.active{background:var(--g);color:var(--n);box-shadow:0 2px 10px rgba(212,160,23,.4)}
-.tb:hover:not(.active){background:rgba(255,255,255,.1);color:rgba(255,255,255,.9)}
+.tb:hover:not(.active){background:var(--bd);color:var(--text)}
 .tp{display:none}.tp.active{display:block}
 
 /* CARD */
@@ -108,7 +130,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .slab{font-size:12.5px;font-weight:600;color:var(--n);margin-bottom:8px}
 .srow{display:flex;gap:8px}
 .sin{flex:1;padding:12px 13px;border:2px solid var(--bd);border-radius:10px;font-family:'Hind Siliguri',sans-serif;font-size:15px;color:var(--n);background:var(--lt);transition:border-color .2s}
-.sin:focus{outline:none;border-color:var(--nm);background:#fff}
+.sin:focus{outline:none;border-color:var(--nm);background:var(--card-bg)}
 .sbt{background:linear-gradient(135deg,var(--n),var(--nm));color:var(--gl);border:none;border-radius:10px;padding:12px 18px;font-family:'Hind Siliguri',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(15,32,68,.3);transition:opacity .2s}
 .sbt:hover{opacity:.9}
 .em{margin-top:8px;color:var(--rd);font-size:12.5px;padding:9px 12px;background:var(--rdb);border-radius:8px;border-left:3px solid var(--rd);display:none}
@@ -201,7 +223,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 /* ══ NEW: LIST SEARCH/FILTER ══ */
 .lf-bar{display:flex;gap:8px;padding:12px 15px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
 .lf-in{flex:1;min-width:140px;padding:9px 12px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Hind Siliguri',sans-serif;font-size:13px;color:var(--n);background:var(--lt)}
-.lf-in:focus{outline:none;border-color:var(--nm);background:#fff}
+.lf-in:focus{outline:none;border-color:var(--nm);background:var(--card-bg)}
 .lf-sel{padding:9px 10px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Hind Siliguri',sans-serif;font-size:12px;color:var(--n);background:var(--lt)}
 .lf-count{font-size:10.5px;color:var(--sl);padding:8px 15px 0;font-family:'Inter',sans-serif}
 
@@ -545,6 +567,37 @@ tr{transition:background var(--dur-fast) var(--ease)}
 [data-theme="dark"] .exp-desc,[data-theme="dark"] .rec-note{color:var(--text-2)}
 [data-theme="dark"] .rec-all-table td:first-child{background:var(--card-bg-2)}
 
+/* Dark theme: catch-all fixes for text that was hardcoded to the navy/slate
+   palette (--n / --sl) which is unreadable on the dark card backgrounds. */
+[data-theme="dark"] .sv,[data-theme="dark"] .slab,[data-theme="dark"] .sin,
+[data-theme="dark"] .tdn,[data-theme="dark"] .cng-driver,
+[data-theme="dark"] .cng-row span:last-child,[data-theme="dark"] .inf tr td:last-child,
+[data-theme="dark"] .pbtn,[data-theme="dark"] .lf-in,[data-theme="dark"] .lf-sel,
+[data-theme="dark"] .mat-card-val,[data-theme="dark"] .mat-personal-title,
+[data-theme="dark"] .mat-personal-row span:last-child,[data-theme="dark"] .ld-item b,
+[data-theme="dark"] .rec-name,[data-theme="dark"] .rec-kpi-v,
+[data-theme="dark"] .rec-section-title,[data-theme="dark"] .rec-all-table td:last-child,
+[data-theme="dark"] .recon-col-title,[data-theme="dark"] .recon-row span:last-child,
+[data-theme="dark"] .recon-total,[data-theme="dark"] .memo-preview-close,
+[data-theme="dark"] .bc-home{color:var(--text)}
+[data-theme="dark"] .pbtn{border-color:var(--bd)}
+[data-theme="dark"] .pbtn:hover{background:var(--nl);color:var(--gl);border-color:var(--nl)}
+[data-theme="dark"] .recon-total{border-top-color:var(--text)}
+
+[data-theme="dark"] .sl2,[data-theme="dark"] .icl,[data-theme="dark"] .icsub,
+[data-theme="dark"] .cng-row,[data-theme="dark"] .inf tr td:first-child,
+[data-theme="dark"] .lf-count,[data-theme="dark"] .mat-card-label,
+[data-theme="dark"] .mat-personal-row span:first-child,[data-theme="dark"] .ld-item,
+[data-theme="dark"] .inst-frac,[data-theme="dark"] .rec-sub,[data-theme="dark"] .rec-kpi-l,
+[data-theme="dark"] .ichip.due,[data-theme="dark"] .rec-all-table td:first-child,
+[data-theme="dark"] .empty-state,[data-theme="dark"] .memo-preview-title,
+[data-theme="dark"] .ov-input-row span,[data-theme="dark"] .ov-item small,
+[data-theme="dark"] .ov-empty,[data-theme="dark"] .ov-sec-label,
+[data-theme="dark"] .state-block{color:var(--text-2)}
+
+[data-theme="dark"] .memo-preview-close{background:rgba(255,255,255,.1)}
+[data-theme="dark"] .ichip.due{border-color:var(--bd)}
+
 /* Accessibility: larger touch targets, readable minimums */
 .tb{min-height:38px}
 .pbtn,.sbt{min-height:40px}
@@ -574,6 +627,14 @@ input,select,button{font-size:15px}
 </style>
 </head>
 <body>
+
+<!-- ══ বকেয়া সদস্য নিউজ টিকার (additive, non-breaking) ══ -->
+<div class="dues-ticker" id="dues-ticker" role="status" aria-live="off" aria-label="বকেয়া সদস্যদের তালিকা">
+  <div class="dues-ticker-badge"><span class="dues-ticker-dot">🔴</span><span>বকেয়া সদস্য</span></div>
+  <div class="dues-ticker-track">
+    <div class="dues-ticker-content" id="dues-ticker-content"></div>
+  </div>
+</div>
 
 <header class="hd">
   <div class="hdi">
@@ -1262,6 +1323,44 @@ const FUND_RECON = {"income": [{"label": "নিয়মিত সদস্য 
 
 // ── utils ──
 const fmt  = n => (!n||n==0)?'৳ 0':'৳ '+Math.round(n).toLocaleString('en-IN');
+
+// ── বকেয়া সদস্য নিউজ টিকার (additive, non-breaking) ──
+const BN_DIGITS_MAP={'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+function toBnDigits(v){ return String(v).replace(/[0-9]/g,d=>BN_DIGITS_MAP[d]); }
+function bnPad(n,width){ return toBnDigits(String(n).padStart(width,'0')); }
+function duesTickerEscape(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function buildDuesTicker(){
+  const wrap = document.getElementById('dues-ticker');
+  const content = document.getElementById('dues-ticker-content');
+  if(!wrap || !content || typeof MEMBERS==='undefined') return;
+  const ids = Object.keys(MEMBERS);
+  const dueList = ids
+    .map((k,idx)=>({m:MEMBERS[k],idx}))
+    .filter(o=>o.m && o.m.due_amount>0);
+  // সাজানো: বেশি মাস বকেয়া আগে; সমান হলে "তালিকা" ট্যাবের মূল ক্রম বজায় থাকবে
+  dueList.sort((a,b)=> (b.m.due_months - a.m.due_months) || (a.idx - b.idx));
+
+  wrap.classList.remove('dues-ticker-clear');
+  if(dueList.length===0){
+    content.innerHTML = '<span class="dues-ticker-item">✅ সকল সদস্যের বকেয়া পরিশোধ সম্পন্ন। ধন্যবাদ।</span>';
+    wrap.classList.add('dues-ticker-clear');
+    content.style.animation='none';
+    return;
+  }
+  const items = dueList.map(o=>{
+    const idBn = bnPad(o.m.id, 3);
+    const nameSafe = duesTickerEscape(o.m.name||'');
+    const monthsBn = toBnDigits(o.m.due_months);
+    return '<span class="dues-ticker-item">🔴 বকেয়া সদস্য | সদস্য নং: '+idBn+' | নাম: '+nameSafe+' | বকেয়া: '+monthsBn+' মাস</span>';
+  });
+  const oneLoop = items.join('<span class="dues-ticker-sep">➡</span>');
+  content.innerHTML = oneLoop + '<span class="dues-ticker-sep">➡</span>' + oneLoop;
+  const dur = Math.max(18, dueList.length*4.5);
+  content.style.animation = '';
+  content.style.setProperty('--dues-ticker-dur', dur+'s');
+}
+document.addEventListener('DOMContentLoaded', buildDuesTicker);
+if(document.readyState==='complete' || document.readyState==='interactive'){ buildDuesTicker(); }
 const $ = id => document.getElementById(id);
 
 // ── Reusable completion check (Loan / CNG / Auto records) ──
@@ -2145,7 +2244,12 @@ try{
     var tEl = document.getElementById('live-time');
     if(dEl) dEl.textContent = now.getDate() + ' ' + bnMonths[now.getMonth()] + ' ' + now.getFullYear();
     if(wEl) wEl.textContent = bnDays[now.getDay()];
-    if(tEl) tEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+    if(tEl){
+      var h24 = now.getHours();
+      var ampm = h24 >= 12 ? 'PM' : 'AM';
+      var h12 = h24 % 12; if(h12 === 0) h12 = 12;
+      tEl.textContent = pad(h12) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()) + ' ' + ampm;
+    }
   }
   tickClock();
   setInterval(tickClock, 1000);
