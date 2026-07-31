@@ -78,34 +78,6 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .dues-ticker-content{display:inline-flex;align-items:center;white-space:nowrap;will-change:transform;animation:dues-ticker-scroll var(--dues-ticker-dur,28s) linear infinite}
 .dues-ticker-item{padding:0 26px;font-size:12px;font-weight:600;color:#fff;font-family:'Hind Siliguri',sans-serif;white-space:nowrap}
 .dues-ticker-sep{padding:0 6px;color:rgba(255,255,255,.65);font-size:11px}
-/* ── Important Notice chip — amber/yellow, visually distinct from member items ── */
-.dues-ticker-notice{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:0 28px;
-  font-size:12px;font-weight:700;
-  font-family:'Hind Siliguri',sans-serif;white-space:nowrap;
-  color:#fef08a; /* bright yellow-300 */
-  letter-spacing:.15px;
-}
-.dues-ticker-notice-icon{font-size:13px;flex-shrink:0}
-.dues-ticker-notice-label{
-  color:#fde047; /* yellow-300 slightly warmer */
-  font-size:10px;font-weight:800;
-  letter-spacing:.8px;text-transform:uppercase;
-  font-family:'Inter',sans-serif;
-  background:rgba(0,0,0,.22);
-  padding:1px 7px;border-radius:20px;
-  border:1px solid rgba(253,224,71,.4);
-  margin-right:4px;
-  flex-shrink:0;
-}
-.dues-ticker-notice-text{
-  color:#fef9c3; /* yellow-100 — softer for the body */
-  font-weight:600;
-}
-.dues-ticker-notice-quote{
-  color:#fef08a;font-weight:800;font-style:italic;
-}
 @keyframes dues-ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion: reduce){.dues-ticker-content{animation:none;overflow-x:auto}}
 @media print{.dues-ticker{display:none!important}}
@@ -150,7 +122,7 @@ button,input{font-size:16px;-webkit-appearance:none;appearance:none;touch-action
 .adv-ticker-content{
   display:inline-flex;align-items:center;white-space:nowrap;
   will-change:transform;
-  animation:adv-ticker-scroll var(--adv-ticker-dur,60s) linear infinite;
+  animation:adv-ticker-scroll var(--adv-ticker-dur,32s) linear infinite;
 }
 .adv-ticker-content:hover{animation-play-state:paused}
 @keyframes adv-ticker-scroll{
@@ -724,35 +696,6 @@ input,select,button{font-size:15px}
   .theme-toggle,.hclock,.breadcrumb{display:none!important}
 }
 
-/* ══ Hero Container — premium, full-width, Light/Dark aware (additive, non-breaking) ══ */
-.hero-container{
-  width:100%;
-  box-sizing:border-box;
-  margin:14px 0 18px;
-  padding:28px 24px;
-  border-radius:18px;
-  background:var(--card-bg);
-  border:1px solid var(--bd);
-  box-shadow:var(--shadow-md);
-  min-height:96px;
-  transition:background var(--dur-slow) var(--ease),
-             border-color var(--dur-slow) var(--ease),
-             box-shadow var(--dur-slow) var(--ease);
-}
-[data-theme="dark"] .hero-container{
-  background:var(--card-bg);
-  border-color:var(--bd);
-  box-shadow:var(--shadow-md);
-}
-@media (max-width:480px){
-  .hero-container{
-    padding:20px 16px;
-    border-radius:14px;
-    margin:10px 0 14px;
-    min-height:72px;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -802,8 +745,6 @@ input,select,button{font-size:15px}
 <div class="breadcrumb" id="breadcrumb" aria-label="Breadcrumb">
   <span class="bc-home">🏠 হোম</span><span class="bc-sep">›</span><span id="bc-current">সদস্য</span>
 </div>
-
-<div class="hero-container" id="hero-container" aria-label="Hero"></div>
 
 <div class="main">
   <div class="tabs">
@@ -1489,38 +1430,15 @@ function buildDuesTicker(){
     content.style.animation='none';
     return;
   }
-
-  // ── Member headline items ──
   const items = dueList.map(o=>{
-    const idBn    = bnPad(o.m.id, 3);
+    const idBn = bnPad(o.m.id, 3);
     const nameSafe = duesTickerEscape(o.m.name||'');
     const monthsBn = toBnDigits(o.m.due_months);
     return '<span class="dues-ticker-item">🔴 বকেয়া সদস্য | সদস্য নং: '+idBn+' | নাম: '+nameSafe+' | বকেয়া: '+monthsBn+' মাস</span>';
   });
-
-  // ── Important notice chip — appended after every complete member list ──
-  const noticeHTML =
-    '<span class="dues-ticker-notice">' +
-      '<span class="dues-ticker-notice-icon">⚠️</span>' +
-      '<span class="dues-ticker-notice-label">গুরুত্বপূর্ণ ঘোষণা</span>' +
-      '<span class="dues-ticker-notice-text">বকেয়া </span>' +
-      '<span class="dues-ticker-notice-quote">৬ মাস অতিক্রম করলে সদস্যপদ বাতিল</span>' +
-      '<span class="dues-ticker-notice-text"> বলে গণ্য হবে।</span>' +
-    '</span>';
-
-  const sep     = '<span class="dues-ticker-sep">➡</span>';
-  const spacer  = '<span class="dues-ticker-sep" style="padding:0 28px"></span>';
-  // One loop = all members + separator + notice + spacer before repeat
-  const oneLoop = items.join(sep) + sep + noticeHTML + spacer;
-  // Double for seamless infinite CSS animation (translateX 0 → -50%)
-  content.innerHTML = oneLoop + oneLoop;
-
-  // ── Slow TV-style duration ──
-  // Base: 9 s per member item + 12 s for the notice = comfortable reading pace.
-  // Floor: 35 s  ·  Ceiling: 180 s (handles large member lists gracefully).
-  const dur = Math.min(180, Math.max(35, dueList.length * 9 + 12));
-  content.style.animation = 'none';
-  void content.offsetWidth; // force reflow so animation resets cleanly
+  const oneLoop = items.join('<span class="dues-ticker-sep">➡</span>');
+  content.innerHTML = oneLoop + '<span class="dues-ticker-sep">➡</span>' + oneLoop;
+  const dur = Math.max(18, dueList.length*4.5);
   content.style.animation = '';
   content.style.setProperty('--dues-ticker-dur', dur+'s');
 }
@@ -1554,202 +1472,87 @@ function getAdvanceMembers(){
   return rows.map(r=>({ memberNo:r.memberNo, memberName:r.memberName, advanceMonth:r.advanceMonth }));
 }
 
-// ── অগ্রিম সদস্য নিউজ টিকার UI — Premium Green, fully dynamic (additive, non-breaking) ══
+// ── অগ্রিম সদস্য নিউজ টিকার UI — Premium Green (additive, non-breaking) ══
 (function(){
-
-  /* ── 1. Pure helpers (no side-effects, no closures over mutable state) ────── */
-  var _BN = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
-  function _toBn(v){ return String(v).replace(/[0-9]/g, function(d){ return _BN[d]; }); }
+  // Bengali digit conversion (reuses BN_DIGITS_MAP / toBnDigits / bnPad already defined above)
+  function _toBn(v){ return String(v).replace(/[0-9]/g,d=>({'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'}[d])); }
   function _pad(n,w){ return _toBn(String(n).padStart(w,'0')); }
   function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  var _MSGS = [
+  // Rotating appreciation messages — one random message per member (seeded by memberNo for stability)
+  var MSGS = [
     '🌿 ধন্যবাদ! আপনার অগ্রিম পরিশোধ আমাদের সংগঠনের জন্য অনুপ্রেরণা।',
     '💚 আন্তরিক শুভেচ্ছা ও অভিনন্দন। আপনার অগ্রিম প্রদান সত্যিই প্রশংসনীয়।',
     '🌱 আপনার সচেতনতা ও সহযোগিতার জন্য অসংখ্য ধন্যবাদ।',
     '🤝 আপনার অগ্রিম সহযোগিতা সংগঠনের শক্তি বৃদ্ধি করেছে।',
     '✨ আপনার মতো দায়িত্বশীল সদস্যদের জন্য আন্তরিক কৃতজ্ঞতা।'
   ];
-  // Deterministic per-member message — memberNo always maps to the same message,
-  // so re-renders never flicker between different messages for the same member.
-  function _pickMsg(memberNo){ return _MSGS[(memberNo - 1) % _MSGS.length]; }
 
-  /* ── 2. Fingerprint — cheap string summary of current advance-member state ── */
-  // Returns e.g. "25:1|73:1|74:2|75:3" — order matches getAdvanceMembers() sort.
-  // Identical fingerprint → data unchanged → skip DOM work entirely.
-  function _fingerprint(list){
-    if(!list || !list.length) return '';
-    var out = '';
-    for(var i=0;i<list.length;i++){
-      out += list[i].memberNo + ':' + list[i].advanceMonth;
-      if(i<list.length-1) out += '|';
-    }
-    return out;
+  function pickMsg(memberNo){
+    // deterministic: each member always gets the same message (no flicker on reflow)
+    return MSGS[(memberNo - 1) % MSGS.length];
   }
 
-  /* ── 3. Build the doubled HTML string for seamless infinite scroll ─────────── */
-  function _buildHTML(list){
-    var sep = '<span class="adv-ticker-sep">⬥</span>';
-    var parts = [];
-    for(var i=0;i<list.length;i++){
-      var r       = list[i];
+  function buildAdvTicker(){
+    var wrap    = document.getElementById('adv-ticker');
+    var content = document.getElementById('adv-ticker-content');
+    if(!wrap || !content || typeof getAdvanceMembers === 'undefined') return;
+
+    var list = getAdvanceMembers(); // uses live MEMBERS, returns sorted array
+
+    if(!list || list.length === 0){
+      // Empty state
+      content.innerHTML = '<span class="adv-ticker-empty">✅ বর্তমানে কোনো অগ্রিম সদস্য নেই।</span>';
+      content.style.animation = 'none';
+      content.style.transform  = 'none';
+      return;
+    }
+
+    // Build one segment of items (will be doubled for seamless infinite loop)
+    var items = list.map(function(r){
       var noStr   = _pad(r.memberNo, 3);
-      var name    = _esc(r.memberName);
+      var nameSafe = _esc(r.memberName);
       var advStr  = _toBn(r.advanceMonth);
-      var msg     = _esc(_pickMsg(r.memberNo));
-      parts.push(
+      var msg     = _esc(pickMsg(r.memberNo));
+      return (
         '<span class="adv-ticker-member">' +
           '<span class="adv-ticker-member-flag">🟢</span>' +
           '<span>অগ্রিম সদস্য</span>' +
           '<span class="adv-ticker-pipe"> | </span>' +
           '<span>সদস্য নং: <strong class="adv-ticker-member-no">' + noStr + '</strong></span>' +
           '<span class="adv-ticker-pipe"> | </span>' +
-          '<span>নাম: <strong class="adv-ticker-member-name">' + name + '</strong></span>' +
+          '<span>নাম: <strong class="adv-ticker-member-name">' + nameSafe + '</strong></span>' +
           '<span class="adv-ticker-pipe"> | </span>' +
           '<span>অগ্রিম: <strong class="adv-ticker-member-advance">' + advStr + ' মাস</strong></span>' +
           '<span class="adv-ticker-pipe"> | </span>' +
           '<span class="adv-ticker-member-msg">' + msg + '</span>' +
         '</span>'
       );
-    }
-    var oneLoop = parts.join(sep) + sep;
-    return oneLoop + oneLoop; // doubled so translateX(-50%) creates a perfect loop
-  }
+    });
 
-  /* ── 4. Core render — idempotent, guarded by fingerprint ────────────────────
-     Animation restart strategy:
-       • Read current computed translateX fraction BEFORE touching innerHTML.
-       • Wipe innerHTML (old nodes freed, no leak).
-       • Set new duration & inject content.
-       • One rAF to let the browser measure new scrollWidth.
-       • Second rAF to restore the fractional position as a CSS offset,
-         then re-enable the animation — so the scroll continues from where
-         it left off without a visible jump.
-     When the ticker goes empty→scroll or scroll→empty the fraction resets
-     to 0, which is correct (fresh start). ──────────────────────────────── */
+    var separator = '<span class="adv-ticker-sep">⬥</span>';
+    var oneLoop   = items.join(separator) + separator;
 
-  var _lastFingerprint = null; // tracks last rendered state
+    // Double for seamless wrap (CSS animation goes 0→-50%)
+    content.innerHTML = oneLoop + oneLoop;
 
-  function buildAdvTicker(){
-    var content = document.getElementById('adv-ticker-content');
-    if(!content || typeof getAdvanceMembers === 'undefined') return;
-
-    var list = getAdvanceMembers(); // live read from MEMBERS every call
-    var fp   = _fingerprint(list);
-
-    // ── Guard: nothing changed → do zero DOM work ──
-    if(fp === _lastFingerprint) return;
-    _lastFingerprint = fp;
-
-    /* ── Empty state ── */
-    if(!list.length){
-      content.style.animation = 'none';
-      content.style.transform = 'none';
-      // Single write, old children discarded
-      content.innerHTML = '<span class="adv-ticker-empty">✅ বর্তমানে কোনো অগ্রিম সদস্য নেই।</span>';
-      return;
-    }
-
-    /* ── Capture current scroll fraction before any DOM mutation ── */
-    // The animation runs translateX(0 → -50%). scrollWidth of the doubled
-    // content equals 2× one loop. Current visual offset ÷ (scrollWidth/2)
-    // gives the fraction [0,1) that we restore after the re-render.
-    var fraction = 0;
-    var sw = content.scrollWidth;
-    if(sw > 0){
-      var matrix = window.getComputedStyle(content).transform;
-      if(matrix && matrix !== 'none'){
-        // matrix(a,b,c,d,tx,ty) — tx is the pixel offset
-        var tx = parseFloat(matrix.split(',')[4]) || 0;
-        // tx is negative; half-width is sw/2
-        fraction = Math.abs(tx) / (sw / 2);
-        fraction = Math.min(Math.max(fraction, 0), 0.9999); // clamp, never exactly 1
-      }
-    }
-
-    /* ── Compute new duration BEFORE touching content ──
-       10 s per member → comfortable TV-style reading pace.
-       Floor 40 s · Ceiling 150 s. ── */
-    var dur = Math.min(150, Math.max(40, list.length * 10));
-
-    /* ── Stop animation, swap content (single innerHTML write) ── */
-    content.style.animation = 'none';
-    content.style.transform = 'none';
-    content.innerHTML = _buildHTML(list);         // old nodes fully replaced
-
-    /* ── Set duration on the property the keyframe references ── */
+    // Duration: base 6s per member, min 20s, max 90s — keeps 60fps smooth
+    var dur = Math.min(90, Math.max(20, list.length * 6));
     content.style.setProperty('--adv-ticker-dur', dur + 's');
-
-    /* ── Two-rAF restart: measure → position → animate ──────────────────────
-       rAF 1: browser has laid out new children, scrollWidth is now valid.
-       rAF 2: set a negative-delay that places the animation at the saved
-              fraction, then clear the inline transform so the keyframe owns it.
-       Using animation-delay with a large negative value is the standard
-       CSS technique for mid-sequence starts — no JS timer needed, no
-       interval, no memory leak. ─────────────────────────────────────────── */
-    requestAnimationFrame(function(){
-      var newSW = content.scrollWidth;
-      // animation-delay = -(fraction × duration) → starts mid-way through
-      var delayS = -(fraction * dur).toFixed(4) + 's';
-      requestAnimationFrame(function(){
-        content.style.animationDelay    = delayS;
-        content.style.animationDuration = dur + 's';
-        content.style.animation =
-          'adv-ticker-scroll ' + dur + 's ' + delayS + ' linear infinite';
-      });
-    });
+    // Force animation restart cleanly (avoid frame skips)
+    content.style.animation = 'none';
+    void content.offsetWidth; // reflow
+    content.style.animation = '';
   }
 
-  /* ── 5. MutationObserver on #ltbody ────────────────────────────────────────
-     renderList() always rewrites #ltbody when data changes (search, filter,
-     or a future data reload). Observing childList on that node gives us a
-     zero-polling, zero-interval trigger that fires only when the তালিকা
-     data actually changes — exactly what we need.
-
-     One observer, registered once. Never removed (the node lives forever).
-     Callback is throttled with a single pending-flag so rapid consecutive
-     mutations (e.g. 77-row bulk replace) collapse into one buildAdvTicker call. ── */
-  var _rafPending = false;
-  function _onListMutation(){
-    if(_rafPending) return;           // already queued — skip
-    _rafPending = true;
-    requestAnimationFrame(function(){
-      _rafPending = false;
-      buildAdvTicker();               // fingerprint guard makes this safe to call freely
-    });
-  }
-
-  function _attachObserver(){
-    var ltbody = document.getElementById('ltbody');
-    if(!ltbody || !window.MutationObserver) return;
-    // childList: true — fires when rows are added/removed (renderList rewrites innerHTML)
-    // subtree: false — we only care about direct children (the <tr> rows)
-    var mo = new MutationObserver(_onListMutation);
-    mo.observe(ltbody, { childList: true });
-  }
-
-  /* ── 6. Boot sequence ───────────────────────────────────────────────────── */
-  function _boot(){
-    buildAdvTicker();   // initial render from current MEMBERS
-    _attachObserver();  // watch for future data changes
-  }
-
+  // Boot
   if(document.readyState === 'complete' || document.readyState === 'interactive'){
-    _boot();
-  } else {
-    document.addEventListener('DOMContentLoaded', _boot);
-  }
-
-  /* ── 7. Public API — callable by auto-refresh step or console ───────────── */
-  // window.buildAdvTicker()  — force a re-render (fingerprint still guards redundant work)
-  // window.resetAdvTicker()  — clear fingerprint + force full re-render (useful after
-  //                            a data reload that replaced the MEMBERS object entirely)
-  window.buildAdvTicker = buildAdvTicker;
-  window.resetAdvTicker = function(){
-    _lastFingerprint = null;  // invalidate cache
     buildAdvTicker();
-  };
+  }
+  document.addEventListener('DOMContentLoaded', buildAdvTicker);
 
+  // Expose globally so future auto-refresh step can call window.buildAdvTicker()
+  window.buildAdvTicker = buildAdvTicker;
 })();
 
 // ── Reusable completion check (Loan / CNG / Auto records) ──
