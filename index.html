@@ -755,6 +755,7 @@ input,select,button{font-size:15px}
 
 <div class="main">
   <div class="tabs">
+    <button class="tb" onclick="tab('info')">ℹ️ তথ্য</button>
     <button class="tb active" onclick="tab('member')">🔍 সদস্য</button>
     <button class="tb" onclick="tab('org')">📊 সংগঠন</button>
     <button class="tb" onclick="tab('monthly')">📅 মাসিক</button>
@@ -941,7 +942,76 @@ input,select,button{font-size:15px}
 
   <!-- ══ MONTHLY ══ -->
   <div class="tp" id="tp-monthly">
-    <div class="card">
+
+    <!-- ══ হাদিস স্লাইডার ══ -->
+    <div id="hadith-slider" style="
+      background:linear-gradient(135deg,#0d3b2e,#1a6b4a 55%,#0d3b2e);
+      border-radius:16px;
+      padding:28px 22px 22px;
+      margin-bottom:13px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 8px 32px rgba(0,0,0,.35);
+      border:1px solid rgba(212,160,23,.25);
+    ">
+      <!-- কোণের তারা -->
+      <span style="position:absolute;top:13px;left:14px;color:rgba(212,160,23,.55);font-size:16px;line-height:1">✦</span>
+      <span style="position:absolute;bottom:13px;right:14px;color:rgba(212,160,23,.55);font-size:16px;line-height:1">✦</span>
+
+      <!-- ব্যাজ -->
+      <div style="text-align:center;margin-bottom:14px">
+        <span style="
+          display:inline-flex;align-items:center;gap:5px;
+          border:1px solid rgba(212,160,23,.55);
+          border-radius:30px;padding:4px 14px;
+          color:rgba(212,160,23,.9);font-size:11.5px;font-weight:600;
+          font-family:'Hind Siliguri',sans-serif;
+        ">☽ হাদিস ✦</span>
+      </div>
+
+      <!-- হাদিস টেক্সট -->
+      <div id="hadith-text" style="
+        font-family:'Hind Siliguri',sans-serif;
+        font-size:17px;font-weight:700;
+        color:#ffffff;
+        text-align:center;
+        line-height:1.7;
+        min-height:60px;
+        padding:0 30px;
+        transition:opacity .45s ease,transform .45s ease;
+      "></div>
+
+      <!-- সূত্র -->
+      <div id="hadith-ref" style="
+        text-align:center;margin-top:12px;
+        font-family:'Hind Siliguri',sans-serif;
+        font-size:11.5px;color:rgba(212,160,23,.85);
+        font-weight:600;
+        transition:opacity .45s ease;
+      "></div>
+
+      <!-- ডট ইন্ডিকেটর -->
+      <div id="hadith-dots" style="display:flex;justify-content:center;gap:7px;margin-top:16px"></div>
+
+      <!-- নেভিগেশন বাটন -->
+      <button onclick="hadithPrev()" style="
+        position:absolute;left:10px;top:50%;transform:translateY(-50%);
+        background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+        color:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:background .2s;
+      " onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">‹</button>
+      <button onclick="hadithNext()" style="
+        position:absolute;right:10px;top:50%;transform:translateY(-50%);
+        background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+        color:#fff;width:34px;height:34px;border-radius:50%;font-size:16px;
+        cursor:pointer;display:flex;align-items:center;justify-content:center;
+        transition:background .2s;
+      " onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">›</button>
+    </div>
+    <!-- ══ হাদিস স্লাইডার শেষ ══ -->
+
+    <div class="card" style="display:none">
       <div class="ch"><span>📅</span><span class="cht">মাসিক সংগ্রহ চার্ট</span><span class="chr">Jun 2023 – Jun 2026</span></div>
       <div class="chart-wrap"><div class="bar-chart" id="barchart"></div></div>
     </div>
@@ -1193,6 +1263,241 @@ input,select,button{font-size:15px}
       </div>
       <div class="em" id="memo-em">❌ Record Not Found</div>
     </div>
+
+    <div id="memo-result"></div>
+  </div>
+
+  <!-- ══ INFO TAB ══ -->
+  <div class="tp" id="tp-info">
+
+    <!-- ══ পেমেন্ট সেকশন ══ -->
+    <div style="
+      background:linear-gradient(160deg,#0a1628,#0f2044 50%,#1a3a6b);
+      border-radius:20px;padding:28px 18px 32px;
+      margin-bottom:14px;
+      box-shadow:0 8px 32px rgba(0,0,0,.4);
+    ">
+      <p style="text-align:center;color:rgba(255,255,255,.65);font-size:12px;margin-bottom:16px;font-family:'Hind Siliguri',sans-serif;letter-spacing:.3px">
+        মাসিক চাঁদা পাঠানোর নম্বর
+      </p>
+
+      <!-- বিকাশ ও নগদ রো -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+
+        <!-- বিকাশ কার্ড -->
+        <div style="
+          background:#fff;border-radius:14px;padding:14px 14px 12px;
+          display:flex;align-items:center;gap:10px;
+          box-shadow:0 2px 12px rgba(0,0,0,.18);
+        ">
+          <div style="flex-shrink:0">
+            <div style="
+              width:40px;height:40px;border-radius:10px;
+              background:#e2136e;display:flex;align-items:center;justify-content:center;
+            ">
+              <span style="color:#fff;font-size:11px;font-weight:800;font-family:'Inter',sans-serif;letter-spacing:-.3px">bKash</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:800;color:#0f2044;font-family:'Inter',sans-serif;letter-spacing:.3px">01816724075</div>
+            <div style="font-size:10px;color:#64748b;margin-top:2px">Send Money</div>
+          </div>
+          <button onclick="copyNum('01816724075','bkash-copied')" style="
+            background:#0f2044;color:#fff;border:none;border-radius:8px;
+            font-size:10px;font-weight:700;padding:5px 10px;cursor:pointer;
+            font-family:'Hind Siliguri',sans-serif;white-space:nowrap;flex-shrink:0;
+          ">কপি</button>
+        </div>
+
+        <!-- নগদ কার্ড -->
+        <div style="
+          background:#fff;border-radius:14px;padding:14px 14px 12px;
+          display:flex;align-items:center;gap:10px;
+          box-shadow:0 2px 12px rgba(0,0,0,.18);
+        ">
+          <div style="flex-shrink:0">
+            <div style="
+              width:40px;height:40px;border-radius:10px;
+              background:#f97316;display:flex;align-items:center;justify-content:center;
+            ">
+              <span style="color:#fff;font-size:11px;font-weight:800;font-family:'Inter',sans-serif">নগদ</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:800;color:#0f2044;font-family:'Inter',sans-serif;letter-spacing:.3px">01816724075</div>
+            <div style="font-size:10px;color:#64748b;margin-top:2px">Send Money</div>
+          </div>
+          <button onclick="copyNum('01816724075','nagad-copied')" style="
+            background:#0f2044;color:#fff;border:none;border-radius:8px;
+            font-size:10px;font-weight:700;padding:5px 10px;cursor:pointer;
+            font-family:'Hind Siliguri',sans-serif;white-space:nowrap;flex-shrink:0;
+          ">কপি</button>
+        </div>
+      </div>
+
+      <p style="text-align:center;color:rgba(255,255,255,.5);font-size:11px;margin-bottom:18px;font-family:'Hind Siliguri',sans-serif">
+        মাসিক চাঁদা ৳১,০০০ + সেন্ড মানি চার্জ আনুমানিক ৳১৮ — মোট ৳১০১৮ পাঠাবেন
+      </p>
+
+      <!-- ব্যাংক হিসাব -->
+      <div style="
+        background:rgba(255,255,255,.06);
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:14px;padding:16px 18px;
+      ">
+        <div style="font-size:15px;font-weight:800;color:#fff;font-family:'Hind Siliguri',sans-serif;margin-bottom:6px">🏦 ব্যাংক হিসাব</div>
+        <div style="font-size:11.5px;color:rgba(255,255,255,.65);font-family:'Hind Siliguri',sans-serif;line-height:1.8">
+          ব্র্যাক ব্যাংক লিমিটেড · লোহাগাড়া শাখা<br>
+          হিসাব নম্বর: <span style="color:var(--gl);font-weight:800;font-family:'Inter',sans-serif;letter-spacing:.5px">1115202383562001</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ যোগাযোগ সেকশন ══ -->
+    <div style="
+      background:#fff;border-radius:20px;
+      padding:24px 18px 20px;margin-bottom:14px;
+      box-shadow:0 4px 24px rgba(15,32,68,.12);
+    ">
+      <div style="text-align:center;margin-bottom:6px">
+        <span style="font-size:22px;font-weight:800;color:#0f2044;font-family:'Hind Siliguri',sans-serif">যোগাযোগ</span>
+      </div>
+      <p style="text-align:center;color:#64748b;font-size:12px;margin-bottom:18px;font-family:'Hind Siliguri',sans-serif">
+        সমিতির ব্যাপারে কিছু জানার থাকলে কল করুন
+      </p>
+
+      <!-- যোগাযোগ কার্ড -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+
+        <div style="background:#f8fafc;border-radius:13px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:15px;font-weight:800;color:#0f2044;font-family:'Hind Siliguri',sans-serif">সাইফুল ইসলাম</div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px;font-family:'Hind Siliguri',sans-serif">সভাপতি</div>
+          </div>
+          <a href="tel:01816724075" style="
+            background:#0f2044;color:#fff;
+            border-radius:12px;padding:10px 16px;
+            display:flex;align-items:center;gap:7px;
+            text-decoration:none;font-size:13px;font-weight:700;
+            font-family:'Inter',sans-serif;
+          ">📞 01816724075</a>
+        </div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div style="margin-top:16px;text-align:center">
+        <p style="color:#64748b;font-size:12px;margin-bottom:10px;font-family:'Hind Siliguri',sans-serif">
+          অথবা যে কোন প্রশ্ন থাকলে WhatsApp-এ
+        </p>
+        <a href="https://chat.whatsapp.com/BSj0VLGjHZAK56qcTXeVrv?s=sw&p=i&mlu=4" target="_blank" style="
+          display:flex;align-items:center;justify-content:center;gap:10px;
+          background:#25d366;color:#fff;border-radius:13px;
+          padding:14px 20px;text-decoration:none;
+          font-size:15px;font-weight:700;font-family:'Hind Siliguri',sans-serif;
+          box-shadow:0 4px 16px rgba(37,211,102,.35);
+        ">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp গ্রুপে যোগ দিন
+        </a>
+      </div>
+    </div>
+
+    <!-- ══ নিয়মাবলী সেকশন ══ -->
+    <div style="
+      background:#fff;border-radius:20px;
+      padding:22px 18px;margin-bottom:14px;
+      box-shadow:0 4px 24px rgba(15,32,68,.12);
+    ">
+      <div style="font-size:16px;font-weight:800;color:#0f2044;font-family:'Hind Siliguri',sans-serif;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #e2e8f0">
+        📜 সংগঠনের নিয়মাবলী সমূহ
+      </div>
+      <div style="font-family:'Hind Siliguri',sans-serif;font-size:13px;color:#334155;line-height:2;counter-reset:rule-counter">
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০১</span>
+          <span>সংগঠনের গঠনতন্ত্রের সকল নিয়ম মেনে ভর্তি ফি বাবদ ১০০ (এক শত) টাকা মূল্যের নির্ধারিত আবেদন ফরম পূরণ করে সংগঠনের সদস্য/সদস্যা হতে হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০২</span>
+          <span>আবেদন ফরনের সাথে জাতীয় পরিচয় পত্র/জন্ম নিবন্ধনের ফটোকপি, ০২(দুই) কপি নিজ, ০১(এক) কপি নমিনীর ছবি জমা দিতে হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৩</span>
+          <span>প্রতি মাসে শেয়ার প্রতি ১০০০ (এক হাজার) টাকা করে সঞ্চয় পরিশোধ করিতে হইবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৪</span>
+          <span>প্রতি মাসের ১-১০ তারিখের মধ্যে মাসিক সঞ্চয় নিজ দায়িত্বে জমা দিতে হবে, যদি কেউ ১০ তারিখের মধ্যে জমা দিতে না পারে তাহলে ৫০ (পঞ্চাশ) টাকা জরিমানা কার্যকর হইবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৫</span>
+          <span>সংগঠনের সঞ্চয় বৃদ্ধির জন্য প্রতি বছর একটি টাকা জমা দিতে হবে। টাকার পরিমান সবার মতামতের ভিত্তিতে সাধারন সভার মাধ্যমে নির্ধারিত হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৬</span>
+          <span>একটানা ৬ মাসের বেশী সঞ্চয় দিতে ব্যর্থ হলে তার সদস্য পদ বাতিল বলে গন্য করা হবে এবং মেয়াদপূর্তির আগে যদি কোন সদস্য মৃত্যুবরণ বা যেকোনো কারণে অব্যাহতি নেয় তাহলে উভয় ক্ষেত্রে সংগঠনের মেয়াদ শেষে তার জমাকৃত লভ্যাংশ ব্যতীত মূল টাকা ফেরত পাবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৭</span>
+          <span>যদি কোন সদস্যের ঋণের প্রয়োজন হয় তাহলে সংগঠনের নিয়মানুযায়ী উক্ত সদস্যের জমাকৃত অর্থের ৭০ শতাংশ ঋণ নিতে পারবে এবং যদি কোন সদস্য এর বাইরে ঋণ নিতে চায় সে ক্ষেত্রে তার অবশিষ্ট ৩০ শতাংশ জমাকৃত অর্থ থেকে ঋণের সাথে সমন্বয় করে তার হিসাবটি স্থায়ীভাবে বন্ধ করে দেওয়া হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৮</span>
+          <span>সকল সদস্যের মতামতের ভিত্তিতে ১০ জন সদস্য বিশিষ্ট একটি পরিচালনা পর্ষদ কমিটি গঠন করা হবে এবং উক্ত কমিটি সিদ্ধান্ত অনুযায়ী সংগঠনের সকল কার্যক্রম পরিচালনা করবে। উক্ত কমিটির মেয়াদকাল ১(এক) বছর। পরবর্তী মেয়াদের জন্য নতুন কমিটি গঠন করা হবে সংগঠনের সকল সদস্যের মতামতের ভিত্তিতে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">০৯</span>
+          <span>সদস্যের জমাকৃত অর্থ এর উহার লাভ/লোকসানের অংশ সংগঠনের মেয়াদ শেষে সবার মাঝে শেয়ার অনুযায়ী সমান হারে বন্টন করা হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১০</span>
+          <span>বিবিধ খরচ বাদে শেয়ার প্রতি একটি নির্দিষ্ট অর্থ প্রতি বছরে একবার জমা দিতে হবে যাহা সভার আপ্যায়ন, স্টেশনারী সামগ্রী ইত্যাদি বাবদ ব্যয় করা হবে। উক্ত জমার পরিমান সংগঠনের পরিচালনা পর্ষদ নির্ধারণ করবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১১</span>
+          <span>সংগঠনের মেয়াদ হবে ৫ বছর।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১২</span>
+          <span>সংগঠনের কারণে কোনো রকম বিশৃঙ্খলা দেখা দিলে সকল সদস্যের মতামতের ভিত্তিতে অভিযুক্ত সদস্যকে উক্ত সংগঠন থেকে বাদ দেওয়ার ক্ষমতা সংগঠনের থাকবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১৩</span>
+          <span>সংগঠনের সকল সদস্যদের মতামতের ভিত্তিতে নতুন কোনো নিয়ম সংশোধন, সংযোজন-বিয়োজন করা যাবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১৪</span>
+          <span>বার্ষিক সাধারণ সভার মাধ্যমে সংগঠনের আয়-ব্যয় সকল সদস্যদেরকে জানাতে হবে।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px dashed #e2e8f0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১৫</span>
+          <span>সংগঠনের কোন সদস্য মৃত্যুবরণ করলে তার জমাকৃত অর্থ তার নমিনীকে প্রদান করা হবে। উল্লেখ্য, নমিনি চাইলে উক্ত হিসাবটি চালমান রাখতে পারবেন বা হিসাব টি স্থায়ীভাবে বন্ধ করে জমাকৃত অর্থ লভ্যাংশ সহ নিয়ে নিতে পারবেন।</span>
+        </div>
+
+        <div style="display:flex;gap:10px;padding:10px 0">
+          <span style="background:#0f2044;color:#d4a017;font-weight:800;font-size:11px;font-family:'Inter',sans-serif;padding:3px 8px;border-radius:6px;flex-shrink:0;height:fit-content;margin-top:3px">১৬</span>
+          <span>সংগঠনের সামগ্রিক কার্যক্রমে কোন প্রকার ত্রুটি পরিলক্ষিত হলে সরাসরি সভাপতি বা মনোনীত প্রতিনিধিকে অবহিত করতে হবে।</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- ══ INFO TAB শেষ ══ -->
 
     <div id="memo-result"></div>
   </div>
@@ -1687,7 +1992,7 @@ function isCompleted(rec){
   return false;
 }
 // ── tab ──
-const TAB_NAMES=['member','org','monthly','cng','loan','memo','expense','list','duesadv','maturity','pl'];
+const TAB_NAMES=['info','member','org','monthly','cng','loan','memo','expense','list','duesadv','maturity','pl'];
 function tab(name){
   document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('active',TAB_NAMES[i]===name));
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
@@ -1869,6 +2174,92 @@ function renderMonthly(){
 
 // ── Chart ──
 let chartDone=false;
+/* ══ copyNum helper (info tab) ══ */
+function copyNum(num){
+  try{
+    navigator.clipboard.writeText(num).then(function(){
+      try{showToastX(num+' কপি হয়েছে','ok');}catch(e){}
+    });
+  }catch(e){
+    try{showToastX(num+' কপি হয়েছে','ok');}catch(e2){}
+  }
+}
+
+/* ══ হাদিস স্লাইডার ══ */
+(function(){
+  var HADITHS=[
+    {text:'"তোমাদের মধ্যে সেই ব্যক্তি সর্বোত্তম যে কুরআন শিক্ষা করে এবং অন্যকে শিক্ষা দেয়।"',ref:'— সহীহ আল-বুখারি'},
+    {text:'"মুসলমান সে ব্যক্তি যার জিভ ও হাত থেকে অন্য মুসলমান নিরাপদ।"',ref:'— সহীহ আল-বুখারি'},
+    {text:'"প্রতিটি ভালো কাজ সাদাকাহ (দান)।"',ref:'— সহীহ আল-বুখারি'},
+    {text:'"যে ব্যক্তি কোনো কষ্টে থাকা মানুষকে কষ্টমুক্ত করে, আল্লাহ কিয়ামতের দিন তাকে কষ্টমুক্ত করবেন।"',ref:'— সহীহ মুসলিম'},
+    {text:'"দুনিয়া হলো মুমিনের জন্য কারাগার আর কাফিরের জন্য জান্নাত।"',ref:'— সহীহ মুসলিম'},
+    {text:'"তোমাদের মধ্যে সে ব্যক্তি সবচেয়ে উত্তম যে স্বভাব-চরিত্রে উত্তম।"',ref:'— সহীহ আল-বুখারি'},
+    {text:'"আল্লাহ দয়ালুদের প্রতি দয়া করেন। তোমরা পৃথিবীবাসীর প্রতি দয়া করো, আসমানের অধিপতি তোমাদের প্রতি দয়া করবেন।"',ref:'— সুনান আত-তিরমিযী'},
+    {text:'"নিশ্চয়ই আল্লাহ তোমাদের চেহারা ও সম্পদ দেখেন না, বরং তিনি তোমাদের অন্তর ও আমল দেখেন।"',ref:'— সহীহ মুসলিম'},
+    {text:'"যে ব্যক্তি আল্লাহ ও পরকালে বিশ্বাস রাখে, সে যেন ভালো কথা বলে অথবা চুপ থাকে।"',ref:'— সহীহ আল-বুখারি'},
+    {text:'"সত্যবাদিতা পুণ্যের দিকে পরিচালিত করে এবং পুণ্য জান্নাতের দিকে পরিচালিত করে।"',ref:'— সহীহ আল-বুখারি'}
+  ];
+  var cur=0, timer=null;
+
+  function $(id){return document.getElementById(id);}
+
+  function buildDots(){
+    var dc=$('hadith-dots'); if(!dc)return;
+    dc.innerHTML='';
+    HADITHS.forEach(function(_,i){
+      var d=document.createElement('div');
+      d.style.cssText='width:'+(i===cur?20:8)+'px;height:8px;border-radius:4px;transition:all .3s;cursor:pointer;background:'+(i===cur?'rgba(212,160,23,.9)':'rgba(255,255,255,.3)');
+      d.onclick=function(){goTo(i);};
+      dc.appendChild(d);
+    });
+  }
+
+  function goTo(idx){
+    var txt=$('hadith-text'), ref=$('hadith-ref');
+    if(!txt||!ref)return;
+    txt.style.opacity='0'; txt.style.transform='translateY(8px)';
+    ref.style.opacity='0';
+    setTimeout(function(){
+      cur=((idx%HADITHS.length)+HADITHS.length)%HADITHS.length;
+      txt.textContent='"'+HADITHS[cur].text.replace(/^"|"$/g,'')+'"';
+      ref.textContent=HADITHS[cur].ref;
+      txt.style.opacity='1'; txt.style.transform='translateY(0)';
+      ref.style.opacity='1';
+      buildDots();
+    },220);
+    resetTimer();
+  }
+
+  function resetTimer(){
+    if(timer)clearInterval(timer);
+    timer=setInterval(function(){goTo(cur+1);},5000);
+  }
+
+  window.hadithNext=function(){goTo(cur+1);};
+  window.hadithPrev=function(){goTo(cur-1);};
+
+  function init(){
+    var txt=$('hadith-text'), ref=$('hadith-ref');
+    if(!txt)return;
+    txt.textContent='"'+HADITHS[0].text.replace(/^"|"$/g,'')+'"';
+    ref.textContent=HADITHS[0].ref;
+    buildDots();
+    resetTimer();
+  }
+
+  /* মাসিক ট্যাব ওপেন হলে স্লাইডার শুরু হবে */
+  var _origTab=window.tab;
+  window.tab=function(name){
+    _origTab&&_origTab(name);
+    if(name==='monthly'){ setTimeout(init,80); }
+  };
+  /* যদি পেজ লোডেই মাসিক ট্যাব সক্রিয় থাকে */
+  if(document.getElementById('tp-monthly')&&document.getElementById('tp-monthly').classList.contains('active')){
+    init();
+  }
+})();
+/* ══ হাদিস স্লাইডার শেষ ══ */
+
 function buildChart(){
   if(chartDone)return; chartDone=true;
   const wrap=$('barchart');
