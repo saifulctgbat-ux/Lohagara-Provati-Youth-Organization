@@ -718,6 +718,55 @@ input,select,button{font-size:15px}
   .theme-toggle,.hclock,.breadcrumb{display:none!important}
 }
 
+
+/* ══ মাসিক WhatsApp মেসেজ ট্যাব (additive, non-breaking) ══ */
+.wam-note{background:var(--grb);border-left:4px solid var(--gr);border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.7;color:var(--text-2);margin-bottom:12px}
+[data-theme="dark"] .wam-note{background:rgba(22,163,74,.12)}
+.wam-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.wam-st{background:var(--card-bg-2);border:1px solid var(--bd);border-radius:12px;padding:10px 6px;text-align:center}
+.wam-st b{display:block;font-size:20px;font-weight:800;color:var(--text);font-family:'Hind Siliguri','Inter',sans-serif}
+.wam-st span{font-size:11px;color:var(--text-2)}
+.wam-st.ok b{color:var(--gr)}.wam-st.warn b{color:var(--am)}
+.wam-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.wam-chip{border:1.5px solid var(--bd);background:var(--card-bg-2);color:var(--text-2);border-radius:20px;padding:6px 12px;font-size:12.5px;font-weight:600;font-family:'Hind Siliguri',sans-serif;cursor:pointer}
+.wam-chip.active{background:#25d366;border-color:#25d366;color:#fff}
+.wam-row-in{display:flex;margin-bottom:10px}
+.wam-chk{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:12px;cursor:pointer}
+.wam-chk input{width:18px;height:18px;flex-shrink:0;margin-top:2px;-webkit-appearance:checkbox;appearance:auto;accent-color:#25d366}
+.wam-actions{display:flex;gap:8px;flex-wrap:wrap}
+.wam-btn{border:none;border-radius:10px;padding:11px 14px;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.wam-btn.go{background:linear-gradient(135deg,#075e54,#25d366);color:#fff;flex:1;min-width:190px}
+.wam-btn.ghost{background:var(--card-bg-2);color:var(--text-2);border:1.5px solid var(--bd)}
+.wam-item{background:var(--card-bg);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--shadow-sm);padding:12px 13px;margin-bottom:10px}
+.wam-item.sent{border-color:#25d366;background:linear-gradient(0deg,rgba(37,211,102,.07),rgba(37,211,102,.07)),var(--card-bg)}
+.wam-top{display:flex;align-items:flex-start;gap:10px}
+.wam-no{background:var(--n);color:var(--gl);border-radius:8px;min-width:38px;text-align:center;padding:4px 6px;font-size:12px;font-weight:800;font-family:'Inter',sans-serif}
+[data-theme="dark"] .wam-no{background:#233152}
+.wam-nm{flex:1;min-width:0}
+.wam-nm .n{font-size:14.5px;font-weight:700;color:var(--text);word-break:break-word}
+.wam-nm .m{font-size:11.5px;color:var(--text-2);font-family:'Inter',sans-serif;margin-top:2px}
+.wam-pill{font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;white-space:nowrap}
+.wam-pill.due{background:var(--rdb);color:var(--rd)}.wam-pill.adv{background:var(--grb);color:var(--gr)}.wam-pill.ok{background:var(--gp);color:#92400e}
+[data-theme="dark"] .wam-pill.due{background:rgba(220,38,38,.18);color:#fca5a5}
+[data-theme="dark"] .wam-pill.adv{background:rgba(22,163,74,.18);color:#86efac}
+[data-theme="dark"] .wam-pill.ok{background:rgba(212,160,23,.18);color:#fcd34d}
+.wam-sum{font-size:12.5px;color:var(--text-2);margin:8px 0 10px;line-height:1.7}
+.wam-btns{display:flex;gap:7px;flex-wrap:wrap}
+.wam-b{border:none;border-radius:9px;padding:8px 12px;font-size:12.5px;font-weight:700;font-family:'Hind Siliguri',sans-serif;cursor:pointer}
+.wam-b.wa{background:#25d366;color:#fff}.wam-b.wa[disabled]{background:#94a3b8;cursor:not-allowed}
+.wam-b.cp{background:var(--card-bg-2);color:var(--text-2);border:1.5px solid var(--bd)}
+.wam-b.ck{background:transparent;color:var(--text-2);border:1.5px dashed var(--bd)}
+.wam-item.sent .wam-b.ck{background:#25d366;color:#fff;border:1.5px solid #25d366}
+.wam-item details{margin-top:9px}
+.wam-item summary{font-size:12px;color:var(--nl);cursor:pointer;font-weight:600}
+[data-theme="dark"] .wam-item summary{color:var(--gl)}
+.wam-pre{white-space:pre-wrap;word-break:break-word;background:var(--card-bg-2);border:1px solid var(--bd);border-radius:10px;padding:10px 11px;margin-top:7px;font-size:12.5px;line-height:1.7;color:var(--text);font-family:'Hind Siliguri','Inter',sans-serif}
+
+.wam-mode{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--card-bg-2);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:12px}
+.wam-mbtn{border:none;background:transparent;color:var(--text-2);border-radius:9px;padding:9px 4px;font-size:12.5px;font-weight:700;font-family:'Hind Siliguri',sans-serif;cursor:pointer}
+.wam-mbtn.active{background:linear-gradient(135deg,#075e54,#25d366);color:#fff}
+.wam-pill.loan{background:var(--amb);color:var(--am)}
+[data-theme="dark"] .wam-pill.loan{background:rgba(217,119,6,.18);color:#fcd34d}
 </style>
 <script>/*!
  * Chart.js v4.4.4
@@ -793,6 +842,7 @@ input,select,button{font-size:15px}
     <button class="tb" onclick="tab('expense')">💸 খরচ</button>
     <button class="tb" onclick="tab('list')">👥 তালিকা</button>
     <button class="tb" onclick="tab('duesadv')">📋 বকেয়া ও অগ্রিম তালিকা</button>
+    <button class="tb" id="tb-wamsg" style="display:none" onclick="tab('wamsg')">💬 মাসিক মেসেজ</button>
     <button class="tb" onclick="tab('maturity')">🎯 মেয়াদপূর্তি</button>
     <button class="tb" onclick="tab('pl')">📉 P&L</button>
   </div>
@@ -1306,6 +1356,42 @@ input,select,button{font-size:15px}
     </div>
   </div>
 
+
+
+  <!-- ══ মাসিক WhatsApp মেসেজ (additive, non-breaking) ══ -->
+  <div class="tp" id="tp-wamsg">
+    <div class="card">
+      <div class="ch" style="background:linear-gradient(135deg,#075e54,#25d366)"><span>💬</span><span class="cht" id="wam-heading">মাসিক WhatsApp মেসেজ</span><span class="chr" id="wam-count">— জন</span></div>
+      <div class="cb">
+        <div class="wam-note">প্রতি সদস্যের নামের পাশে <strong>WhatsApp</strong> বাটনে চাপ দিলে তাঁর জন্য তৈরি মেসেজ সহ WhatsApp খুলবে — শুধু <strong>Send</strong> চাপলেই হবে। পাঠানো সদস্যের পাশে ✓ চিহ্ন বসবে (এই মাসের জন্য ফোনে সংরক্ষিত থাকে)।</div>
+        <div class="wam-mode" id="wam-mode">
+          <button class="wam-mbtn active" data-m="mem" onclick="wamSetMode('mem')">👥 মাসিক হিসাব</button>
+          <button class="wam-mbtn" data-m="loan" onclick="wamSetMode('loan')">🏦 লোন নোটিশ</button>
+          <button class="wam-mbtn" data-m="cng" onclick="wamSetMode('cng')">🚕 CNG/Auto কিস্তি</button>
+        </div>
+        <div class="wam-stats">
+          <div class="wam-st"><b id="wam-st-total">—</b><span>মোট সদস্য</span></div>
+          <div class="wam-st ok"><b id="wam-st-sent">—</b><span>পাঠানো হয়েছে</span></div>
+          <div class="wam-st warn"><b id="wam-st-left">—</b><span>বাকি</span></div>
+        </div>
+        <div class="wam-chips wam-mem-only" id="wam-chips">
+          <button class="wam-chip active" data-f="all" onclick="wamSetFilter('all')">সকল</button>
+          <button class="wam-chip" data-f="due" onclick="wamSetFilter('due')">🔴 বকেয়া</button>
+          <button class="wam-chip" data-f="adv" onclick="wamSetFilter('adv')">🟢 অগ্রিম</button>
+          <button class="wam-chip" data-f="ok" onclick="wamSetFilter('ok')">✅ নিয়মিত</button>
+          <button class="wam-chip" data-f="left" onclick="wamSetFilter('left')">⏳ বাকি</button>
+        </div>
+        <div class="wam-row-in"><input class="sin" id="wam-search" type="text" placeholder="নাম, সদস্য নম্বর বা মোবাইল দিয়ে খুঁজুন…" oninput="wamSearch(this.value)"></div>
+        <label class="wam-chk wam-mem-only"><input type="checkbox" id="wam-pay" checked onchange="wamTogglePay(this.checked)"> মেসেজে জমা দেওয়ার নম্বর ও নিয়মাবলি যুক্ত করুন</label>
+        <div class="wam-actions">
+          <button class="wam-btn go" onclick="wamNext()">▶ পরবর্তী সদস্যকে পাঠান</button>
+          <button class="wam-btn ghost" onclick="wamReset()">↺ এই মাসের ✓ রিসেট</button>
+          <button class="wam-btn ghost" onclick="wamLock()">🔒 লক করুন</button>
+        </div>
+      </div>
+    </div>
+    <div id="wam-list"></div>
+  </div>
 
   <!-- ══ MEMO CENTER ══ -->
   <div class="tp" id="tp-memo">
@@ -2139,13 +2225,15 @@ function isCompleted(rec){
   return false;
 }
 // ── tab ──
-const TAB_NAMES=['info','member','org','monthly','cng','loan','memo','expense','list','duesadv','maturity','pl'];
+const TAB_NAMES=['info','member','org','monthly','cng','loan','memo','expense','list','duesadv','wamsg','maturity','pl'];
 function tab(name){
+  if(name==='wamsg' && !(typeof lpyoAdminOk==='function' && lpyoAdminOk())){ name='member'; }
   document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('active',TAB_NAMES[i]===name));
   document.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));
   $('tp-'+name).classList.add('active');
   if(name==='monthly') buildChart();
   if(name==='duesadv' && typeof renderDuesAdvTab==='function') renderDuesAdvTab();
+  if(name==='wamsg' && typeof renderWaMsgTab==='function') renderWaMsgTab();
 }
 
 // ── toast ──
@@ -3855,6 +3943,556 @@ window.uiErrorState = function(title,sub){
 
 })();
 
+</script>
+
+<script>
+/* ══ মাসিক WhatsApp মেসেজ — প্রতিটি সদস্যের জন্য স্বয়ংক্রিয় হিসাব-বিবরণী (additive, non-breaking) ══
+   ডেটা আসে সরাসরি MEMBERS / MONTHLY থেকে — বকেয়া/অগ্রিম মাসের নাম বকেয়া-ট্যাবের মতোই একই ফাংশন থেকে নির্ণয় হয়। */
+(function(){
+  var WAM = { filter:'all', q:'', pay:true, mode:'mem' };
+
+  function cur(){ try{ return getCurrentMonthMeta(); }catch(e){ return null; } }
+  function curLabel(){ var c=cur(); return c ? bnMonthYearLabel(c.idx,c.yy) : ''; }
+  function nextLabel(){
+    var c=cur(); if(!c) return '';
+    var i=c.idx+1, y=c.yy; if(i>11){ i=0; y++; }
+    return bnMonthYearLabel(i,y);
+  }
+  function storeKey(){ var c=cur(); return (WAM.mode==='loan'?'lpyo-wamloan-sent-':WAM.mode==='cng'?'lpyo-wamcng-sent-':'lpyo-wamsg-sent-')+(c? c.idx+'-'+c.yy : 'x'); }
+  function getSent(){ try{ return JSON.parse(localStorage.getItem(storeKey())||'[]'); }catch(e){ return []; } }
+  function setSent(a){ try{ localStorage.setItem(storeKey(), JSON.stringify(a)); }catch(e){} }
+  function nBn(n){ return toBnDigits(Math.round(n||0).toLocaleString('en-IN')); }
+  function taka(n){ return '৳'+nBn(n); }
+  function perShare(){ return (typeof KPI!=='undefined' && KPI.per_share) ? KPI.per_share : 1000; }
+
+  // মোবাইল নম্বর → WhatsApp আন্তর্জাতিক ফরম্যাট (বাংলাদেশ: 880…, সৌদি/আমিরাত: 966…/971… যেমন আছে তেমন)
+  function waNum(mobile){
+    var d=String(mobile||'').replace(/\D/g,'');
+    if(d.indexOf('00')===0) d=d.slice(2);
+    if(!d) return '';
+    if(d.indexOf('880')===0 && d.length===13) return d;
+    if(d.length===11 && d.charAt(0)==='0') return '88'+d;
+    if(d.length===10 && d.charAt(0)==='1') return '880'+d;
+    if(d.length>=11) return d;
+    return '';
+  }
+  function dispMobile(m){ var w=waNum(m); if(!w) return 'নম্বর নেই'; return (w.indexOf('880')===0)? '0'+w.slice(3) : '+'+w; }
+
+  function status(m){
+    if(m.due_amount>0 && m.due_months>0) return 'due';
+    if(m.advance_amount>0 && m.advance_months>0) return 'adv';
+    return 'ok';
+  }
+
+  function buildMsg(m, withPay){
+    var st=status(m), cl=curLabel(), L=[];
+    var monthly = (m.shares||1)*perShare();
+    L.push('*লোহাগাড়া প্রভাতী যুব সংগঠন (LPYO)*');
+    L.push('📋 *মাসিক হিসাব বিবরণী — '+cl+'*');
+    L.push('');
+    L.push('আসসালামু আলাইকুম, *'+(m.name||'')+'*।');
+    L.push('');
+    L.push('🆔 সদস্য নং: '+bnPad(m.id,3));
+    L.push('📦 শেয়ার: '+toBnDigits(m.shares||1)+' টি (মাসিক চাঁদা '+taka(monthly)+')');
+    L.push('');
+    L.push('💰 *এ পর্যন্ত মোট জমা: '+taka(m.total_deposit)+'*');
+    if(m.total_fine>0) L.push('⚖️ এ পর্যন্ত জরিমানা প্রদান: '+taka(m.total_fine));
+    L.push('');
+    if(st==='due'){
+      var lab=getDueMonthLabels(m.due_months);
+      L.push('🔴 *বকেয়া আছে*');
+      L.push('• বকেয়া মাস: '+toBnDigits(m.due_months)+' মাস');
+      L.push('• মাসসমূহ: '+joinBnMonthList(lab));
+      L.push('• মোট বকেয়া: *'+taka(m.due_amount)+'*');
+      L.push('');
+      if(m.due_months>=6) L.push('🚨 সংগঠনের নিয়মানুযায়ী ৬ মাসের বেশি বকেয়া হলে সদস্যপদ বাতিল বলে গণ্য হয়। অনুগ্রহ করে *অবিলম্বে* বকেয়া পরিশোধ করুন বা যোগাযোগ করুন।');
+      else if(m.due_months>=4) L.push('⚠️ বকেয়া ৬ মাস অতিক্রম করলে সদস্যপদ বাতিল বলে গণ্য হবে। অনুগ্রহ করে দ্রুত বকেয়া পরিশোধ করুন।');
+      else L.push('অনুগ্রহ করে দ্রুত বকেয়া পরিশোধ করার অনুরোধ করা হলো।');
+    } else if(st==='adv'){
+      var al=getAdvanceMonthLabels(m.advance_months);
+      L.push('🟢 *অগ্রিম জমা আছে*');
+      L.push('• অগ্রিম মাস: '+toBnDigits(m.advance_months)+' মাস ('+joinBnMonthList(al)+')');
+      L.push('• অগ্রিম অর্থ: *'+taka(m.advance_amount)+'*');
+      L.push('');
+      L.push('💚 সময়ের আগে পরিশোধের জন্য আন্তরিক ধন্যবাদ।');
+    } else {
+      L.push('✅ আলহামদুলিল্লাহ, আপনার কোনো বকেয়া নেই। নিয়মিত জমা দেওয়ার জন্য ধন্যবাদ।');
+    }
+    if(withPay){
+      L.push('');
+      var nxt=nextLabel();
+      L.push('🗓️ '+(st==='due'?'বকেয়ার সাথে ':'')+'*'+nxt+'* মাসের চাঁদা ('+taka(monthly)+') প্রতি মাসের *১–১০ তারিখের মধ্যে* জমা দিন। ১০ তারিখের পরে ৳৫০ জরিমানা প্রযোজ্য।');
+      L.push('');
+      L.push('💳 *জমা দেওয়ার মাধ্যম*');
+      L.push('1️⃣ *অর্জুন কর্মকারের ফার্মেসিতে* সরাসরি জমা দিন');
+      L.push('');
+      L.push('*বিকল্প মাধ্যম:*');
+      L.push('2️⃣ বিকাশ (Send Money): 01816724075');
+      L.push('3️⃣ নগদ (Send Money): 01816724075');
+      L.push('   (সেন্ড মানি চার্জ আনুমানিক ৳১৮ আলাদা)');
+      L.push('4️⃣ ব্র্যাক ব্যাংক, লোহাগাড়া শাখা — হিসাব নং: 1115202383562001');
+      L.push('');
+      L.push('বিকাশ/নগদ/ব্যাংকে জমা দিলে ট্রানজেকশন আইডি বা স্ক্রিনশট পাঠাবেন।');
+    }
+    L.push('');
+    L.push('হিসাবে কোনো অসঙ্গতি থাকলে জানাবেন। ধন্যবাদ। 🤝');
+    L.push('— লোহাগাড়া প্রভাতী যুব সংগঠন');
+    return L.join('\n');
+  }
+
+  function members(){
+    if(typeof MEMBERS==='undefined') return [];
+    return Object.keys(MEMBERS).map(function(k){ return MEMBERS[k]; })
+      .filter(Boolean).sort(function(a,b){ return a.id-b.id; });
+  }
+  function esc(s){ return duesTickerEscape(s==null?'':s); }
+
+  function visible(){
+    var sent=getSent(), q=WAM.q.trim().toLowerCase();
+    var qd=q.replace(/\D/g,'');
+    return members().filter(function(m){
+      var st=status(m);
+      if(WAM.filter==='due' && st!=='due') return false;
+      if(WAM.filter==='adv' && st!=='adv') return false;
+      if(WAM.filter==='ok'  && st!=='ok')  return false;
+      if(WAM.filter==='left' && sent.indexOf(m.id)>-1) return false;
+      if(q){
+        var hit = String(m.name||'').toLowerCase().indexOf(q)>-1
+               || (qd && (String(m.id)===qd || String(m.mobile||'').replace(/\D/g,'').indexOf(qd)>-1));
+        if(!hit) return false;
+      }
+      return true;
+    });
+  }
+
+  function summaryLine(m){
+    var st=status(m);
+    var base='জমা: <b>'+taka(m.total_deposit)+'</b>';
+    if(st==='due') return base+' · বকেয়া: <b style="color:var(--rd)">'+toBnDigits(m.due_months)+' মাস ('+esc(joinBnMonthList(getDueMonthLabels(m.due_months)))+') — '+taka(m.due_amount)+'</b>';
+    if(st==='adv') return base+' · অগ্রিম: <b style="color:var(--gr)">'+toBnDigits(m.advance_months)+' মাস — '+taka(m.advance_amount)+'</b>';
+    return base+' · বকেয়া নেই';
+  }
+
+  window.renderWaMsgTab = function(){
+    applyMode();
+    if(WAM.mode==='loan') return renderLoanMode();
+    if(WAM.mode==='cng') return renderCngMode();
+    var all=members(), sent=getSent();
+    var h=document.getElementById('wam-heading'); if(h) h.textContent='মাসিক WhatsApp মেসেজ — '+curLabel();
+    var list=visible();
+    var cEl=document.getElementById('wam-count'); if(cEl) cEl.textContent=toBnDigits(list.length)+' জন';
+    var sentCount=all.filter(function(m){ return sent.indexOf(m.id)>-1; }).length;
+    var set=function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+    set('wam-st-total',toBnDigits(all.length)); set('wam-st-sent',toBnDigits(sentCount)); set('wam-st-left',toBnDigits(all.length-sentCount));
+    document.querySelectorAll('#wam-chips .wam-chip').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-f')===WAM.filter); });
+
+    var box=document.getElementById('wam-list'); if(!box) return;
+    if(!list.length){ box.innerHTML='<div class="card"><div class="empty-state"><div class="empty-state-icon">🔍</div>কোনো সদস্য পাওয়া যায়নি</div></div>'; return; }
+    box.innerHTML = list.map(function(m){
+      var st=status(m), isSent=sent.indexOf(m.id)>-1, has=!!waNum(m.mobile);
+      var pill = st==='due' ? '<span class="wam-pill due">🔴 বকেয়া</span>' : st==='adv' ? '<span class="wam-pill adv">🟢 অগ্রিম</span>' : '<span class="wam-pill ok">✅ নিয়মিত</span>';
+      return '<div class="wam-item'+(isSent?' sent':'')+'">'+
+        '<div class="wam-top"><div class="wam-no">'+bnPad(m.id,3)+'</div>'+
+        '<div class="wam-nm"><div class="n">'+esc(m.name)+'</div><div class="m">'+esc(dispMobile(m.mobile))+'</div></div>'+pill+'</div>'+
+        '<div class="wam-sum">'+summaryLine(m)+'</div>'+
+        '<div class="wam-btns">'+
+          '<button class="wam-b wa" '+(has?'':'disabled ')+'onclick="wamSend('+m.id+')">💬 WhatsApp</button>'+
+          '<button class="wam-b cp" onclick="wamCopy('+m.id+')">📋 কপি</button>'+
+          '<button class="wam-b ck" onclick="wamToggle('+m.id+')">'+(isSent?'✓ পাঠানো হয়েছে':'চিহ্নিত করুন')+'</button>'+
+        '</div>'+
+        '<details><summary>মেসেজ দেখুন</summary><div class="wam-pre">'+esc(buildMsg(m,WAM.pay))+'</div></details>'+
+      '</div>';
+    }).join('');
+  };
+
+  function mark(id,on){
+    var a=getSent(), i=a.indexOf(id);
+    if(on && i<0) a.push(id);
+    if(!on && i>-1) a.splice(i,1);
+    setSent(a);
+  }
+  window.wamSend = function(id){
+    var m=MEMBERS[String(id)]; if(!m) return;
+    var n=waNum(m.mobile); if(!n){ showToast('এই সদস্যের মোবাইল নম্বর নেই'); return; }
+    var url='https://wa.me/'+n+'?text='+encodeURIComponent(buildMsg(m,WAM.pay));
+    mark(id,true);
+    window.open(url,'_blank');
+    renderWaMsgTab();
+  };
+  window.wamCopy = function(id){
+    var m=MEMBERS[String(id)]; if(!m) return;
+    var t=buildMsg(m,WAM.pay);
+    function ok(){ showToast('মেসেজ কপি হয়েছে — WhatsApp-এ পেস্ট করুন'); }
+    try{
+      navigator.clipboard.writeText(t).then(ok,function(){ fallback(); });
+    }catch(e){ fallback(); }
+    function fallback(){
+      var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){ showToast('কপি করা যায়নি'); }
+      document.body.removeChild(ta);
+    }
+  };
+  window.wamToggle = function(id){
+    var on=getSent().indexOf(id)===-1; mark(id,on); renderWaMsgTab();
+  };
+  window.wamNext = function(){
+    var sent=getSent();
+    if(WAM.mode==='cng'){
+      var nc=visibleCng().filter(function(c){ return sent.indexOf(c.id)===-1 && waNum(cngMobile(c)); })[0];
+      if(!nc){ showToast('নম্বর আছে এমন সবাইকে পাঠানো হয়ে গেছে ✅ (নম্বর না থাকলে 📱 বাটনে নম্বর দিন)'); return; }
+      return wamCSend(nc.id);
+    }
+    if(WAM.mode==='loan'){
+      var nl=visibleLoans().filter(function(c){ return sent.indexOf(c.id)===-1 && waNum(loanMobile(c)); })[0];
+      if(!nl){ showToast('সব লোন-নোটিশ পাঠানো হয়ে গেছে ✅'); return; }
+      return wamLSend(nl.id);
+    }
+    var nxt=visible().filter(function(m){ return sent.indexOf(m.id)===-1 && waNum(m.mobile); })[0];
+    if(!nxt){ showToast('তালিকার সবাইকে পাঠানো হয়ে গেছে ✅'); return; }
+    wamSend(nxt.id);
+  };
+  window.wamReset = function(){
+    if(!confirm(curLabel()+' মাসের সব ✓ চিহ্ন মুছে ফেলবেন?')) return;
+    setSent([]); renderWaMsgTab();
+  };
+
+  /* ══ 🏦 লোন নোটিশ — যাদের লোন চলমান (৯৮%-এর কম পরিশোধিত) তাদের জন্য মাসিক অবস্থা-নোটিশ ══
+     সুদের হিসাব ড্যাশবোর্ডের লোন ট্যাবের মতোই: ১৮% বার্ষিক, ৬ মাসের ব্লক (getInterestMonths)। */
+  var BN_ONES=['শূন্য','এক','দুই','তিন','চার','পাঁচ','ছয়','সাত','আট','নয়','দশ','এগারো','বারো','তেরো','চৌদ্দ','পনেরো','ষোলো','সতেরো','আঠারো','উনিশ','বিশ','একুশ','বাইশ','তেইশ','চব্বিশ','পঁচিশ','ছাব্বিশ','সাতাশ','আটাশ','ঊনত্রিশ','ত্রিশ','একত্রিশ','বত্রিশ','তেত্রিশ','চৌত্রিশ','পঁয়ত্রিশ','ছত্রিশ','সাঁইত্রিশ','আটত্রিশ','ঊনচল্লিশ','চল্লিশ','একচল্লিশ','বিয়াল্লিশ','তেতাল্লিশ','চুয়াল্লিশ','পঁয়তাল্লিশ','ছেচল্লিশ','সাতচল্লিশ','আটচল্লিশ','ঊনপঞ্চাশ','পঞ্চাশ','একান্ন','বাহান্ন','তিপ্পান্ন','চুয়ান্ন','পঞ্চান্ন','ছাপ্পান্ন','সাতান্ন','আটান্ন','ঊনষাট','ষাট','একষট্টি','বাষট্টি','তেষট্টি','চৌষট্টি','পঁয়ষট্টি','ছেষট্টি','সাতষট্টি','আটষট্টি','ঊনসত্তর','সত্তর','একাত্তর','বাহাত্তর','তিয়াত্তর','চুয়াত্তর','পঁচাত্তর','ছিয়াত্তর','সাতাত্তর','আটাত্তর','ঊনআশি','আশি','একাশি','বিরাশি','তিরাশি','চুরাশি','পঁচাশি','ছিয়াশি','সাতাশি','অষ্টাশি','ঊননব্বই','নব্বই','একানব্বই','বিরানব্বই','তিরানব্বই','চুরানব্বই','পঁচানব্বই','ছিয়ানব্বই','সাতানব্বই','আটানব্বই','নিরানব্বই'];
+  function bnWords(n){
+    n=Math.round(Number(n)||0);
+    if(n<=0) return 'শূন্য';
+    var out=[], parts=[[10000000,'কোটি'],[100000,'লক্ষ'],[1000,'হাজার'],[100,'শত']];
+    parts.forEach(function(p){
+      var q=Math.floor(n/p[0]);
+      if(q>0){ out.push((q>99?bnWords(q):BN_ONES[q])+' '+p[1]); n-=q*p[0]; }
+    });
+    if(n>0) out.push(BN_ONES[n]);
+    return out.join(' ');
+  }
+  function bnDMY(d){ return toBnDigits(String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()); }
+  function bnLongDate(d){ return toBnDigits(d.getDate())+' '+BN_MONTH_FULL[d.getMonth()]+' '+toBnDigits(d.getFullYear()); }
+  function addMonthsClamped(d,n){
+    var y=d.getFullYear(), m=d.getMonth()+n, day=d.getDate();
+    var last=new Date(y,m+1,0).getDate();
+    return new Date(y,m,Math.min(day,last));
+  }
+  function termText(months){
+    var y=Math.floor(months/12), r=months%12, t=[];
+    if(y>0) t.push(toBnDigits(y)+' বছর');
+    if(r>0) t.push(toBnDigits(r)+' মাস');
+    return t.join(' ');
+  }
+  function elapsedText(dur){
+    var t=[];
+    if(dur.months>0) t.push(toBnDigits(dur.months)+' মাস');
+    if(dur.days>0) t.push(toBnDigits(dur.days)+' দিন');
+    return t.length? t.join(' ') : '০ দিন';
+  }
+  function loanRows(){
+    if(typeof LOAN==='undefined') return [];
+    return LOAN.filter(function(c){
+      var fully = c.total_payable>0 && (c.collected/c.total_payable*100)>=98;   // ড্যাশবোর্ডের ৯৮% নিয়ম
+      return !fully;
+    });
+  }
+  function loanInfo(c){
+    var start=lmParseShortDate(c.disbursement_date);
+    if(!start) return null;
+    var today=new Date(); today=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    var dur=calculateLoanDuration(start,today);
+    var block=getInterestMonths(dur.months,dur.days);
+    var deadline=addMonthsClamped(start,block);
+    var gross=Math.round((Number(c.invest)||0)*(1+0.18*block/12));
+    var paid=Number(c.collected)||0;
+    return { start:start, today:today, dur:dur, block:block, deadline:deadline,
+             gross:gross, paid:paid, due:Math.max(0,gross-paid), nextTerm:block+6 };
+  }
+  function loanMobile(c){
+    if(waNum(c.mobile)) return c.mobile;
+    var m=MEMBERS[String(c.member_id)]; return m? m.mobile : '';
+  }
+  function buildLoanMsg(c){
+    var f=loanInfo(c); if(!f) return '';
+    var L=[];
+    L.push('🌟 *লোহাগাড়া প্রভাতী যুব সংগঠন*');
+    L.push('');
+    L.push('📢 নোটিশ');
+    L.push('');
+    L.push('প্রিয় সদস্য,');
+    L.push('আসসালামু আলাইকুম,');
+    L.push('');
+    L.push('আপনাকে অবগত করা যাচ্ছে যে, সংগঠনের পক্ষ থেকে আপনাকে পূর্বে ৳'+nBn(c.invest)+'/- ('+bnWords(c.invest)+' টাকা) লোন প্রদান করা হয়েছিল।');
+    L.push('');
+    L.push('সদস্যের তথ্য:');
+    L.push('• নাম: '+(c.borrower||''));
+    L.push('• সদস্য নম্বর: '+toBnDigits(c.member_id));
+    L.push('• লোন প্রদান তারিখ: '+bnDMY(f.start));
+    L.push('• আজকের তারিখ: '+bnDMY(f.today));
+    L.push('• লোনের মেয়াদ: '+elapsedText(f.dur));
+    if(f.paid>0) L.push('• এ পর্যন্ত পরিশোধিত: ৳'+nBn(f.paid));
+    L.push('');
+    L.push('লোন প্রদানের পর ইতোমধ্যে '+elapsedText(f.dur)+' অতিবাহিত হয়েছে। তাই আপনাকে অনুরোধ করা হচ্ছে, '+(f.deadline>f.today?'আগামী ':'')+bnLongDate(f.deadline)+' তারিখের মধ্যে ৳'+nBn(f.due)+'/- সম্পূর্ণ পরিশোধ করতে।');
+    L.push('');
+    L.push('📌 নির্ধারিত তারিখের পর পরিশোধ করলে, লোনের মেয়াদ '+termText(f.nextTerm)+' হিসেবে গণ্য হবে।');
+    L.push('');
+    L.push('আপনার সময়মতো পরিশোধ সংগঠনের আর্থিক কার্যক্রমকে আরও সুসংগঠিত ও শক্তিশালী করবে।');
+    L.push('');
+    L.push('ধন্যবাদসহ,');
+    L.push('লোহাগাড়া প্রভাতী যুব সংগঠন');
+    return L.join('\n');
+  }
+  function visibleLoans(){
+    var q=WAM.q.trim().toLowerCase(), qd=q.replace(/\D/g,'');
+    return loanRows().filter(function(c){
+      if(!q) return true;
+      return String(c.borrower||'').toLowerCase().indexOf(q)>-1
+          || (qd && (String(c.member_id)===qd || String(c.id)===qd || String(loanMobile(c)).replace(/\D/g,'').indexOf(qd)>-1));
+    });
+  }
+  function applyMode(){
+    document.querySelectorAll('.wam-mem-only').forEach(function(e){ e.style.display = WAM.mode!=='mem' ? 'none' : ''; });
+    document.querySelectorAll('#wam-mode .wam-mbtn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-m')===WAM.mode); });
+  }
+  function renderLoanMode(){
+    var all=loanRows(), sent=getSent();
+    var h=document.getElementById('wam-heading'); if(h) h.textContent='লোন নোটিশ — '+curLabel();
+    var list=visibleLoans();
+    var cEl=document.getElementById('wam-count'); if(cEl) cEl.textContent=toBnDigits(list.length)+' টি লোন';
+    var sentCount=all.filter(function(c){ return sent.indexOf(c.id)>-1; }).length;
+    var set=function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+    set('wam-st-total',toBnDigits(all.length)); set('wam-st-sent',toBnDigits(sentCount)); set('wam-st-left',toBnDigits(all.length-sentCount));
+    var box=document.getElementById('wam-list'); if(!box) return;
+    if(!list.length){ box.innerHTML='<div class="card"><div class="empty-state"><div class="empty-state-icon">🎉</div>নোটিশ পাঠানোর মতো কোনো চলমান লোন নেই</div></div>'; return; }
+    box.innerHTML=list.map(function(c){
+      var f=loanInfo(c), isSent=sent.indexOf(c.id)>-1, has=!!waNum(loanMobile(c));
+      if(!f) return '';
+      var sum='লোন: <b>'+taka(c.invest)+'</b> · প্রদান: '+esc(bnDMY(f.start))+' · মেয়াদ: <b>'+esc(elapsedText(f.dur))+'</b><br>'+
+              (f.paid>0?'পরিশোধিত: '+taka(f.paid)+' · ':'')+'<b style="color:var(--rd)">'+esc(bnLongDate(f.deadline))+'-এর মধ্যে '+taka(f.due)+'</b>';
+      return '<div class="wam-item'+(isSent?' sent':'')+'">'+
+        '<div class="wam-top"><div class="wam-no">#'+toBnDigits(c.id)+'</div>'+
+        '<div class="wam-nm"><div class="n">'+esc(c.borrower)+' <span style="font-weight:400;font-size:11px;color:var(--text-2)">(সদস্য '+toBnDigits(c.member_id)+')</span></div><div class="m">'+esc(dispMobile(loanMobile(c)))+'</div></div>'+
+        '<span class="wam-pill loan">🏦 লোন</span></div>'+
+        '<div class="wam-sum">'+sum+'</div>'+
+        '<div class="wam-btns">'+
+          '<button class="wam-b wa" '+(has?'':'disabled ')+'onclick="wamLSend('+c.id+')">💬 WhatsApp</button>'+
+          '<button class="wam-b cp" onclick="wamLCopy('+c.id+')">📋 কপি</button>'+
+          '<button class="wam-b ck" onclick="wamLToggle('+c.id+')">'+(isSent?'✓ পাঠানো হয়েছে':'চিহ্নিত করুন')+'</button>'+
+        '</div>'+
+        '<details><summary>নোটিশ দেখুন</summary><div class="wam-pre">'+esc(buildLoanMsg(c))+'</div></details>'+
+      '</div>';
+    }).join('');
+  }
+  function loanById(id){ return (typeof LOAN!=='undefined') ? LOAN.filter(function(c){ return c.id===id; })[0] : null; }
+  window.wamLSend=function(id){
+    var c=loanById(id); if(!c) return;
+    var n=waNum(loanMobile(c)); if(!n){ showToast('এই সদস্যের মোবাইল নম্বর নেই'); return; }
+    mark(id,true);
+    window.open('https://wa.me/'+n+'?text='+encodeURIComponent(buildLoanMsg(c)),'_blank');
+    renderWaMsgTab();
+  };
+  window.wamLCopy=function(id){
+    var c=loanById(id); if(!c) return;
+    var t=buildLoanMsg(c);
+    function ok(){ showToast('নোটিশ কপি হয়েছে — WhatsApp-এ পেস্ট করুন'); }
+    function fb(){
+      var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){ showToast('কপি করা যায়নি'); }
+      document.body.removeChild(ta);
+    }
+    try{ navigator.clipboard.writeText(t).then(ok,fb); }catch(e){ fb(); }
+  };
+  window.wamLToggle=function(id){ var on=getSent().indexOf(id)===-1; mark(id,on); renderWaMsgTab(); };
+  window.wamSetMode=function(m){ WAM.mode=(m==='loan'||m==='cng')?m:'mem'; renderWaMsgTab(); };
+
+  /* ══ 🚕 CNG / Auto কিস্তি — CNG ট্যাবের ডেটা (CNG, CNG_EXTRA, CNG_PAYMENTS) থেকে প্রতি ড্রাইভারের হিসাব-বিবরণী ══
+     CNG ডেটায় মোবাইল নম্বর নেই — তাই 📱 বাটনে একবার নম্বর দিলে এই ব্রাউজারে সেভ থাকবে। */
+  var CNG_BN={'Zohir Ahmed':'জহির আহমেদ','Abu Taher':'আবু তাহের','Zahedul Islam':'জাহেদুল ইসলাম','Sajal Barua':'সজল বড়ুয়া','Nurul Abser':'নুরুল আবছার','Abdul Malek':'আব্দুল মালেক','Kamal Uddin':'কামাল উদ্দিন','Mohammad Yousof':'মোহাম্মদ ইউসুফ','Mohammad Alamgir':'মোহাম্মদ আলমগীর','Norul Alam (Babul)':'নুরুল আলম (বাবুল)','Norul Amin':'নুরুল আমিন'};
+  var CNG_PHONE_KEY='lpyo-cng-mobile';
+  function cngPhones(){ try{ return JSON.parse(localStorage.getItem(CNG_PHONE_KEY)||'{}'); }catch(e){ return {}; } }
+  function cngMobile(c){ var v=cngPhones()[String(c.id)]; return v||c.mobile||''; }
+  function cngName(c){ return CNG_BN[c.driver]||c.driver; }
+  function cngRows(){ return (typeof CNG!=='undefined') ? CNG : []; }
+  function cngById(id){ return cngRows().filter(function(c){ return c.id===id; })[0]; }
+  function pYMD(str){ var a=String(str||'').split('-'); return a.length===3? new Date(+a[0],+a[1]-1,+a[2]) : null; }
+  function cngInfo(c){
+    var ex=(typeof CNG_EXTRA!=='undefined' && CNG_EXTRA[String(c.id)])||{};
+    var pays=(typeof CNG_PAYMENTS!=='undefined' && CNG_PAYMENTS[String(c.id)])||[];
+    var last=pays.length? pays[pays.length-1] : null;
+    var today=new Date(); today=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    var done=!(c.remaining>0);
+    var lastD=last? pYMD(last.date) : null, nextDue=null;
+    if(!done && lastD) nextDue=new Date(lastD.getFullYear(),lastD.getMonth()+1,10);
+    return { ex:ex, last:last, lastD:lastD, today:today, done:done, nextDue:nextDue,
+             overdue: !!(nextDue && nextDue<today),
+             veh: c.type==='CNG' ? 'সিএনজি' : 'অটো রিকশা', em: c.type==='CNG' ? '🚕' : '🛺',
+             payable: c.total_payable };
+  }
+  function buildCngMsg(c){
+    var f=cngInfo(c), ex=f.ex, L=[], nm=cngName(c);
+    L.push('🌟 *লোহাগাড়া প্রভাতী যুব সংগঠন*');
+    L.push('📋 *'+f.veh+' কিস্তির হিসাব বিবরণী*');
+    L.push('');
+    L.push('প্রিয় *'+nm+'*,');
+    L.push('আসসালামু আলাইকুম 🤝');
+    L.push('');
+    if(f.done) L.push('আপনার '+f.veh+' কিস্তির হিসাব জানানো হলো। আলহামদুলিল্লাহ, আপনার সম্পূর্ণ কিস্তি পরিশোধ হয়েছে। 🎉');
+    else L.push('সংগঠনের পক্ষ থেকে আপনার *'+f.veh+'* কিস্তির বর্তমান হিসাব জানানো হলো।');
+    L.push('');
+    L.push(f.em+' *'+f.veh+' তথ্য*');
+    L.push('━━━━━━━━━━━━━━━━━━');
+    var idt=pYMD(ex.investmentDate);
+    if(idt) L.push('📅 বিনিয়োগের তারিখ: *'+bnDMY(idt)+'*');
+    if(ex.purchasePrice) L.push('🏷️ ক্রয়মূল্য: ৳'+nBn(ex.purchasePrice)+'/-');
+    if(ex.downPayment)   L.push('💵 ডাউন পেমেন্ট: ৳'+nBn(ex.downPayment)+'/-');
+    L.push('📑 মোট পরিশোধযোগ্য: *৳'+nBn(c.total_payable)+'/-*');
+    L.push('━━━━━━━━━━━━━━━━━━');
+    L.push('');
+    L.push('📊 *বর্তমান অবস্থা* ('+bnDMY(f.today)+' পর্যন্ত)');
+    L.push('━━━━━━━━━━━━━━━━━━');
+    L.push('✅ এ পর্যন্ত পরিশোধ: *৳'+nBn(c.collected)+'/-*');
+    L.push(f.done ? '⏳ বাকি: *৳০/- (সম্পূর্ণ পরিশোধিত)*' : '⏳ বাকি আছে: *৳'+nBn(c.remaining)+'/-*');
+    if(!f.done) L.push('📋 কিস্তি: *'+toBnDigits(c.paid_installments)+' / '+toBnDigits(c.total_installments)+'* টি পরিশোধিত');
+    if(f.last && f.lastD) L.push('🕐 সর্বশেষ পরিশোধ: ৳'+nBn(f.last.amount)+'/- ('+bnDMY(f.lastD)+')');
+    L.push('━━━━━━━━━━━━━━━━━━');
+    L.push('');
+    if(!f.done){
+      if(ex.installmentAmount) L.push('📌 *নিয়মিত কিস্তি:* প্রতি মাসের ১০ তারিখের মধ্যে ৳'+nBn(ex.installmentAmount)+'/- করে।');
+      if(f.nextDue){
+        if(f.overdue) L.push('⚠️ *'+BN_MONTH_FULL[f.nextDue.getMonth()]+' '+toBnDigits(f.nextDue.getFullYear())+'* মাসের কিস্তি এখনো জমা হয়নি। অনুগ্রহ করে দ্রুত জমা দিন।');
+        else L.push('🗓️ পরবর্তী কিস্তির তারিখ: *'+bnLongDate(f.nextDue)+'*');
+      }
+      L.push('');
+      L.push('সময়মতো কিস্তি পরিশোধ করলে সংগঠনের কার্যক্রম আরও সুসংগঠিত হবে। আপনার সহযোগিতার জন্য ধন্যবাদ।');
+    } else {
+      L.push('আপনার নিয়মিত সহযোগিতার জন্য সংগঠনের পক্ষ থেকে আন্তরিক ধন্যবাদ। আল্লাহ আপনার উপার্জনে বরকত দিন। 🤲');
+    }
+    L.push('');
+    L.push('হিসাবে কোনো অসঙ্গতি থাকলে জানাবেন।');
+    L.push('');
+    L.push('🙏 *ধন্যবাদসহ,*');
+    L.push('*লোহাগাড়া প্রভাতী যুব সংগঠন*');
+    return L.join('\n');
+  }
+  function visibleCng(){
+    var q=WAM.q.trim().toLowerCase(), qd=q.replace(/\D/g,'');
+    return cngRows().filter(function(c){
+      if(!q) return true;
+      return String(c.driver||'').toLowerCase().indexOf(q)>-1 || cngName(c).toLowerCase().indexOf(q)>-1
+          || (qd && (String(c.id)===qd || String(cngMobile(c)).replace(/\D/g,'').indexOf(qd)>-1));
+    });
+  }
+  function renderCngMode(){
+    var all=cngRows(), sent=getSent();
+    var h=document.getElementById('wam-heading'); if(h) h.textContent='CNG / Auto কিস্তি — '+curLabel();
+    var list=visibleCng();
+    var cEl=document.getElementById('wam-count'); if(cEl) cEl.textContent=toBnDigits(list.length)+' জন';
+    var sentCount=all.filter(function(c){ return sent.indexOf(c.id)>-1; }).length;
+    var set=function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+    set('wam-st-total',toBnDigits(all.length)); set('wam-st-sent',toBnDigits(sentCount)); set('wam-st-left',toBnDigits(all.length-sentCount));
+    var box=document.getElementById('wam-list'); if(!box) return;
+    if(!list.length){ box.innerHTML='<div class="card"><div class="empty-state"><div class="empty-state-icon">🔍</div>কোনো ড্রাইভার পাওয়া যায়নি</div></div>'; return; }
+    box.innerHTML=list.map(function(c){
+      var f=cngInfo(c), isSent=sent.indexOf(c.id)>-1, has=!!waNum(cngMobile(c));
+      var pill = f.done ? '<span class="wam-pill ok">✅ সম্পন্ন</span>' : (f.overdue ? '<span class="wam-pill due">🔴 কিস্তি বাকি</span>' : '<span class="wam-pill loan">'+f.em+' চলমান</span>');
+      var sum = 'মোট পরিশোধযোগ্য: <b>'+taka(c.total_payable)+'</b> · আদায়: <b style="color:var(--gr)">'+taka(c.collected)+'</b><br>'+
+                (f.done ? '<b style="color:var(--gr)">সম্পূর্ণ পরিশোধিত</b>' : 'বাকি: <b style="color:var(--rd)">'+taka(c.remaining)+'</b> · কিস্তি: <b>'+toBnDigits(c.paid_installments)+'/'+toBnDigits(c.total_installments)+'</b>');
+      return '<div class="wam-item'+(isSent?' sent':'')+'">'+
+        '<div class="wam-top"><div class="wam-no">'+f.em+' '+toBnDigits(c.id)+'</div>'+
+        '<div class="wam-nm"><div class="n">'+esc(cngName(c))+' <span style="font-weight:400;font-size:11px;color:var(--text-2)">('+esc(f.veh)+')</span></div><div class="m">'+esc(dispMobile(cngMobile(c)))+'</div></div>'+pill+'</div>'+
+        '<div class="wam-sum">'+sum+'</div>'+
+        '<div class="wam-btns">'+
+          '<button class="wam-b wa" onclick="wamCSend('+c.id+')">💬 WhatsApp</button>'+
+          '<button class="wam-b cp" onclick="wamCCopy('+c.id+')">📋 কপি</button>'+
+          '<button class="wam-b cp" onclick="wamCPhone('+c.id+')">📱 '+(has?'নম্বর বদলান':'নম্বর দিন')+'</button>'+
+          '<button class="wam-b ck" onclick="wamCToggle('+c.id+')">'+(isSent?'✓ পাঠানো হয়েছে':'চিহ্নিত করুন')+'</button>'+
+        '</div>'+
+        '<details><summary>মেসেজ দেখুন</summary><div class="wam-pre">'+esc(buildCngMsg(c))+'</div></details>'+
+      '</div>';
+    }).join('');
+  }
+  window.wamCPhone=function(id){
+    var c=cngById(id); if(!c) return false;
+    var cand=''; // নামের হুবহু মিল থাকলে একটি পরামর্শ দেখানো হয় (নিশ্চিত করে নিন)
+    try{ Object.keys(MEMBERS).forEach(function(k){ var m=MEMBERS[k]; if(!cand && m && String(m.name).trim().toLowerCase()===String(c.driver).trim().toLowerCase()) cand=m.mobile; }); }catch(e){}
+    var v=window.prompt(cngName(c)+' — WhatsApp মোবাইল নম্বর দিন (যেমন 01XXXXXXXXX):', cngMobile(c)||cand||'');
+    if(v===null) return false;
+    var ph=cngPhones();
+    if(!String(v).trim()){ delete ph[String(id)]; }
+    else if(!waNum(v)){ showToast('নম্বরটি সঠিক মনে হচ্ছে না'); return false; }
+    else ph[String(id)]=String(v).trim();
+    try{ localStorage.setItem(CNG_PHONE_KEY, JSON.stringify(ph)); }catch(e){ showToast('নম্বর সেভ করা যায়নি'); }
+    renderWaMsgTab(); return !!waNum(cngMobile(c));
+  };
+  window.wamCSend=function(id){
+    var c=cngById(id); if(!c) return;
+    var n=waNum(cngMobile(c));
+    if(!n){
+      if(!window.wamCPhone(id)) return;
+      n=waNum(cngMobile(c)); if(!n) return;
+    }
+    mark(id,true);
+    window.open('https://wa.me/'+n+'?text='+encodeURIComponent(buildCngMsg(c)),'_blank');
+    renderWaMsgTab();
+  };
+  window.wamCCopy=function(id){
+    var c=cngById(id); if(!c) return;
+    var t=buildCngMsg(c);
+    function ok(){ showToast('মেসেজ কপি হয়েছে — WhatsApp-এ পেস্ট করুন'); }
+    function fb(){
+      var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); ok(); }catch(e){ showToast('কপি করা যায়নি'); }
+      document.body.removeChild(ta);
+    }
+    try{ navigator.clipboard.writeText(t).then(ok,fb); }catch(e){ fb(); }
+  };
+  window.wamCToggle=function(id){ var on=getSent().indexOf(id)===-1; mark(id,on); renderWaMsgTab(); };
+
+  window.wamSetFilter = function(f){ WAM.filter=f; renderWaMsgTab(); };
+  window.wamSearch = function(v){ WAM.q=v||''; renderWaMsgTab(); };
+  window.wamTogglePay = function(v){ WAM.pay=!!v; renderWaMsgTab(); };
+})();
+</script>
+
+<script>
+/* ══ অ্যাডমিন-গেট: "মাসিক মেসেজ" ট্যাব সাধারণ সদস্যদের কাছে লুকানো; শুধু পাসওয়ার্ড দিয়ে খোলা যায় ══
+   খুলতে: পেজের লিংকের শেষে #admin যোগ করে ওপেন করুন (যেমন …/index.html#admin) → পাসওয়ার্ড দিন।
+   পাসওয়ার্ড বদলাতে: ব্রাউজার কনসোলে lpyoHash('নতুন-পাসওয়ার্ড') চালিয়ে যে কোড পাবেন তা ADMIN_HASH-এ বসান। */
+(function(){
+  var ADMIN_HASH='kp4z0izh7r', SALT='lpyo-wam-v1:', LS='lpyo-admin-ok';
+  function cyrb53(str,seed){seed=seed||0;var h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(var i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}h1=Math.imul(h1^(h1>>>16),2246822507);h1^=Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507);h2^=Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);}
+  window.lpyoHash=function(pw){ return cyrb53(SALT+pw); };
+  function ok(){ try{ return localStorage.getItem(LS)===ADMIN_HASH; }catch(e){ return !!window.__lpyoAdminSession; } }
+  window.lpyoAdminOk=ok;
+  function showBtn(on){ var b=document.getElementById('tb-wamsg'); if(b) b.style.display=on?'':'none'; }
+  function unlock(){
+    if(ok()){ showBtn(true); return true; }
+    var pw=window.prompt('অ্যাডমিন পাসওয়ার্ড দিন:');
+    if(pw===null) return false;
+    if(cyrb53(SALT+pw.trim())===ADMIN_HASH){
+      try{ localStorage.setItem(LS,ADMIN_HASH); }catch(e){ window.__lpyoAdminSession=true; }
+      window.__lpyoAdminSession=true; showBtn(true); return true;
+    }
+    try{ showToast('ভুল পাসওয়ার্ড'); }catch(e){}
+    return false;
+  }
+  function checkHash(){
+    if((location.hash||'').toLowerCase()==='#admin'){
+      try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){}
+      if(unlock()) tab('wamsg');
+    }
+  }
+  window.wamLock=function(){
+    try{ localStorage.removeItem(LS); }catch(e){}
+    window.__lpyoAdminSession=false; showBtn(false); tab('member');
+  };
+  showBtn(ok());
+  checkHash();
+  window.addEventListener('hashchange',checkHash);
+})();
 </script>
 </body>
 </html>
