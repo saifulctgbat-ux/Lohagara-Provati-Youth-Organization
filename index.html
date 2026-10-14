@@ -4640,5 +4640,389 @@ window.uiErrorState = function(title,sub){
   window.addEventListener('hashchange',checkHash);
 })();
 </script>
+
+<script>
+/* LPYO workbook -> dashboard data parser (works in browser and Node) */
+(function (root) {
+  'use strict';
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function num(v) {
+    if (typeof v === 'number') return isFinite(v) ? v : 0;
+    if (v == null) return 0;
+    var x = parseFloat(String(v).replace(/[,\u09F3\s]/g, ''));
+    return isFinite(x) ? x : 0;
+  }
+  function str(v) { return v == null ? '' : String(v).trim(); }
+  function serialToYMD(s) {
+    var d = new Date(Math.round((s - 25569) * 86400000));
+    return { y: d.getUTCFullYear(), m: d.getUTCMonth(), d: d.getUTCDate() };
+  }
+  function p2(n) { return (n < 10 ? '0' : '') + n; }
+  function toISO(v) {
+    if (typeof v === 'number') { var o = serialToYMD(v); return o.y + '-' + p2(o.m + 1) + '-' + p2(o.d); }
+    var s = str(v), m;
+    if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})/))) return m[1] + '-' + m[2] + '-' + m[3];
+    if ((m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/))) return m[3] + '-' + p2(+m[2]) + '-' + p2(+m[1]);
+    return s;
+  }
+  function toShort(v) { // "28 Mar 2024"
+    var iso = toISO(v), m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? m[3] + ' ' + MON[+m[2] - 1] + ' ' + m[1] : str(v);
+  }
+  function labelKey(s) {
+    return String(s == null ? '' : s).replace(/[^\p{L}\p{N}\s\/&%()+.-]/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+
+  function parse(XLSX, wb, prev, opts) {
+    prev = prev || {}; opts = opts || {};
+    var names = wb.SheetNames;
+    function rows(name) {
+      var ws = wb.Sheets[name];
+      if (!ws) throw new Error('Sheet পাওয়া যায়নি: "' + name + '"');
+      return XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: null, blankrows: true });
+    }
+    function findHeader(r, label) { // returns {row, cols:{label->idx}}
+      for (var i = 0; i < r.length; i++) {
+        var row = r[i] || [];
+        for (var j = 0; j < row.length; j++) {
+          if (labelKey(row[j]) === labelKey(label)) {
+            var cols = {};
+            row.forEach(function (c, k) { if (c != null) cols[labelKey(c)] = k; });
+            return { row: i, cols: cols };
+          }
+        }
+      }
+      throw new Error('Header পাওয়া যায়নি: "' + label + '"');
+    }
+    function col(h, name) {
+      var k = labelKey(name);
+      if (h.cols[k] == null) throw new Error('Column পাওয়া যায়নি: "' + name + '"');
+      return h.cols[k];
+    }
+
+    /* ---------- MONTHLY ---------- */
+    var mr = rows('Month Wise Collection Summary'), mh = findHeader(mr, 'Month');
+    var cM = col(mh, 'Month'), cReg = col(mh, 'Regular Deposit'), cAdv = col(mh, 'Advance'),
+        cDue = col(mh, 'Due Collection'), cFine = col(mh, 'Fine'),
+        cCng = mh.cols[labelKey('CNG & Other Installment Collection')], cExp = col(mh, 'Expense');
+    if (cCng == null) { Object.keys(mh.cols).forEach(function (k) { if (k.indexOf('cng') === 0) cCng = mh.cols[k]; }); }
+    var MONTHLY = [];
+    for (var i = mh.row + 1; i < mr.length; i++) {
+      var r0 = mr[i]; if (!r0 || typeof r0[cM] !== 'number') continue;
+      var o = serialToYMD(r0[cM]);
+      var rec = { month: MON[o.m] + '-' + String(o.y).slice(-2), regular: num(r0[cReg]), advance: num(r0[cAdv]),
+                  due: num(r0[cDue]), fine: num(r0[cFine]), cng: cCng == null ? 0 : num(r0[cCng]), expense: num(r0[cExp]) };
+      MONTHLY.push(rec);
+    }
+    while (MONTHLY.length && !(MONTHLY[MONTHLY.length - 1].regular > 0)) MONTHLY.pop();
+    var totalMonths = MONTHLY.length;
+
+    /* ---------- MEMBERS ---------- */
+    var kr = rows('Member Wise Deposit Summary'), kh = findHeader(kr, 'Member ID');
+    var cId = col(kh, 'Member ID'), cNm = col(kh, 'Name'), cMo = col(kh, 'Mobile Number'),
+        cSh = col(kh, 'Number of Shares'), cEf = kh.cols[Object.keys(kh.cols).filter(function (k) { return k.indexOf('entry fee') === 0; })[0]],
+        cTd = col(kh, 'Till Date Total Deposit'), cTf = col(kh, 'Total Fine');
+    var fr = rows('Member Final Receivable'), fh = findHeader(fr, 'Member ID');
+    var fId = col(fh, 'Member ID'), fVal = col(fh, 'Estimated Final Receivable');
+    var finalMap = {};
+    for (i = fh.row + 1; i < fr.length; i++) { var fx = fr[i]; if (fx && typeof fx[fId] === 'number') finalMap[fx[fId]] = num(fx[fVal]); }
+    var kpiDash = scanLabels(rows('DASHBOARD'));
+    var perShare = kpiDash['per share/month'] || 1000;
+    var MEMBERS = {};
+    for (i = kh.row + 1; i < kr.length; i++) {
+      var x = kr[i]; if (!x || typeof x[cId] !== 'number') continue;
+      var id = x[cId], sh = num(x[cSh]), dep = num(x[cTd]);
+      var expected = sh * perShare * totalMonths, unit = sh * perShare || 1;
+      var due = Math.max(expected - dep, 0), adv = Math.max(dep - expected, 0);
+      MEMBERS[String(id)] = { id: id, name: str(x[cNm]), mobile: str(x[cMo]), shares: sh, entry_fee: num(x[cEf]),
+        total_deposit: dep, total_fine: num(x[cTf]), expected: expected, due_amount: due, due_months: Math.round(due / unit),
+        advance_amount: adv, advance_months: Math.round(adv / unit), final_receivable: finalMap[id] != null ? finalMap[id] : 0 };
+    }
+
+    /* ---------- CNG ---------- */
+    var cr = rows('CNG Summary'), ch = findHeader(cr, 'CNG No');
+    var sheetFor = {};
+    names.forEach(function (n) { var m = n.match(/^(CNG|Auto Rikshwa)\s*(\d+)/i); if (m) sheetFor[+m[2]] = { name: n, type: /^CNG/i.test(m[1]) ? 'CNG' : 'Auto' }; });
+    var CNG = [], CNG_PAYMENTS = {}, CNG_EXTRA = {};
+    var cNo = col(ch, 'CNG No'), cDr = col(ch, 'Driver'), cTi = col(ch, 'Total Installments'), cPi = col(ch, 'Paid Installments'),
+        cInv = col(ch, 'Investment Amount'), cTp = ch.cols[Object.keys(ch.cols).filter(function (k) { return k.indexOf('total payable') === 0; })[0]],
+        cCo = col(ch, 'Collected Amount'), cRm = ch.cols[Object.keys(ch.cols).filter(function (k) { return k.indexOf('remaining amount with profit') === 0; })[0]];
+    for (i = ch.row + 1; i < cr.length; i++) {
+      var c = cr[i]; if (!c || typeof c[cNo] !== 'number') continue;
+      var cid = c[cNo], payable = num(c[cTp]), coll = num(c[cCo]), remaining = num(c[cRm]);
+      var sh0 = sheetFor[cid];
+      CNG.push({ id: cid, driver: str(c[cDr]), type: sh0 ? sh0.type : 'CNG', invest: num(c[cInv]), total_payable: payable,
+                 collected: coll, remaining: remaining, status: remaining <= 0 ? '\u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8' : '\u099A\u09B2\u09AE\u09BE\u09A8',
+                 total_installments: num(c[cTi]), paid_installments: num(c[cPi]) });
+      if (sh0) {
+        var sr = rows(sh0.name), pay = [], ex = {}, inPay = false;
+        for (var j = 0; j < sr.length; j++) {
+          var a = sr[j] || [], k = labelKey(a[1]), v = a[2];
+          if (!inPay) {
+            if (k === 'date') { inPay = true; continue; }
+            var map = { 'investment date': ['investmentDate', toISO], 'purchase price': ['purchasePrice', num], 'down payment': ['downPayment', num],
+                        'sale price': ['salePrice', num], 'profit': ['profit', num], 'term': ['term', str],
+                        'installment': ['installmentAmount', num], 'final installment': ['finalInstallment', num] };
+            if (map[k]) ex[map[k][0]] = map[k][1](v);
+          } else {
+            if (a[1] == null || /total/i.test(str(a[1]))) { if (a[1] != null) break; else continue; }
+            if (num(v) !== 0 || v === 0) pay.push({ date: toISO(a[1]), amount: num(v) });
+          }
+        }
+        CNG_PAYMENTS[String(cid)] = pay; CNG_EXTRA[String(cid)] = ex;
+      }
+    }
+
+    /* ---------- LOAN ---------- */
+    var lr = rows('Loan Collection Summary'), lh = findHeader(lr, 'Loan ID');
+    var L = function (n) { return col(lh, n); };
+    var LOAN = [];
+    var lId = L('Loan ID'), lMid = L('Member ID'), lNm = L('Member Name'), lMo = L('Mobile Number'), lAmt = L('Loan Amount'),
+        lDt = L('Disbursement Date'), lG = L('Guarantor Member ID'), lRt = L('Interest Rate'), lDur = L('Duration (Months)'),
+        lPay = L('Payble Amount'), lCol = L('Collected Amount'), lRem = L('Remarks');
+    for (i = lh.row + 1; i < lr.length; i++) {
+      var q = lr[i]; if (!q || typeof q[lId] !== 'number') continue;
+      var inv = num(q[lAmt]), tp = num(q[lPay]) || inv, cl = num(q[lCol]), rem = Math.max(tp - cl, 0);
+      var dur = str(q[lDur]), rmk = str(q[lRem]), mem = MEMBERS[String(num(q[lMid]))];
+      LOAN.push({ id: q[lId], borrower: str(q[lNm]), member_id: num(q[lMid]), mobile: (mem && mem.mobile) ? mem.mobile : str(q[lMo]), invest: inv, total_payable: tp,
+                  collected: cl, remaining: rem, status: (rem <= 0 || /closed/i.test(rmk)) ? '\u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8' : '\u099A\u09B2\u09AE\u09BE\u09A8',
+                  disbursement_date: toShort(q[lDt]), guarantor: str(q[lG]), interest_rate: num(q[lRt]),
+                  duration: /year|month|day/i.test(dur) ? dur : '\u2014', remarks: rmk });
+    }
+
+    /* ---------- EXPENSES ---------- */
+    var er = rows('Month Wise Expenses'), EXPENSES = [], yrRow = er[1] || [];
+    yrRow.forEach(function (yv, cIdx) {
+      if (!/^\d{4}$/.test(str(yv))) return;
+      var y = +str(yv);
+      for (var t = 3; t < er.length; t++) {
+        var e = er[t] || [], mn = str(e[cIdx]);
+        if (!mn || /total/i.test(mn)) continue;
+        var amt = num(e[cIdx + 2]);
+        if (amt > 0) {
+          var d0 = str(e[cIdx + 1]), desc = '';
+          if (opts.expenseDesc === 'sheet') desc = d0.toLowerCase() === 'expense' ? '' : d0;
+          else { var pe = (prev.EXPENSES || []).filter(function (z) { return z.year === y && z.month === mn; })[0]; desc = pe ? pe.description : ''; }
+          EXPENSES.push({ year: y, month: mn, description: desc, amount: amt });
+        }
+      }
+    });
+
+    /* ---------- KPI ---------- */
+    var sum = function (a, f) { return a.reduce(function (s, o) { return s + (+o[f] || 0); }, 0); };
+    var mv = Object.keys(MEMBERS).map(function (k) { return MEMBERS[k]; });
+    var KPI = {
+      net_fund: kpiDash['net fund (bdt)'], total_members: mv.length, total_shares: sum(mv, 'shares'), per_share: perShare,
+      total_months: totalMonths, regular_collection: kpiDash['regular collection'], advance_collection: kpiDash['advance collection'],
+      due_collection: kpiDash['due collection'], fine_collection: kpiDash['fine collection'], loan_receivable: kpiDash['loan receivable'] != null ? kpiDash['loan receivable'] : sum(LOAN, 'invest') - sum(LOAN, 'collected'),
+      cng_invest: sum(CNG, 'invest'), cng_payable: sum(CNG, 'total_payable'), cng_collected: sum(CNG, 'collected'),
+      cng_remaining: sum(CNG, 'total_payable') - sum(CNG, 'collected'), loan_invest: sum(LOAN, 'invest'), loan_collected: sum(LOAN, 'collected'),
+      entry_fee: kpiDash['entry fee (bdt)'], total_expenses: kpiDash['total expenses'], dps_invest: kpiDash['dps investment'],
+      fdr_invest: kpiDash['fdr investment'], savings_balance: kpiDash['savings balance'], member_total_deposit: sum(mv, 'total_deposit'),
+      member_total_expected: sum(mv, 'expected'), member_total_due: sum(mv, 'due_amount'), member_total_advance: sum(mv, 'advance_amount'),
+      member_total_fine: sum(mv, 'total_fine')
+    };
+    Object.keys(KPI).forEach(function (k) { KPI[k] = num(KPI[k]); });
+
+    /* ---------- PL ---------- */
+    var pr = rows('Profit & Loss'), items = [], gp = 0, te = 0, np = 0, eps = 0, inInc = false;
+    pr.forEach(function (a) {
+      var lab = str(a[1]), k = labelKey(lab);
+      if (/income sources/.test(k)) { inInc = true; return; }
+      if (k === 'gross profit') { gp = num(a[2]); inInc = false; return; }
+      if (/total expenses/.test(k)) { te = num(a[2]); return; }
+      if (/^net profit/.test(k)) { np = num(a[2]); return; }
+      if (/^earning per share/.test(k)) { eps = num(a[2]); return; }
+      if (inInc && lab) items.push({ label: lab.replace(/^\d+\.\s*/, ''), amount: num(a[2]), note: str(a[3]) });
+    });
+    var pOld = (prev.PL && prev.PL.items) || [];
+    if (pOld.length === items.length) items = items.map(function (it, n) { return { label: pOld[n].label, amount: it.amount, note: pOld[n].note }; });
+    var PL = { items: items, gross_profit: gp, total_expense: te, net_profit: np, eps: eps };
+
+    /* ---------- SHARE_MATURITY ---------- */
+    var sr2 = scanRowLabels(rows('Share Maturity'), 1, 2);
+    var SM_KEYS = [['total actual member collection', 'total_collection'], ['total cng/loan profit', 'cng_loan_profit'],
+      ['total fine collected', 'fine_collected'], ['total dps + fdr + other profit', 'investment_profit'], ['less total expenses', 'total_expenses'],
+      ['net organization fund', 'net_fund'], ['total number of shares', 'total_shares'], ['total net profit (distributable)', 'net_profit_distributable'],
+      ['profit per share', 'profit_per_share'], ['expected deposit per share (60 months)', 'expected_deposit_per_share_60m'],
+      ['current share value (deposit only)', 'current_share_value_deposit'], ['current total share value (with profit)', 'current_total_share_value'],
+      ['estimated final share value (60 months)', 'estimated_final_share_value_60m'], ['projected total payout (all 125 shares)', 'projected_total_payout']];
+    var SHARE_MATURITY = {};
+    SM_KEYS.forEach(function (p) {
+      var key = p[0], v = sr2[key];
+      if (v == null && p[1] === 'projected_total_payout') { Object.keys(sr2).forEach(function (k) { if (k.indexOf('projected total payout') === 0) v = sr2[k]; }); }
+      SHARE_MATURITY[p[1]] = num(v);
+    });
+
+    /* ---------- FUND_RECON ---------- */
+    var fc = rows('Central Fund Control'), inc = [], dep = [], ti = 0, td = 0, vr = 0, an = 0, started = false;
+    fc.forEach(function (a) {
+      var l0 = labelKey(a[0]);
+      if (l0 === 'income sources') { started = true; return; }
+      if (l0 === 'total income') { ti = num(a[1]); td = num(a[3]); started = false; return; }
+      if (/^variance/.test(l0)) { vr = num(a[1]); return; }
+      if (/^actual organi[sz]ation net fund/.test(l0)) { an = num(a[1]); return; }
+      if (started && a[0] != null) { inc.push({ label: str(a[0]), amount: num(a[1]) }); dep.push({ label: str(a[2]), amount: num(a[3]) }); }
+    });
+    var fo = prev.FUND_RECON || {};
+    if (fo.income && fo.income.length === inc.length) inc = inc.map(function (it, n) { return { label: fo.income[n].label, amount: it.amount }; });
+    if (fo.deployment && fo.deployment.length === dep.length) dep = dep.map(function (it, n) { return { label: fo.deployment[n].label, amount: it.amount }; });
+    var FUND_RECON = { income: inc, deployment: dep, total_income: ti, total_deployment: td, variance: vr, actual_net_fund: an };
+
+    return { MEMBERS: MEMBERS, MONTHLY: MONTHLY, CNG: CNG, LOAN: LOAN, CNG_PAYMENTS: CNG_PAYMENTS, CNG_EXTRA: CNG_EXTRA,
+             EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON };
+  }
+
+  /* dashboard KPI cards: label cell -> value below, or to the right */
+  function scanLabels(r) {
+    var out = {};
+    for (var i = 0; i < r.length; i++) for (var j = 0; j < (r[i] || []).length; j++) {
+      var c = r[i][j]; if (typeof c !== 'string') continue;
+      var k = labelKey(c); if (!k || out[k] != null) continue;
+      var below = r[i + 1] && r[i + 1][j], right = r[i][j + 1];
+      if (typeof below === 'number') out[k] = below; else if (typeof right === 'number') out[k] = right;
+    }
+    return out;
+  }
+  /* label in col a -> value in col b (first occurrence wins) */
+  function scanRowLabels(r, a, b) {
+    var out = {};
+    r.forEach(function (x) { var k = labelKey(x && x[a]); if (k && out[k] == null && typeof x[b] === 'number') out[k] = x[b]; });
+    return out;
+  }
+
+  root.lpyoParse = parse;
+  if (typeof module !== 'undefined' && module.exports) module.exports = parse;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ══ ডেটা অটো-লোড লেয়ার (additive) — Excel (.xlsx) থেকে সরাসরি ডেটা পড়ে ড্যাশবোর্ড আপডেট করে ══
+   • পেজ খুললে CFG.url-এর workbook (ডিফল্ট: index.html-এর পাশের data.xlsx) আনার চেষ্টা করে; না পেলে এম্বেড করা ডেটাই চলে।
+   • অ্যাডমিন (#admin) হলে নিচে-বামে "ডেটা আপডেট" বাটন দেখা যায় — সেখান থেকে হাতে .xlsx বেছে নেওয়া যায়।
+   • শুধু ১১টি ডেটা-ব্লক (MEMBERS, MONTHLY, CNG, LOAN …) বদলায়; বাকি কোডে হাত দেওয়া হয় না। */
+(function () {
+  'use strict';
+  var CFG = {
+    url: (typeof window.LPYO_DATA_URL === 'string') ? window.LPYO_DATA_URL : 'data.xlsx',
+    sheetjs: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    expenseDesc: 'keep' // 'keep' = খরচের বিবরণ আগের মতো (সাধারণ পরিচালনা ব্যয়); 'sheet' = Excel-এর বিবরণ হুবহু
+  };
+  var BLOCKS = ['MEMBERS', 'MONTHLY', 'CNG', 'LOAN', 'CNG_PAYMENTS', 'CNG_EXTRA', 'EXPENSES', 'KPI', 'PL', 'SHARE_MATURITY', 'FUND_RECON'];
+  var status = { text: 'এম্বেড করা ডেটা চলছে', ok: true };
+  var sheetPromise = null;
+
+  function live() { return { MEMBERS: MEMBERS, MONTHLY: MONTHLY, CNG: CNG, LOAN: LOAN, CNG_PAYMENTS: CNG_PAYMENTS, CNG_EXTRA: CNG_EXTRA,
+    EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON }; }
+  function stable(o) {
+    return JSON.stringify(o, function (k, v) {
+      if (typeof v === 'number') return Math.round(v * 1e6) / 1e6; // floating-point noise উপেক্ষা
+      if (v && typeof v === 'object' && !Array.isArray(v)) { var s = {}; Object.keys(v).sort().forEach(function (x) { s[x] = v[x]; }); return s; }
+      return v;
+    });
+  }
+  function swap(target, src) {
+    if (Array.isArray(target)) { target.length = 0; Array.prototype.push.apply(target, src); }
+    else { Object.keys(target).forEach(function (k) { delete target[k]; }); Object.keys(src).forEach(function (k) { target[k] = src[k]; }); }
+  }
+  function loadLib() {
+    if (window.XLSX) return Promise.resolve(window.XLSX);
+    if (sheetPromise) return sheetPromise;
+    sheetPromise = new Promise(function (res, rej) {
+      var s = document.createElement('script');
+      s.src = CFG.sheetjs; s.onload = function () { window.XLSX ? res(window.XLSX) : rej(new Error('SheetJS লোড হয়নি')); };
+      s.onerror = function () { sheetPromise = null; rej(new Error('SheetJS লোড হয়নি (ইন্টারনেট দরকার)')); };
+      document.head.appendChild(s);
+    });
+    return sheetPromise;
+  }
+
+  function rerender() {
+    var fns = ['renderKPI', 'renderMonthly', 'renderCNG', 'renderLoan', 'renderPL', 'renderMaturity', 'renderExpense', 'renderList',
+      'renderDuesAdvTab', 'buildCngLoanDoughnuts', 'buildMemberStatusPie', 'buildSummaryTrends', 'buildDuesTicker', 'buildAdvTicker'];
+    fns.forEach(function (n) { try { if (typeof window[n] === 'function') window[n](); } catch (e) { console.warn('[lpyo-autoload]', n, e); } });
+    try { chartDone = false; } catch (e) {}
+    function on(id) { var p = document.getElementById(id); return p && p.classList.contains('active'); }
+    try { if (on('tp-monthly') && typeof buildChart === 'function') buildChart(); } catch (e) {}
+    try { if (on('tp-wamsg') && typeof renderWaMsgTab === 'function') renderWaMsgTab(); } catch (e) {}
+    try { var mi = document.getElementById('minput'); if (mi && mi.value && typeof lookup === 'function') lookup(); } catch (e) {}
+  }
+
+  /* ডেটা পার্স → যাচাই → একসাথে প্রয়োগ (কোনো ত্রুটি হলে পুরনো ডেটা অক্ষত থাকে) */
+  function ingest(buf, label, quiet) {
+    return loadLib().then(function (XLSX) {
+      var wb;
+      try { wb = XLSX.read(buf, { type: 'array' }); } catch (e) { throw new Error('ফাইলটি বৈধ Excel (.xlsx) নয়'); }
+      if (!wb || !wb.SheetNames || wb.SheetNames.indexOf('DASHBOARD') < 0) throw new Error('এটি LPYO workbook নয় (DASHBOARD sheet নেই)');
+      var d = window.lpyoParse(XLSX, wb, live(), { expenseDesc: CFG.expenseDesc });
+      if (!Object.keys(d.MEMBERS).length) throw new Error('সদস্য তালিকা খালি');
+      if (!d.MONTHLY.length) throw new Error('মাসিক সংগ্রহের ডেটা খালি');
+      if (!isFinite(d.KPI.net_fund) || !d.KPI.net_fund) throw new Error('DASHBOARD থেকে Net Fund পড়া যায়নি');
+      var before = live(), changed = BLOCKS.filter(function (b) { return stable(before[b]) !== stable(d[b]); });
+      if (changed.length) {
+        BLOCKS.forEach(function (b) { swap(before[b], d[b]); });
+        rerender();
+      }
+      var t = new Date().toLocaleString('bn-BD', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      status = { ok: true, text: label + ' থেকে লোড · ' + t + (changed.length ? ' · বদলেছে: ' + changed.join(', ') : ' · কোনো পরিবর্তন নেই') };
+      if (!quiet && typeof showToast === 'function') showToast(changed.length ? '✅ ডেটা আপডেট হয়েছে' : 'ℹ️ ডেটা আগেই আপ-টু-ডেট');
+      paint();
+    }).catch(function (e) {
+      status = { ok: false, text: label + ': ' + (e && e.message ? e.message : e) + ' — আগের ডেটা চলছে' };
+      console.warn('[lpyo-autoload]', e);
+      if (!quiet && typeof showToast === 'function') showToast('⚠️ ' + status.text);
+      paint();
+    });
+  }
+
+  function autoFetch() {
+    if (!CFG.url || location.protocol === 'file:') return Promise.resolve();
+    var u = CFG.url + (CFG.url.indexOf('?') < 0 ? '?' : '&') + 't=' + Date.now();
+    return fetch(u, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.arrayBuffer();
+    }).then(function (buf) { return ingest(buf, 'অটো-লোড', true); })
+      .catch(function (e) { status = { ok: false, text: 'অটো-লোড হয়নি (' + (e.message || e) + ') — এম্বেড ডেটা চলছে' }; paint(); });
+  }
+
+  /* ── অ্যাডমিন প্যানেল ── */
+  var css = document.createElement('style');
+  css.textContent = '#lpyo-sync{position:fixed;left:12px;bottom:12px;z-index:9990;font-family:inherit;display:none}' +
+    '#lpyo-sync .ls-b{background:#1a3a6b;color:#fff;border:0;border-radius:999px;padding:9px 14px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}' +
+    '#lpyo-sync .ls-p{display:none;position:absolute;left:0;bottom:44px;width:min(320px,86vw);background:#fff;color:#1e293b;border:1px solid #cbd5e1;border-radius:12px;padding:12px;box-shadow:0 6px 24px rgba(0,0,0,.22);font-size:12.5px;line-height:1.5}' +
+    '[data-theme="dark"] #lpyo-sync .ls-p{background:#0f172a;color:#e2e8f0;border-color:#334155}' +
+    '#lpyo-sync.open .ls-p{display:block}#lpyo-sync .ls-s{margin:0 0 10px;word-break:break-word}#lpyo-sync .ls-s.bad{color:#b91c1c}' +
+    '#lpyo-sync .ls-r{display:flex;gap:6px;flex-wrap:wrap}#lpyo-sync .ls-r button{flex:1;min-width:120px;border:1px solid #94a3b8;background:transparent;color:inherit;border-radius:8px;padding:7px 8px;font-size:12px;cursor:pointer}';
+  document.head.appendChild(css);
+
+  var box = document.createElement('div');
+  box.id = 'lpyo-sync';
+  box.innerHTML = '<button class="ls-b" type="button">📥 ডেটা আপডেট</button><div class="ls-p"><p class="ls-s"></p><div class="ls-r">' +
+    '<button type="button" data-a="pick">📂 Excel (.xlsx) বেছে নিন</button><button type="button" data-a="fetch">🔄 সার্ভার থেকে রিফ্রেশ</button></div>' +
+    '<input type="file" accept=".xlsx,.xlsm" style="display:none"></div>';
+  document.body.appendChild(box);
+  var fileIn = box.querySelector('input'), sEl = box.querySelector('.ls-s');
+  box.querySelector('.ls-b').addEventListener('click', function () { box.classList.toggle('open'); });
+  box.querySelector('[data-a=pick]').addEventListener('click', function () { fileIn.click(); });
+  box.querySelector('[data-a=fetch]').addEventListener('click', function () {
+    if (!CFG.url || location.protocol === 'file:') { status = { ok: false, text: 'সার্ভার URL নেই (file:// থেকে খুললে হাতে ফাইল বেছে নিন)' }; paint(); return; }
+    status = { ok: true, text: 'আনা হচ্ছে…' }; paint(); autoFetch();
+  });
+  fileIn.addEventListener('change', function () {
+    var f = fileIn.files && fileIn.files[0]; if (!f) return;
+    var fr = new FileReader();
+    fr.onload = function () { ingest(fr.result, f.name, false); };
+    fr.onerror = function () { status = { ok: false, text: 'ফাইল পড়া যায়নি' }; paint(); };
+    fr.readAsArrayBuffer(f); fileIn.value = '';
+  });
+  function paint() { sEl.textContent = status.text; sEl.className = 'ls-s' + (status.ok ? '' : ' bad'); }
+  function adminOk() { try { return typeof lpyoAdminOk === 'function' && lpyoAdminOk(); } catch (e) { return false; } }
+  function sync() { box.style.display = adminOk() ? 'block' : 'none'; }
+  paint(); sync(); setInterval(sync, 1500); window.addEventListener('hashchange', sync);
+
+  window.lpyoReloadData = autoFetch;      // কনসোল থেকে: lpyoReloadData()
+  autoFetch();
+})();
+
+</script>
 </body>
 </html>
