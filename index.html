@@ -1296,7 +1296,7 @@ input,select,button{font-size:15px}
     <div class="card" style="margin-bottom:13px">
       <div class="ch"><span>👥</span><span class="cht">সদস্য তালিকা</span><span class="chr" id="list-count">৭৭ জন</span></div>
       <div class="lf-bar">
-        <input class="lf-in" id="lf-search" type="text" placeholder="নাম দিয়ে খুঁজুন..." oninput="renderList()">
+        <input class="lf-in" id="lf-search" type="text" placeholder="নাম / মোবাইল দিয়ে খুঁজুন..." oninput="renderList()">
         <select class="lf-sel" id="lf-filter" onchange="renderList()">
           <option value="all">সকল সদস্য</option>
           <option value="due">শুধু বকেয়া</option>
@@ -1307,7 +1307,7 @@ input,select,button{font-size:15px}
       <div class="cb" style="padding:0">
         <div class="tw">
           <table>
-            <thead><tr><th>#</th><th>নাম</th><th>শেয়ার</th><th>জমা</th><th>বকেয়া</th><th>অগ্রিম</th><th>জরিমানা</th></tr></thead>
+            <thead><tr><th>#</th><th>নাম</th><th>মোবাইল</th><th>শেয়ার</th><th>জমা</th><th>বকেয়া</th><th>অগ্রিম</th><th>জরিমানা</th></tr></thead>
             <tbody id="ltbody"></tbody>
           </table>
         </div>
@@ -3365,6 +3365,13 @@ function memoSearch(){
 $('memo-input').addEventListener('keydown',e=>{if(e.key==='Enter')memoSearch();});
 
 // ── Member list table (search + filter) ──
+function _listFmtMobile(mobile){
+  let d=String(mobile||'').replace(/\D/g,'');
+  if(d.length<8) return 'N/A';
+  d=d.replace(/^00/,'');
+  if(/^880/.test(d) || /^0?1\d{9}$/.test(d)) return '0'+d.slice(-10);   // বাংলাদেশি নম্বর
+  return '+'+d.replace(/^0+/,'');                                      // বিদেশি নম্বর (দেশ-কোডসহ)
+}
 function renderList(){
   const tb=$('ltbody'); tb.innerHTML='';
   const q=($('lf-search').value||'').trim().toLowerCase();
@@ -3372,7 +3379,7 @@ function renderList(){
   let entries=Object.entries(MEMBERS).sort((a,b)=>+a[0]-+b[0]);
 
   entries=entries.filter(([id,m])=>{
-    if(q && !m.name.toLowerCase().includes(q) && !String(id).includes(q)) return false;
+    if(q && !m.name.toLowerCase().includes(q) && !String(id).includes(q) && !String(m.mobile||'').replace(/\D/g,'').includes(q.replace(/\D/g,'')||'\u0000')) return false;
     if(filter==='due' && !(m.due_amount>0)) return false;
     if(filter==='advance' && !(m.advance_amount>0)) return false;
     if(filter==='clear' && (m.due_amount>0 || m.advance_amount>0)) return false;
@@ -3386,6 +3393,7 @@ function renderList(){
     const tr=document.createElement('tr');
     tr.innerHTML=`<td style="color:var(--sl);font-size:10.5px">${String(id).padStart(2,'0')}</td>
       <td class="tdn" style="font-size:11px">${m.name}</td>
+      <td style="font-size:10.5px;white-space:nowrap">${_listFmtMobile(m.mobile)}</td>
       <td style="text-align:center">${m.shares}</td>
       <td class="tdg">${(m.total_deposit||0).toLocaleString('en-IN')}</td>
       <td class="${m.due_amount>0?'tdr':'tdg'}">${m.due_amount>0?m.due_months+' মাস':'✓'}</td>
@@ -4600,6 +4608,16 @@ window.uiErrorState = function(title,sub){
     try{ navigator.clipboard.writeText(t).then(ok,fb); }catch(e){ fb(); }
   };
   window.wamGToggle=function(id){ var on=getSent().indexOf(id)===-1; mark(id,on); renderWaMsgTab(); };
+
+  /* অটো-রিমাইন্ডার লেয়ারের জন্য শুধু-পড়ার API (কোনো বিদ্যমান আচরণ বদলায় না) */
+  window.lpyoWamApi = {
+    cur:cur, members:members, status:status, loanRows:loanRows, loanInfo:loanInfo, cngRows:cngRows, cngInfo:cngInfo, guarRows:guarRows,
+    sentFor:function(mode,back){
+      var c=cur(), p = mode==='loan'?'lpyo-wamloan-sent-':mode==='cng'?'lpyo-wamcng-sent-':mode==='guar'?'lpyo-wamguar-sent-':'lpyo-wamsg-sent-', k='x';
+      if(c){ var i=c.idx-(back||0), y=c.yy; while(i<0){ i+=12; y--; } k=i+'-'+y; }
+      try{ return JSON.parse(localStorage.getItem(p+k)||'[]'); }catch(e){ return []; }
+    }
+  };
 })();
 </script>
 
@@ -4938,7 +4956,7 @@ window.uiErrorState = function(title,sub){
 
   function rerender() {
     var fns = ['renderKPI', 'renderMonthly', 'renderCNG', 'renderLoan', 'renderPL', 'renderMaturity', 'renderExpense', 'renderList',
-      'renderDuesAdvTab', 'buildCngLoanDoughnuts', 'buildMemberStatusPie', 'buildSummaryTrends', 'buildDuesTicker', 'buildAdvTicker'];
+      'renderDuesAdvTab', 'buildCngLoanDoughnuts', 'buildMemberStatusPie', 'buildSummaryTrends', 'buildDuesTicker', 'buildAdvTicker', 'lpyoRemindRefresh'];
     fns.forEach(function (n) { try { if (typeof window[n] === 'function') window[n](); } catch (e) { console.warn('[lpyo-autoload]', n, e); } });
     try { chartDone = false; } catch (e) {}
     function on(id) { var p = document.getElementById(id); return p && p.classList.contains('active'); }
@@ -5021,6 +5039,146 @@ window.uiErrorState = function(title,sub){
 
   window.lpyoReloadData = autoFetch;      // কনসোল থেকে: lpyoReloadData()
   autoFetch();
+})();
+
+</script>
+
+<script>
+/* ══ অটো ডিউ-রিমাইন্ডার অ্যালার্ট (additive) — শুধু অ্যাডমিনের জন্য ══
+   নির্দিষ্ট তারিখ এলে পেজের উপরে ব্যানার + "মাসিক মেসেজ" ট্যাবে লাল ব্যাজ দেখায়: কতজনকে মেসেজ পাঠানো বাকি।
+   বাটনে চাপলে সরাসরি ঐ মোডে যায়; সেখানে একটা করে Send চাপলেই হবে। পাঠানো ✓ হলে গণনা নিজে কমে।
+   (WhatsApp-এ নিজে নিজে মেসেজ যায় না — প্রতিটি Send অ্যাডমিন চাপেন।) */
+(function () {
+  'use strict';
+  var REMIND = {
+    memberFromDay: 8,   // মাসের এই তারিখ থেকে (১০ তারিখের ডেডলাইনের আগে) বকেয়া সদস্যদের রিমাইন্ডার শুরু
+    cngLeadDays: 2,     // CNG/অটো কিস্তির তারিখের এত দিন আগে থেকে (মেয়াদোত্তীর্ণ হলেও দেখাবে)
+    loanLeadDays: 7,    // লোনের নির্ধারিত তারিখের এত দিন আগে থেকে (মেয়াদোত্তীর্ণ হলেও দেখাবে)
+    guarantor: true     // মেয়াদোত্তীর্ণ লোনের গ্যারান্টরদের নোটিশও গণনায় ধরবে
+  };
+  var DAY = 86400000;
+
+  function api() { return window.lpyoWamApi; }
+  function bn(n) { return typeof toBnDigits === 'function' ? toBnDigits(String(n)) : String(n); }
+  function adminOk() { try { return typeof window.lpyoAdminOk === 'function' && window.lpyoAdminOk(); } catch (e) { return false; } }
+  function dayKey(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function has(arr, id) { return arr.some(function (x) { return String(x) === String(id); }); }
+  function sentU(A, mode) { // লোন/গ্যারান্টর নোটিশ মাস-সীমানা পেরোলেও একই মেয়াদের জন্য দ্বিতীয়বার চাইবে না (আগের মাসের ✓-ও ধরা হয়)
+    return A.sentFor(mode).concat(A.sentFor(mode, 1));
+  }
+  function daysTxt(d) { return d <= 0 ? 'আজই' : bn(d) + ' দিন বাকি'; }
+
+  /* ── গণনা ── */
+  function compute() {
+    var A = api(); if (!A) return null;
+    var now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var c = A.cur(), out = { today: today, items: [], stale: null };
+    if (!c) return out;
+    var dataY = 2000 + c.yy, behind = (today.getFullYear() * 12 + today.getMonth()) - (dataY * 12 + c.idx);
+
+    // ১) মাসিক বকেয়া সদস্য
+    if (behind >= 1) {
+      if (today.getDate() >= REMIND.memberFromDay) out.stale = c;   // নতুন মাসের Excel এখনো আপডেট হয়নি
+    } else if (today.getDate() >= REMIND.memberFromDay) {
+      var sentM = A.sentFor('mem');
+      var due = A.members().filter(function (m) { return A.status(m) === 'due'; });
+      var pend = due.filter(function (m) { return !has(sentM, m.id); });
+      if (pend.length) out.items.push({ mode: 'mem', icon: '👥', label: 'বকেয়া সদস্যকে হিসাব-বিবরণী', n: pend.length, total: due.length,
+        note: today.getDate() > 10 ? '১০ তারিখ পার হয়েছে' : '১০ তারিখের ডেডলাইন আসছে' });
+    }
+    // ২) CNG / অটো কিস্তি
+    var sentC = A.sentFor('cng'), cp = 0, co = 0, minC = 9999;
+    A.cngRows().forEach(function (r) {
+      var f = A.cngInfo(r); if (!f || f.done || !f.nextDue) return;
+      var left = Math.round((f.nextDue - today) / DAY);
+      if (left <= REMIND.cngLeadDays && !has(sentC, r.id)) { cp++; if (left < 0) co++; if (left < minC) minC = left; }
+    });
+    if (cp) out.items.push({ mode: 'cng', icon: '🚕', label: 'CNG/অটো কিস্তি রিমাইন্ডার', n: cp, note: co ? bn(co) + ' জনের কিস্তি মেয়াদোত্তীর্ণ' : 'কিস্তির তারিখ: ' + daysTxt(minC) });
+    // ৩) লোন নোটিশ + ৪) গ্যারান্টর — লোনের নির্ধারিত তারিখের (৬ মাসের ব্লক শেষ) আগের সপ্তাহে
+    var sentL = sentU(A, 'loan'), lp = 0, minL = 9999, inWin = {};
+    A.loanRows().forEach(function (r) {
+      var f = A.loanInfo(r); if (!f) return;
+      var left = Math.round((f.deadline - today) / DAY);
+      if (left <= REMIND.loanLeadDays) {
+        inWin[r.id] = true;
+        if (!has(sentL, r.id)) { lp++; if (left < minL) minL = left; }
+      }
+    });
+    if (lp) out.items.push({ mode: 'loan', icon: '🏦', label: 'লোন নোটিশ', n: lp, note: 'নির্ধারিত তারিখ: ' + daysTxt(minL) + ' (সবচেয়ে কাছের)' });
+    if (REMIND.guarantor) {
+      var sentG = sentU(A, 'guar'), gp = 0;
+      A.guarRows().forEach(function (g) {
+        if (g.loans.some(function (r) { return inWin[r.id]; }) && !has(sentG, g.id)) gp++;
+      });
+      if (gp) out.items.push({ mode: 'guar', icon: '🛡️', label: 'গ্যারান্টর নোটিশ', n: gp, note: 'নির্ধারিত তারিখের কাছাকাছি লোনের গ্যারান্টর' });
+    }
+    return out;
+  }
+
+  /* ── UI ── */
+  var css = document.createElement('style');
+  css.textContent = '#lpyo-remind{margin:8px 10px;border:1px solid #f59e0b;background:#fffbeb;color:#78350f;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;display:none}' +
+    '[data-theme="dark"] #lpyo-remind{background:#2a1f05;color:#fde68a;border-color:#b45309}' +
+    '#lpyo-remind .lr-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700;margin-bottom:6px}' +
+    '#lpyo-remind .lr-x{border:0;background:transparent;color:inherit;font-size:12px;cursor:pointer;text-decoration:underline;white-space:nowrap}' +
+    '#lpyo-remind .lr-r{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-top:1px dashed rgba(180,83,9,.35)}' +
+    '#lpyo-remind .lr-r small{display:block;opacity:.8;font-size:11.5px}' +
+    '#lpyo-remind .lr-r button{flex:none;border:0;background:#d97706;color:#fff;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer}' +
+    '#lpyo-remind .lr-w{padding:4px 0;font-size:12.5px}' +
+    '.lpyo-badge{display:inline-block;min-width:18px;margin-left:5px;padding:0 5px;border-radius:9px;background:#dc2626;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center}';
+  document.head.appendChild(css);
+
+  var box = document.createElement('div');
+  box.id = 'lpyo-remind';
+  var hd = document.querySelector('header.hd');
+  if (hd && hd.parentNode) hd.parentNode.insertBefore(box, hd.nextSibling); else document.body.insertBefore(box, document.body.firstChild);
+
+  function dismissKey() { return 'lpyo-remind-dismiss-' + dayKey(new Date()); }
+  function dismissed() { try { return localStorage.getItem(dismissKey()) === '1'; } catch (e) { return false; } }
+
+  window.lpyoRemindGo = function (mode) {
+    try { if (typeof tab === 'function') tab('wamsg'); } catch (e) {}
+    try { if (typeof wamSetMode === 'function') wamSetMode(mode); } catch (e) {}
+    try { if (mode === 'mem' && typeof wamSetFilter === 'function') wamSetFilter('due'); } catch (e) {}
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) {}
+  };
+  window.lpyoRemindDismiss = function () {
+    try { localStorage.setItem(dismissKey(), '1'); } catch (e) {}
+    box.style.display = 'none';
+  };
+
+  function badge(total) {
+    var b = document.getElementById('tb-wamsg'); if (!b) return;
+    var old = b.querySelector('.lpyo-badge'); if (old) old.parentNode.removeChild(old);
+    if (total > 0) { var s = document.createElement('span'); s.className = 'lpyo-badge'; s.textContent = bn(total); b.appendChild(s); }
+  }
+
+  function render() {
+    var res = null;
+    try { res = adminOk() ? compute() : null; } catch (e) { console.warn('[lpyo-remind]', e); }
+    var total = res ? res.items.reduce(function (s, x) { return s + x.n; }, 0) : 0;
+    badge(total);
+    if (!res || (!res.items.length && !res.stale) || dismissed()) { box.style.display = 'none'; return; }
+    var t = res.today, h = '<div class="lr-h"><span>🔔 আজকের রিমাইন্ডার — ' + bn(t.getDate()) + ' ' + BN_MONTH_FULL[t.getMonth()] + '</span>' +
+      '<button class="lr-x" type="button" onclick="lpyoRemindDismiss()">আজকের মতো লুকান</button></div>';
+    if (res.stale) {
+      h += '<div class="lr-w">⚠️ ডেটা এখনো <b>' + BN_MONTH_FULL[res.stale.idx] + '’' + bn(res.stale.yy) + '</b> পর্যন্ত। নতুন মাসের Excel আপডেট করলে বকেয়া সদস্যের রিমাইন্ডার সঠিক আসবে।</div>';
+    }
+    res.items.forEach(function (x) {
+      h += '<div class="lr-r"><div>' + x.icon + ' <b>' + bn(x.n) + ' জন</b> — ' + x.label + ' পাঠানো বাকি<small>' + x.note + '</small></div>' +
+        '<button type="button" onclick="lpyoRemindGo(\'' + x.mode + '\')">পাঠাতে যান →</button></div>';
+    });
+    if (box.getAttribute('data-h') !== h) { box.innerHTML = h; box.setAttribute('data-h', h); }
+    box.style.display = 'block';
+  }
+
+  window.lpyoRemindRefresh = render;
+  window.lpyoRemindConfig = REMIND;
+  window.addEventListener('storage', render);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) render(); });
+  window.addEventListener('hashchange', function () { setTimeout(render, 300); });
+  setInterval(render, 4000);   // ✓ চিহ্ন বা অ্যাডমিন-আনলক হলে গণনা নিজে আপডেট হয়
+  render();
 })();
 
 </script>
