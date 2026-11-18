@@ -562,7 +562,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 .mm-card *{box-sizing:border-box}
 .mm-bar{height:6px;background:linear-gradient(90deg,#b91c1c 0 25%,#1d4ed8 25% 50%,#15803d 50% 75%,#c89b2f 75%)}
 .mm-head{display:flex;align-items:center;gap:16px;padding:20px 28px 14px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal2) 100%);color:#fff;position:relative}
-.mm-head::after{content:'';position:absolute;inset:auto 0 0 0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.mm-head::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
 .mm-logo{width:68px;height:68px;border-radius:50%;object-fit:cover;border:3px solid var(--gold2);background:#fff;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .mm-org{flex:1;min-width:0}
 .mm-org-bn{font-size:21px;font-weight:700;line-height:1.15;color:#fff}
@@ -623,7 +623,7 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 .mm-sign span{display:block;text-align:center;font-size:11px;color:var(--ink3);margin-top:4px}
 .mm-foot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding:10px 28px;background:var(--teal);color:rgba(255,255,255,.7);font-size:10px}
 .mm-err{padding:26px;text-align:center;background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:12px;font-weight:600}
-@media(max-width:680px){
+@media screen and (max-width:680px){
   .mm-head{flex-wrap:wrap;padding:16px 16px 12px}.mm-doc{border-left:none;padding-left:0;text-align:left;width:100%}
   .mm-org-bn{font-size:17px}
   .mm-meta{grid-template-columns:1fr 1fr}.mm-meta div{padding:8px 14px!important}.mm-meta div:last-child{grid-column:1/-1;border-top:1px solid var(--line)}
@@ -636,9 +636,13 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
 }
 #mmPrintWrap{display:none}
 @media print{
-  body.mm-printing .hd,body.mm-printing .main,body.mm-printing footer{display:none!important}
-  body.mm-printing #mmPrintWrap{display:block!important}
-  #mmPrintWrap .mm-card{box-shadow:none!important;border-radius:0!important;page-break-inside:avoid;max-width:100%}
+  #lpyo-sync{display:none!important}
+  body.mm-printing{background:#fff!important}
+  body.mm-printing::before{display:none!important}
+  body.mm-printing>*:not(#mmPrintWrap){display:none!important}
+  body.mm-printing #mmPrintWrap{display:block!important;width:182mm;margin:0 auto;overflow:hidden;page-break-after:avoid;page-break-inside:avoid}
+  #mmPrintWrap .mm-card{box-shadow:none!important;border-radius:0!important;page-break-inside:avoid;max-width:none;width:100%}
+  html:has(body.mm-printing){height:auto}
 }
 
 /* ══ MEMO PREVIEW MODAL (on-screen preview before download/print) ══ */
@@ -1029,6 +1033,7 @@ input,select,button{font-size:15px}
           <button class="pbtn" onclick="printMember()">🖨️ স্টেটমেন্ট প্রিন্ট / PDF</button>
         </div>
       </div>
+      <div class="cb" id="mcx-sec" style="padding-top:0"></div>
     </div><!-- /mc -->
   </div>
 
@@ -2047,11 +2052,337 @@ input,select,button{font-size:15px}
     <div class="memo-preview-body" id="memoPreviewBody"></div>
     <div class="memo-preview-actions">
       <button class="pbtn" onclick="downloadMemo(parseInt($('memoPreviewOverlay').dataset.id,10),$('memoPreviewOverlay').dataset.kind)">⬇️ Download PDF</button>
+      <button class="pbtn" onclick="memoModalJpg()">🖼️ Download JPG</button>
       <button class="pbtn" onclick="printMemo(parseInt($('memoPreviewOverlay').dataset.id,10),$('memoPreviewOverlay').dataset.kind)">🖨️ Print</button>
+      <button class="pbtn wa" id="memoWaBtn" style="display:none" onclick="LPYOMC.wa()">💬 WhatsApp</button>
+      <button class="pbtn wa2" id="memoWaImgBtn" style="display:none" onclick="LPYOMC.waImg()">🖼️ ছবিসহ</button>
     </div>
   </div>
 </div>
 
+<style id="mcx-css">
+/* ── মাসিক চাঁদা রশিদ (সদস্য ট্যাব) ── */
+.mcx-wrap{margin-top:16px;padding-top:14px;border-top:1px dashed var(--bd,#cbd5e1)}
+.mcx-title{font-weight:700;font-size:15px;margin-bottom:4px}
+.mcx-note{font-size:12.5px;opacity:.75;margin-bottom:8px}
+.mcx-sel{width:100%;box-sizing:border-box;padding:9px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;font-size:13px;background:#fff;color:#0f2044;margin-bottom:8px}
+.mcx-es{display:flex;gap:8px;align-items:center;font-size:12.5px;margin-bottom:8px}
+.mcx-es input[type=checkbox]{-webkit-appearance:checkbox;appearance:auto;width:17px;height:17px;min-width:17px;margin:0;padding:0;accent-color:#0f5a4d;flex:none}
+.mcx-err{padding:10px 12px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px}
+.ms-id{display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;border-radius:14px;padding:13px 16px 14px;color:#2a1c05;background:linear-gradient(135deg,#f7e3a1 0%,#e9c768 38%,#f4dc92 62%,#cf9f3a 100%);box-shadow:0 8px 20px rgba(138,90,12,.28),inset 0 0 0 1px rgba(255,255,255,.55)}
+.ms-id::before{content:'';position:absolute;inset:0;background:repeating-radial-gradient(circle at 85% 120%,rgba(255,255,255,.22) 0 2px,transparent 2px 9px);opacity:.55}
+.ms-id-wm{position:absolute;right:-18px;top:-18px;width:130px;height:130px;border-radius:50%;border:14px solid rgba(255,255,255,.18);box-shadow:0 0 0 14px rgba(255,255,255,.1)}
+.ms-id>*:not(.ms-id-wm){position:relative}
+.ms-id-top{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:700;letter-spacing:1.4px;color:#6b4a10;margin-bottom:8px}
+.ms-id-main{display:flex;gap:14px;align-items:center}
+.ms-no{flex-shrink:0;text-align:center;background:var(--teal);color:#fff;border-radius:12px;padding:7px 14px;min-width:78px;box-shadow:0 4px 10px rgba(11,61,53,.35)}
+.ms-no i{display:block;font-style:normal;font-size:9.5px;color:rgba(255,255,255,.7)}
+.ms-no b{font-family:'Playfair Display','Hind Siliguri',serif;font-size:28px;font-weight:900;color:var(--gold2);line-height:1.05;letter-spacing:1px}
+.ms-nm{min-width:0}
+.ms-nm-n{font-family:'Playfair Display','Hind Siliguri',serif;font-size:23px;font-weight:700;color:#1d1405;line-height:1.15;margin-bottom:7px;word-break:break-word}
+.ms-id .mm-chip{background:rgba(255,255,255,.55);border-color:rgba(107,74,16,.25);color:#3a2808}
+.ms-st{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:0;border:1px solid transparent}
+.ms-st-ok{background:rgba(21,128,61,.13);color:#14602f;border-color:rgba(21,128,61,.35)}
+.ms-st-due{background:rgba(217,119,6,.14);color:#92400e;border-color:rgba(217,119,6,.4)}
+.ms-note{margin:10px 28px 0;padding:9px 14px;border-radius:10px;font-size:12.5px;line-height:1.55}
+.ms-note-warn{background:#fff7e6;border:1px solid #f1c97a;color:#7a4b06}
+.ms-note-ok{background:#effaf3;border:1px solid #9fd8b4;color:#14532d}
+.ms-note-adv{background:#eef4ff;border:1px solid #b6c9f2;color:#1e3a8a}
+.mcx-wa{margin-top:10px;padding:11px 12px;border-radius:12px;background:#effaf3;border:1px solid #9fd8b4}
+.mcx-wa-to{font-size:12.5px;color:#14532d;margin-bottom:8px}
+.mcx-wa-btns{display:flex;gap:8px;flex-wrap:wrap}
+.pbtn.wa{background:#25d366;border-color:#25d366;color:#fff}.pbtn.wa:hover{background:#1ebe5a}.pbtn.wa[disabled]{background:#94a3b8;border-color:#94a3b8;cursor:not-allowed}
+.pbtn.wa2{border-color:#25d366;color:#0f7a3a}
+.mcx-wa-h{font-size:11.5px;opacity:.75;margin-top:7px;line-height:1.5}
+.mc-dm{display:inline-block;background:#fff;border:1px solid #f1c97a;color:#7a4b06;border-radius:99px;padding:1px 10px;margin:2px 2px;font-weight:700;font-size:12.5px}
+.mc-dm.ok{border-color:#9fd8b4;color:#14532d}.mc-dm.adv{border-color:#b6c9f2;color:#1e3a8a}
+.mc-pill-due{background:rgba(217,119,6,.14);color:#92400e;border:1px solid rgba(217,119,6,.4)}
+.mm-row small{font-weight:400;color:var(--ink3);font-size:10.5px}
+@media screen and (max-width:680px){.ms-id-main{flex-direction:column;align-items:flex-start}.ms-note{margin-left:16px;margin-right:16px}}
+</style>
+<script>
+/* ══════════════════════════════════════════════════════════
+   মাসিক চাঁদা রশিদ (Monthly Subscription Memo) — সদস্য ট্যাব
+   ডেটা: MEMBERS + MEMBER_MONTHS (Excel-এর "Monthly Collection-YYYY" শিট থেকে)।
+   শুধু পাটিগণিত — কোনো মান পরিবর্তন বা অনুমান করা হয় না; হিসাব না মিললে মেমো তৈরি হয় না।
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  var MON_BN=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  var BN_D='০১২৩৪৫৬৭৮৯';
+  function bnD(v){return String(v).replace(/[0-9]/g,function(d){return BN_D[d];});}
+  function money(n){return '৳ '+bnD(Math.round(Number(n)||0).toLocaleString('en-IN'));}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function mLabel(k){var p=k.split('-');return MON_BN[+p[1]-1]+' '+bnD(p[0]);}
+  function addM(k,n){var p=k.split('-'),t=(+p[0])*12+(+p[1]-1)+n;return Math.floor(t/12)+'-'+String(t%12+1).padStart(2,'0');}
+  function dBn(d){return bnD(d.getDate())+' '+MON_BN[d.getMonth()]+' '+bnD(d.getFullYear());}
+  function mobile(v){var d=String(v||'').replace(/\D/g,'');if(d.length<8)return '';d=d.replace(/^00/,'');
+    return (/^880/.test(d)||/^0?1\d{9}$/.test(d))?'0'+d.slice(-10):'+'+d.replace(/^0+/,'');}
+  function chips(a,cls){return a.map(function(k){return '<span class="mc-dm '+(cls||'')+'">'+mLabel(k)+'</span>';}).join(' ');}
+  function perShare(){return (typeof KPI!=='undefined'&&KPI&&KPI.per_share)||1000;}
+
+  /* কোনো মাসে Regular Deposit না থাকলে সেটি "অপরিশোধিত": আগের Advance থেকে মিটলে সমন্বিত, নইলে বকেয়া।
+     Due Collection / Advance-এর টাকা সবচেয়ে পুরনো বকেয়া মাস আগে মেটায়; বাড়তি অংশ পরের মাসগুলোর অগ্রিম। */
+  function calc(id,upto){
+    var m=MEMBERS[id]; if(!m) return {error:'সদস্য পাওয়া যায়নি'};
+    var MM=(typeof MEMBER_MONTHS!=='undefined')?MEMBER_MONTHS:null, rows=MM&&MM.rows&&MM.rows[String(id)];
+    if(!rows||!MM.months||!MM.months.length) return {error:'এই সদস্যের মাসিক ডেটা পাওয়া যায়নি'};
+    var MONTHS=MM.months, idx=MONTHS.indexOf(upto); if(idx<0) return {error:'মাস পাওয়া যায়নি'};
+    var req=m.shares*perShare(), out=[], lots=[], paid=0, ev=null;
+    if(!(req>0)) return {error:'শেয়ার সংখ্যা পাওয়া যায়নি'};
+    for(var i=0;i<=idx;i++){
+      var r=rows[i], reg=r[0], adv=r[1], due=r[2];
+      paid+=reg+adv+due;
+      ev={cov:[],duePaid:[],advPaid:[]};
+      var need=reg<req?req-reg:0;
+      while(need&&lots.length){var l=lots[0],t=Math.min(need,l[1]);l[1]-=t;need-=t;ev.cov.push(MONTHS[l[0]]);if(!l[1])lots.shift();}
+      if(need) out.push([i,need]);
+      [['duePaid',due],['advPaid',adv]].forEach(function(p){
+        var rem=p[1];
+        while(rem&&out.length){var o=out[0],t=Math.min(rem,o[1]);o[1]-=t;rem-=t;ev[p[0]].push([MONTHS[o[0]],t]);if(!o[1])out.shift();}
+        if(rem) lots.push([i,rem]);
+      });
+    }
+    var expected=req*(idx+1), diff=paid-expected;
+    var dueAmt=out.reduce(function(s,o){return s+o[1];},0), advAmt=lots.reduce(function(s,l){return s+l[1];},0);
+    var aligned=out.every(function(o){return o[1]===req;})&&lots.every(function(l){return l[1]%req===0;});
+    if(!aligned||(diff>=0?(dueAmt!==0||advAmt!==diff):(advAmt!==0||dueAmt!==-diff))) return {error:'হিসাব মিলছে না'};
+    var pos=0, advMonths=[], thisAdv=[];
+    lots.forEach(function(l){var n=l[1]/req;for(var j=0;j<n;j++){var k=addM(upto,pos+j+1);advMonths.push(k);if(l[0]===idx)thisAdv.push(k);}pos+=n;});
+    var cur=rows[idx];
+    return {m:m,req:req,months:idx+1,paid:paid,expected:expected,dueMonths:out.map(function(o){return MONTHS[o[0]];}),dueAmt:dueAmt,
+            advAmt:advAmt,advMonths:advMonths,thisAdv:thisAdv,ev:ev,cur:cur,curTotal:cur[0]+cur[1]+cur[2],fine:cur[3]};
+  }
+
+  function html(id,key,logo,esign){
+    var r=calc(id,key); if(r.error) return '<div class="mm-err">⚠️ মেমো তৈরি করা যাচ্ছে না — '+esc(r.error)+'</div>';
+    var m=r.m, now=new Date(), mob=mobile(m.mobile), ml=mLabel(key), c=r.cur, ev=r.ev, PER=perShare();
+    var receiptNo='LPYO-MC-'+String(id).padStart(3,'0')+'-'+key.replace('-','');
+    var hasDue=r.dueMonths.length>0, hasAdv=r.advAmt>0, nd=r.dueMonths.length;
+    var pct=Math.min(Math.round(r.paid/r.expected*100),100);
+    var cleared=ev.duePaid.concat(ev.advPaid), paidMonths=cleared.map(function(x){return x[0];}),
+        paidAmt=cleared.reduce(function(s,x){return s+x[1];},0);
+    var stamp=r.curTotal>0?{cls:'ok',t:'জমা',s:'গৃহীত'}:{cls:'done',t:'জমা নেই',s:'এ মাসে'};
+    function row(l,v,cl){return '<div class="mm-row'+(cl?' '+cl:'')+'"><span>'+l+'</span><b>'+v+'</b></div>';}
+
+    var parts=[];
+    if(c[0]>0) parts.push('<b>'+ml+'</b> মাসের নিয়মিত চাঁদা <b>'+money(c[0])+'</b>');
+    if(ev.cov.length) parts.push('<b>'+ml+'</b> মাসের চাঁদা পূর্বে জমা অগ্রিম থেকে সমন্বিত');
+    if(paidMonths.length) parts.push('<b>'+paidMonths.map(mLabel).join(', ')+'</b> মাসের বকেয়া <b>'+money(paidAmt)+'</b>');
+    if(r.thisAdv.length) parts.push('<b>'+r.thisAdv.map(mLabel).join(', ')+'</b> মাসের জন্য অগ্রিম <b>'+money(r.thisAdv.length*r.req)+'</b>');
+    var onlyCov=ev.cov.length&&parts.length===1;
+    var say='<b>'+esc(m.name)+'</b>, '+(onlyCov?'<b>'+ml+'</b> মাসের চাঁদা পূর্বে জমা অগ্রিম থেকে সমন্বিত হয়েছে।'
+      :parts.length?'আপনি '+ml+' মাসে — '+parts.join('; ')+' — জমা দিয়েছেন।':ml+' মাসে আপনার কোনো চাঁদা জমা পাওয়া যায়নি।');
+
+    var third = hasDue ? {c:'mm-tile-r',l:'বকেয়া',v:money(r.dueAmt),e:bnD(nd)+' মাসের বকেয়া'}
+              : hasAdv ? {c:'mm-tile-g',l:'অগ্রিম জমা',v:money(r.advAmt),e:bnD(r.advMonths.length)+' মাসের অগ্রিম'}
+              : {c:'mm-tile-g',l:'বকেয়া',v:money(0),e:'কোনো বকেয়া নেই'};
+
+    var notes='';
+    if(paidMonths.length) notes+='<div class="ms-note ms-note-ok">✅ <b>এ মাসে পরিশোধিত বকেয়া:</b> '+chips(paidMonths,'ok')+' — মোট <b>'+money(paidAmt)+'</b></div>';
+    if(ev.cov.length) notes+='<div class="ms-note ms-note-adv">ℹ️ <b>'+ml+'</b> মাসের চাঁদা পূর্বে জমা অগ্রিম থেকে সমন্বিত হয়েছে।</div>';
+    if(r.fine>0) notes+='<div class="ms-note ms-note-ok">✅ <b>জরিমানা পরিশোধ ('+ml+'):</b> '+money(r.fine)+'</div>';
+    if(hasAdv) notes+='<div class="ms-note ms-note-adv">⬆ <b>অগ্রিম পরিশোধিত মাস ('+bnD(r.advMonths.length)+' মাস):</b> '+chips(r.advMonths,'adv')+' — মোট <b>'+money(r.advAmt)+'</b></div>';
+    if(hasDue) notes+='<div class="ms-note ms-note-warn">⚠️ <b>বকেয়া মাস ('+bnD(nd)+' মাস):</b> '+chips(r.dueMonths)+' — মোট <b>'+money(r.dueAmt)+'</b></div>';
+
+    return ''+
+'<div class="mm-card">'+
+ '<div class="mm-bar"></div>'+
+ '<header class="mm-head"><img class="mm-logo" src="'+logo+'" alt="">'+
+  '<div class="mm-org"><div class="mm-org-bn">লোহাগাড়া প্রভাতী যুব সংগঠন</div><div class="mm-org-en">Lohagara Provati Youth Organisation</div>'+
+  '<div class="mm-org-addr">কামার পুকুর পাড়, উজির হাট, লোহাগাড়া, চট্টগ্রাম । স্থাপিত ২০২৩</div></div>'+
+  '<div class="mm-doc"><div class="mm-doc-t">মাসিক চাঁদা রশিদ</div><div class="mm-doc-s">Monthly Subscription Memo</div></div></header>'+
+ '<div class="mm-meta"><div><i>রশিদ নম্বর</i><b>'+receiptNo+'</b></div><div><i>মেমো তৈরির তারিখ</i><b>'+dBn(now)+'</b></div><div><i>মাস</i><b>'+ml+'</b></div></div>'+
+ '<section class="mm-hero">'+
+  '<div class="ms-id"><div class="ms-id-wm"></div>'+
+   '<div class="ms-id-top"><span>সদস্য কার্ড · MEMBER</span><span class="ms-st ms-st-'+(hasDue?'due':'ok')+'">'+(hasDue?'● বকেয়া আছে':hasAdv?'⬆ অগ্রিম জমা':'✓ নিয়মিত')+'</span></div>'+
+   '<div class="ms-id-main"><div class="ms-no"><i>সদস্য নং</i><b>'+bnD(String(id).padStart(3,'0'))+'</b></div>'+
+    '<div class="ms-nm"><div class="ms-nm-n">'+esc(m.name)+'</div><div class="mm-chips">'+
+     (mob?'<span class="mm-chip">📞 <b>'+esc(bnD(mob))+'</b></span>':'')+
+     '<span class="mm-chip mm-veh">📑 শেয়ার <b>'+bnD(m.shares)+'</b></span></div></div></div></div>'+
+  '<div class="mm-amt"><div class="mm-amt-l">'+ml+' মাসে মোট আদায়</div><div class="mm-amt-v">'+money(r.curTotal)+'</div>'+
+   '<div class="mm-amt-d">মাসিক চাঁদা: '+bnD(m.shares)+' শেয়ার × '+money(PER)+' = '+money(r.req)+(r.fine>0?'<br>জরিমানা পরিশোধ: '+money(r.fine):'')+'</div>'+
+   '<div class="mm-stamp mm-stamp-'+stamp.cls+'"><b>'+stamp.t+'</b><span>'+stamp.s+'</span></div></div>'+
+ '</section>'+
+ '<div class="mm-say">'+say+'</div>'+ notes +
+ '<section class="mm-tiles">'+
+  '<div class="mm-tile"><i>প্রত্যাশিত জমা</i><b>'+money(r.expected)+'</b><em>'+bnD(r.months)+' মাস পর্যন্ত</em></div>'+
+  '<div class="mm-tile mm-tile-g"><i>এ পর্যন্ত মোট জমা</i><b>'+money(r.paid)+'</b><em>'+bnD(pct)+'% জমা সম্পন্ন</em></div>'+
+  '<div class="mm-tile '+third.c+'"><i>'+third.l+'</i><b>'+third.v+'</b><em>'+third.e+'</em></div>'+
+ '</section>'+
+ '<div class="mm-prog"><div><span style="width:'+pct+'%"></span></div></div>'+
+ '<section class="mm-cols">'+
+  '<div class="mm-box"><div class="mm-box-t">'+ml+' মাসের আদায়</div>'+
+   row('নিয়মিত জমা',money(c[0]))+
+   row('অগ্রিম জমা',money(c[1]))+
+   row('বকেয়া আদায়',money(c[2]))+
+   row('= মোট আদায়',money(r.curTotal),'mm-sum')+
+   row('জরিমানা পরিশোধ <small>(মোট আদায়ের বাইরে)</small>',money(r.fine))+
+  '</div>'+
+  '<div class="mm-box"><div class="mm-box-t">জমার হিসাব ('+ml+' পর্যন্ত)</div>'+
+   row('মাসিক চাঁদা ('+bnD(m.shares)+' শেয়ার)',money(r.req))+
+   row('মোট মাস',bnD(r.months)+' মাস')+
+   row('= প্রত্যাশিত জমা',money(r.expected),'mm-sum')+
+   row('মোট জমা',money(r.paid))+
+   row(hasDue?'= বকেয়া ('+bnD(nd)+' মাস)':hasAdv?'= অগ্রিম ('+bnD(r.advMonths.length)+' মাস)':'= বকেয়া / অগ্রিম',money(hasDue?r.dueAmt:hasAdv?r.advAmt:0),'mm-sum')+
+  '</div>'+
+ '</section>'+
+ '<div class="mm-status"><span>পেমেন্ট স্ট্যাটাস</span>'+(hasDue?'<b class="mm-pill mc-pill-due">● বকেয়া আছে</b>':hasAdv?'<b class="mm-pill mm-pill-ok">⬆ অগ্রিম জমা আছে</b>':'<b class="mm-pill mm-pill-ok">● নিয়মিত</b>')+'</div>'+
+ (esign?'<div class="mm-esign">✔ এটি কম্পিউটার-জেনারেটেড (ই-জেনারেটেড) মেমো — স্বাক্ষরের প্রয়োজন নেই। · This is an e-generated memo; no signature required.</div>'
+  :'<div class="mm-sign"><div><u></u><span>সদস্যের স্বাক্ষর</span></div><div><u></u><span>প্রস্তুতকারী (কোষাধ্যক্ষ)</span></div><div><u></u><span>অনুমোদন (সভাপতি / সম্পাদক)</span></div></div>')+
+ '<div class="mm-foot"><span>লোহাগাড়া প্রভাতী যুব সংগঠন · অফিসিয়াল ডকুমেন্ট</span><span>রশিদ '+receiptNo+' · তৈরি: '+bnD(now.toLocaleString('en-GB'))+'</span></div>'+
+'</div>';
+  }
+
+  function logo(){var i=document.querySelector('.lm-rh-logo')||document.querySelector('header .logo,.hd .logo');return i?i.src:'';}
+  function esignOn(){try{return MonthlyMemo.getESign();}catch(e){return true;}}
+  function selKey(){var s=document.getElementById('mcx-sel');return s?s.value:'';}
+  function curId(){var s=document.getElementById('mcx-sec');return s?parseInt(s.dataset.id,10):0;}
+
+  /* সদস্য ট্যাবের সেকশন */
+  function render(id){
+    var sec=document.getElementById('mcx-sec'); if(!sec) return;
+    var prev=selKey(), MM=(typeof MEMBER_MONTHS!=='undefined')?MEMBER_MONTHS:null, rows=MM&&MM.rows&&MM.rows[String(id)];
+    sec.dataset.id=id;
+    var T='<div class="mcx-wrap"><div class="mcx-title">📅 মাসিক চাঁদা রশিদ — Monthly Subscription Memo</div>';
+    if(!rows||!MM.months.length){ sec.innerHTML=T+'<div class="mcx-note">এই সদস্যের মাসিক ডেটা পাওয়া যায়নি — রশিদ তৈরি করা যাবে না।</div></div>'; return; }
+    var opts=MM.months.map(function(k,i){var r=rows[i];return {k:k,t:r[0]+r[1]+r[2]};}).reverse()
+      .map(function(o){return '<option value="'+o.k+'">'+mLabel(o.k)+' — আদায় '+money(o.t)+'</option>';}).join('');
+    sec.innerHTML=T+
+      '<div class="mcx-note">যেকোনো মাস বেছে রশিদ দেখুন, PDF / JPG করুন বা প্রিন্ট করুন।</div>'+
+      '<select id="mcx-sel" class="mcx-sel">'+opts+'</select>'+
+      '<label class="mcx-es"><input type="checkbox" '+(esignOn()?'checked ':'')+'onchange="try{MonthlyMemo.setESign(this.checked)}catch(e){}"> ই-জেনারেটেড রশিদ — স্বাক্ষর লাগবে না</label>'+
+      '<div class="actions-row memo-actions">'+
+        '<button class="pbtn" onclick="LPYOMC.preview()">👁️ Preview রশিদ</button>'+
+        '<button class="pbtn" onclick="LPYOMC.pdf()">⬇️ Download PDF</button>'+
+        '<button class="pbtn" onclick="LPYOMC.jpg()">🖼️ Download JPG</button>'+
+        '<button class="pbtn" onclick="LPYOMC.print()">🖨️ Print</button>'+
+      '</div>'+waBlock(id)+'</div>';
+    var s=document.getElementById('mcx-sel'); if(prev&&MM.months.indexOf(prev)>=0) s.value=prev;
+  }
+
+  function build(id,key){
+    id=id||curId(); key=key||selKey();
+    if(!id||!key){ if(typeof showToast==='function') showToast('⚠️ মাস নির্বাচন করুন'); return null; }
+    var h=html(id,key,logo(),esignOn());
+    if(h.indexOf('mm-err')>=0){ if(typeof showToast==='function') showToast('⚠️ রশিদ তৈরি করা যাচ্ছে না — হিসাব মিলছে না'); return null; }
+    return h;
+  }
+  function fname(id,key){var m=MEMBERS[id];return 'LPYO_MonthlyCollection_'+String(id).padStart(3,'0')+'_'+(m?String(m.name).trim().replace(/\s+/g,'_'):'')+'_'+key;}
+
+  function preview(){
+    var id=curId(), key=selKey(), h=build(id,key); if(!h) return;
+    $('memoPreviewBody').innerHTML=h;
+    var o=$('memoPreviewOverlay'); o.dataset.id=id; o.dataset.kind='mc'; o.dataset.month=key; o.classList.add('on');
+    var b1=$('memoWaBtn'),b2=$('memoWaImgBtn'); if(b1) b1.style.display='inline-flex'; if(b2) b2.style.display='inline-flex';
+  }
+  /* এক A4 পাতায় ফিট করে প্রিন্ট */
+  function print(id,key){
+    id=id||curId(); key=key||selKey(); var h=build(id,key); if(!h) return;
+    if(typeof closeMemoPreview==='function') closeMemoPreview();
+    $('mmPrintWrap').innerHTML=h;
+    document.body.classList.add('mm-printing');
+    var w=$('mmPrintWrap'), card=w.firstElementChild;
+    if(card){
+      w.style.cssText='display:block;position:absolute;left:-9999px;top:0;width:182mm';
+      card.style.zoom=''; var ht=card.getBoundingClientRect().height;
+      var maxH=273*96/25.4, z=ht>maxH?Math.floor(maxH/ht*1000)/1000:1;
+      w.style.cssText=''; card.style.zoom=z;
+    }
+    setTimeout(function(){window.print();},80);
+  }
+  function pdf(id,key){
+    id=id||curId(); key=key||selKey(); if(!build(id,key)) return;
+    var old=document.title; document.title=fname(id,key);
+    var rs=function(){document.title=old;window.removeEventListener('afterprint',rs);};
+    window.addEventListener('afterprint',rs);
+    print(id,key);
+  }
+  function jpg(id,key){
+    id=id||curId(); key=key||selKey(); var h=build(id,key); if(!h) return;
+    return memoJpg(h,fname(id,key));
+  }
+
+  /* ── WhatsApp-এ মেমো পাঠানো ── */
+  function waNum(v){
+    var d=String(v||'').replace(/\D/g,''); if(d.indexOf('00')===0) d=d.slice(2); if(!d) return '';
+    if(d.indexOf('880')===0&&d.length===13) return d;
+    if(d.length===11&&d.charAt(0)==='0') return '88'+d;
+    if(d.length===10&&d.charAt(0)==='1') return '880'+d;
+    return d.length>=11?d:'';
+  }
+  function waBlock(id){
+    var m=MEMBERS[id], n=m?waNum(m.mobile):'', dis=n?'':' disabled';
+    var to=n?('পাঠানো হবে: <b>'+esc(bnD(mobile(m.mobile)))+'</b> ('+esc(m.name)+')'):'⚠️ এই সদস্যের মোবাইল নম্বর পাওয়া যায়নি — WhatsApp-এ পাঠানো যাবে না।';
+    return '<div class="mcx-wa"><div class="mcx-wa-to">💬 '+to+'</div><div class="mcx-wa-btns">'+
+      '<button class="pbtn wa"'+dis+' onclick="LPYOMC.wa()">💬 WhatsApp-এ মেমো পাঠান</button>'+
+      '<button class="pbtn wa2"'+dis+' onclick="LPYOMC.waImg()">🖼️ মেমো ছবিসহ</button></div>'+
+      '<div class="mcx-wa-h">প্রথম বাটন: সদস্যের নম্বরে মেমোর সারসংক্ষেপ লেখা মেসেজ সহ WhatsApp খুলবে — শুধু Send চাপুন।<br>দ্বিতীয় বাটন: মেমোর ছবি তৈরি করে (মোবাইলে শেয়ার-মেনু, কম্পিউটারে কপি হয়ে) সদস্যের চ্যাট খুলবে — ছবি পেস্ট/অ্যাটাচ করে Send করুন। (WhatsApp নিয়মে ছবি নিজে থেকে যুক্ত হতে পারে না।)</div></div>';
+  }
+  function waText(id,key){
+    var r=calc(id,key); if(r.error) return '';
+    var m=r.m, ml=mLabel(key), c=r.cur, L=[];
+    L.push('*লোহাগাড়া প্রভাতী যুব সংগঠন*','মাসিক চাঁদা রশিদ — '+ml,'');
+    L.push('সদস্য: *'+m.name+'* (নং '+bnD(String(id).padStart(3,'0'))+')','শেয়ার: '+bnD(m.shares)+' · মাসিক চাঁদা: '+money(r.req),'');
+    L.push('*'+ml+' মাসে মোট আদায়: '+money(r.curTotal)+'*');
+    if(c[0]>0) L.push('• নিয়মিত জমা: '+money(c[0]));
+    if(c[1]>0) L.push('• অগ্রিম জমা: '+money(c[1]));
+    if(c[2]>0) L.push('• বকেয়া আদায়: '+money(c[2]));
+    if(r.ev.cov.length) L.push('• '+ml+' মাসের চাঁদা পূর্বের অগ্রিম থেকে সমন্বিত');
+    if(r.curTotal===0&&!r.ev.cov.length) L.push('• এ মাসে কোনো চাঁদা জমা পাওয়া যায়নি');
+    if(r.fine>0) L.push('• জরিমানা পরিশোধ: '+money(r.fine));
+    L.push('','এ পর্যন্ত ('+bnD(r.months)+' মাস): প্রত্যাশিত '+money(r.expected)+' · মোট জমা '+money(r.paid));
+    if(r.dueMonths.length) L.push('🔴 *বকেয়া '+bnD(r.dueMonths.length)+' মাস:* '+r.dueMonths.map(mLabel).join(', ')+' — '+money(r.dueAmt));
+    else if(r.advAmt>0) L.push('🟢 *অগ্রিম '+bnD(r.advMonths.length)+' মাস:* '+r.advMonths.map(mLabel).join(', ')+' — '+money(r.advAmt));
+    else L.push('✅ কোনো বকেয়া নেই — নিয়মিত');
+    L.push('','রশিদ নং: LPYO-MC-'+String(id).padStart(3,'0')+'-'+key.replace('-',''),'ধন্যবাদ। — সভাপতি: সাইফুল ইসলাম');
+    return L.join('\n');
+  }
+  function waCtx(){
+    var id=curId(), key=selKey(); if(!id||!key){ if(typeof showToast==='function') showToast('⚠️ মাস নির্বাচন করুন'); return null; }
+    var m=MEMBERS[id], n=m?waNum(m.mobile):''; if(!n){ if(typeof showToast==='function') showToast('⚠️ এই সদস্যের মোবাইল নম্বর নেই'); return null; }
+    var t=waText(id,key); if(!t){ if(typeof showToast==='function') showToast('⚠️ মেমো তৈরি করা যাচ্ছে না — হিসাব মিলছে না'); return null; }
+    return {id:id,key:key,n:n,t:t};
+  }
+  function wa(){
+    var x=waCtx(); if(!x) return;
+    var w=window.open('https://wa.me/'+x.n+'?text='+encodeURIComponent(x.t),'_blank');
+    if(!w) location.href='https://wa.me/'+x.n+'?text='+encodeURIComponent(x.t);
+  }
+  function memoBlob(h){
+    var box=document.createElement('div');
+    box.style.cssText='position:fixed;left:-10000px;top:0;width:780px;background:#fff;z-index:-1';
+    box.innerHTML=h; document.body.appendChild(box);
+    return loadH2C().then(function(h2c){
+      return (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){
+        return h2c(box.firstElementChild,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,windowWidth:780});
+      });
+    }).then(function(cv){
+      return new Promise(function(res){ cv.toBlob(function(b){res(b);},'image/png'); });
+    }).then(function(b){ box.remove(); return b; },function(e){ box.remove(); throw e; });
+  }
+  function waImg(){
+    var x=waCtx(); if(!x) return;
+    var h=build(x.id,x.key); if(!h) return;
+    showToast('🖼️ মেমোর ছবি তৈরি হচ্ছে…');
+    var link='https://wa.me/'+x.n+'?text='+encodeURIComponent('*লোহাগাড়া প্রভাতী যুব সংগঠন* — '+mLabel(x.key)+' মাসের চাঁদা রশিদ (ছবি সংযুক্ত)');
+    memoBlob(h).then(function(blob){
+      var file=new File([blob],fname(x.id,x.key)+'.png',{type:'image/png'});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){
+        return navigator.share({files:[file],text:x.t}).then(function(){showToast('✅ শেয়ার মেনু থেকে WhatsApp বেছে সদস্যকে পাঠান');},function(e){ if(e&&e.name!=='AbortError') throw e; });
+      }
+      var copied=false;
+      return (navigator.clipboard&&window.ClipboardItem?navigator.clipboard.write([new ClipboardItem({'image/png':blob})]).then(function(){copied=true;},function(){}):Promise.resolve())
+        .then(function(){
+          if(!copied){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname(x.id,x.key)+'.png'; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500); }
+          showToast(copied?'✅ ছবি কপি হয়েছে — চ্যাটে Ctrl+V দিয়ে পেস্ট করে Send করুন':'✅ ছবি ডাউনলোড হয়েছে — চ্যাটে 📎 দিয়ে যুক্ত করুন');
+          if(!window.open(link,'_blank')) location.href=link;
+        });
+    }).catch(function(e){ console.warn('[mc-wa]',e); showToast('⚠️ ছবি তৈরি হয়নি — ইন্টারনেট দেখুন; মেসেজ বাটনটি ব্যবহার করুন'); });
+  }
+  window.LPYOMC={calc:calc,html:html,render:render,preview:preview,print:print,pdf:pdf,jpg:jpg,wa:wa,waImg:waImg,waText:waText};
+})();
+
+</script>
 <div class="toast" id="toast"></div>
 
 <footer>
@@ -2086,6 +2417,7 @@ input,select,button{font-size:15px}
 
 <script>
 const MEMBERS = {"1": {"id": 1, "name": "Monjurul Islam", "mobile": "1814824030", "shares": 3, "entry_fee": 300, "total_deposit": 123000, "total_fine": 300, "expected": 123000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 127804.85208}, "2": {"id": 2, "name": "Saiful Islam", "mobile": "1816724075", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "3": {"id": 3, "name": "Mohammad Tawhidul Islam", "mobile": "1846506898", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "4": {"id": 4, "name": "Amanat Khan", "mobile": "966551311461", "shares": 5, "entry_fee": 500, "total_deposit": 205000, "total_fine": 0, "expected": 205000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 213008.0868}, "5": {"id": 5, "name": "Nurunnabi Hosen Tanzid", "mobile": "1838848678", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 300, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "6": {"id": 6, "name": "Jashim Uddin", "mobile": "966538760537", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "7": {"id": 7, "name": "Shibu Sankar Karmaker", "mobile": "1885946523", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "8": {"id": 8, "name": "Monsur", "mobile": "1608632799", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "9": {"id": 9, "name": "Monjur Alam", "mobile": "1811938007", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "10": {"id": 10, "name": "Rupal Kanti Karmaker", "mobile": "1812934934", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 100, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "11": {"id": 11, "name": "Yousof", "mobile": "1858217297", "shares": 3, "entry_fee": 300, "total_deposit": 123000, "total_fine": 0, "expected": 123000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 127804.85208}, "12": {"id": 12, "name": "Arjun Kanti Karmaker", "mobile": "01813143128", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "13": {"id": 13, "name": "Abdul Jabber", "mobile": "1814941801", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "14": {"id": 14, "name": "Mohammad Helal Uddin", "mobile": "1819700976", "shares": 3, "entry_fee": 300, "total_deposit": 123000, "total_fine": 0, "expected": 123000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 127804.85208}, "15": {"id": 15, "name": "Abul Kashem", "mobile": "1871777022", "shares": 3, "entry_fee": 300, "total_deposit": 123000, "total_fine": 0, "expected": 123000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 127804.85208}, "16": {"id": 16, "name": "Uzzal Karmaker", "mobile": "1820016020", "shares": 2, "entry_fee": 200, "total_deposit": 80000, "total_fine": 300, "expected": 82000, "due_amount": 2000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 83203.23472}, "17": {"id": 17, "name": "Jahedul Islam", "mobile": "971562765681", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "18": {"id": 18, "name": "Mohammad Alamgir", "mobile": "1822092650", "shares": 2, "entry_fee": 200, "total_deposit": 86000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 4000, "advance_months": 2, "final_receivable": 89203.23472}, "19": {"id": 19, "name": "Kafil Uddin", "mobile": "966534770192", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "20": {"id": 20, "name": "Mohammudul Hoque", "mobile": "1816821801", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "21": {"id": 21, "name": "Nurul Amin", "mobile": "1820989105", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 50, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "22": {"id": 22, "name": "Abul Kashem", "mobile": "1873812598", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 150, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "23": {"id": 23, "name": "Belal Uddin", "mobile": "1815073916", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 650, "expected": 41000, "due_amount": 4000, "due_months": 4, "advance_amount": 0, "advance_months": 0, "final_receivable": 38601.61736}, "24": {"id": 24, "name": "Md. Helal Uddin", "mobile": "1860493163", "shares": 1, "entry_fee": 100, "total_deposit": 36000, "total_fine": 1600, "expected": 41000, "due_amount": 5000, "due_months": 5, "advance_amount": 0, "advance_months": 0, "final_receivable": 37601.61736}, "25": {"id": 25, "name": "Md.Hamid", "mobile": "1870876309", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 150, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "26": {"id": 26, "name": "Samsul Alam", "mobile": "1865394799", "shares": 3, "entry_fee": 300, "total_deposit": 120000, "total_fine": 150, "expected": 123000, "due_amount": 3000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 124804.85208}, "27": {"id": 27, "name": "Riad Hossen", "mobile": "1882217274", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 100, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "28": {"id": 28, "name": "Md. Sohel Islam", "mobile": "1858538010", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 100, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "29": {"id": 29, "name": "Idrish Alam", "mobile": "1858538010", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 100, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "30": {"id": 30, "name": "Jahed", "mobile": "966562024068", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 300, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "31": {"id": 31, "name": "Sahidul Islam", "mobile": "966549955548", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "32": {"id": 32, "name": "Md. Sohel Uddin", "mobile": "1822020050", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 900, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "33": {"id": 33, "name": "Mohammad Faruk", "mobile": "1831797810", "shares": 1, "entry_fee": 100, "total_deposit": 39000, "total_fine": 650, "expected": 41000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 40601.61736}, "34": {"id": 34, "name": "Didarul Islam", "mobile": "971562663270", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "35": {"id": 35, "name": "Mohammad Fahim", "mobile": "1873808231", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "36": {"id": 36, "name": "Delower Hossain", "mobile": "971561572487", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "37": {"id": 37, "name": "Abdul Malek", "mobile": "1879352117", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "38": {"id": 38, "name": "Khalil Uddin", "mobile": "00971569173725", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "39": {"id": 39, "name": "Mohammad Abul Hashem", "mobile": "1873807617", "shares": 2, "entry_fee": 200, "total_deposit": 76000, "total_fine": 1400, "expected": 82000, "due_amount": 6000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 79203.23472}, "40": {"id": 40, "name": "Abdul Karim", "mobile": "971569774500", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "41": {"id": 41, "name": "Mohammad Kaisar", "mobile": "1830621990", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 1200, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "42": {"id": 42, "name": "Korshed Alam", "mobile": "971501332588", "shares": 6, "entry_fee": 600, "total_deposit": 246000, "total_fine": 0, "expected": 246000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 255609.70416}, "43": {"id": 43, "name": "Emon Hasan", "mobile": "971545640821", "shares": 2, "entry_fee": 200, "total_deposit": 78000, "total_fine": 1000, "expected": 82000, "due_amount": 4000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 81203.23472}, "44": {"id": 44, "name": "Tawhidul Islam", "mobile": "971562982931", "shares": 2, "entry_fee": 200, "total_deposit": 80000, "total_fine": 1600, "expected": 82000, "due_amount": 2000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 83203.23472}, "45": {"id": 45, "name": "Sahidul Islam", "mobile": "1840409753", "shares": 1, "entry_fee": 100, "total_deposit": 39000, "total_fine": 850, "expected": 41000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 40601.61736}, "46": {"id": 46, "name": "Amir Hossen", "mobile": "1871081769", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 1400, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "47": {"id": 47, "name": "Mohammad Abdullah Al Rafi", "mobile": "1882916447", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 50, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "48": {"id": 48, "name": "Nurul Huda Misbah", "mobile": "1814836702", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "49": {"id": 49, "name": "Aminul Hoque", "mobile": "0097433390829", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 300, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "50": {"id": 50, "name": "Shekh Ahmed Roki", "mobile": "1829921642", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "51": {"id": 51, "name": "Md. Sahjahan", "mobile": "1889786926", "shares": 3, "entry_fee": 300, "total_deposit": 123000, "total_fine": 0, "expected": 123000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 127804.85208}, "52": {"id": 52, "name": "Babul Hossen", "mobile": "1833903155", "shares": 1, "entry_fee": 100, "total_deposit": 38000, "total_fine": 950, "expected": 41000, "due_amount": 3000, "due_months": 3, "advance_amount": 0, "advance_months": 0, "final_receivable": 39601.61736}, "53": {"id": 53, "name": "Khair Ahmed", "mobile": "1897045177", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 50, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "54": {"id": 54, "name": "Md. Lutfar Rahman", "mobile": "00966564847790", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 300, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "55": {"id": 55, "name": "Abu Bakker", "mobile": "00971559969326", "shares": 2, "entry_fee": 200, "total_deposit": 86000, "total_fine": 1950, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 4000, "advance_months": 2, "final_receivable": 89203.23472}, "56": {"id": 56, "name": "Abdullah Al Mumid", "mobile": "01585430658", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 700, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "57": {"id": 57, "name": "Sujan Kanti Karmaker", "mobile": "01814785317", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 900, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "58": {"id": 58, "name": "Prokash Kanti Nath", "mobile": "01728125764", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "59": {"id": 59, "name": "Abdul Sabur", "mobile": "1817246488", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "60": {"id": 60, "name": "Ridowanul Hoque", "mobile": "1866911987", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 100, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "61": {"id": 61, "name": "Mohammad Toyab", "mobile": "1817504865", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 50, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "62": {"id": 62, "name": "Nurul Amin", "mobile": "1885316318", "shares": 1, "entry_fee": 100, "total_deposit": 37000, "total_fine": 1200, "expected": 41000, "due_amount": 4000, "due_months": 4, "advance_amount": 0, "advance_months": 0, "final_receivable": 38601.61736}, "63": {"id": 63, "name": "Joy Sankar Karmaker", "mobile": "1827204517", "shares": 1, "entry_fee": 100, "total_deposit": 39000, "total_fine": 50, "expected": 41000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 40601.61736}, "64": {"id": 64, "name": "Mohammad Sahjahan", "mobile": "00971557893251", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 250, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "65": {"id": 65, "name": "Akter Hossen", "mobile": "1861821214", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 250, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "66": {"id": 66, "name": "Ehsanul Kabir", "mobile": "00971557512381", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 250, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "67": {"id": 67, "name": "Mohammad Sayed Uddin Forhad", "mobile": "971585735180", "shares": 1, "entry_fee": 100, "total_deposit": 39000, "total_fine": 250, "expected": 41000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 40601.61736}, "68": {"id": 68, "name": "Mohammad Ziabul Hoque", "mobile": "971502927559", "shares": 1, "entry_fee": 100, "total_deposit": 39000, "total_fine": 100, "expected": 41000, "due_amount": 2000, "due_months": 2, "advance_amount": 0, "advance_months": 0, "final_receivable": 40601.61736}, "69": {"id": 69, "name": "Mohammad Yousof", "mobile": "971561607784", "shares": 2, "entry_fee": 200, "total_deposit": 82000, "total_fine": 0, "expected": 82000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 85203.23472}, "70": {"id": 70, "name": "Mohammad Osman Goni", "mobile": "1814123764", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 50, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "71": {"id": 71, "name": "Iqbal Hossen", "mobile": "1849738787", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 100, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "72": {"id": 72, "name": "Debasish Karmaker", "mobile": "1863367162", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 50, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "73": {"id": 73, "name": "Salim Uddin", "mobile": "00971545732130", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 400, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "74": {"id": 74, "name": "Mujibur Rahman", "mobile": "00966504512844", "shares": 1, "entry_fee": 100, "total_deposit": 40000, "total_fine": 0, "expected": 41000, "due_amount": 1000, "due_months": 1, "advance_amount": 0, "advance_months": 0, "final_receivable": 41601.61736}, "75": {"id": 75, "name": "Md. Borhan Uddin", "mobile": "1608600387", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 0, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "76": {"id": 76, "name": "Mokter Ahmed", "mobile": "00966554277305", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 50, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}, "77": {"id": 77, "name": "Nepal Kanti Karmaker", "mobile": "1812676040", "shares": 1, "entry_fee": 100, "total_deposit": 41000, "total_fine": 950, "expected": 41000, "due_amount": 0, "due_months": 0, "advance_amount": 0, "advance_months": 0, "final_receivable": 42601.61736}};
+const MEMBER_MONTHS = {"months":["2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12","2024-01","2024-02","2024-03","2024-04","2024-05","2024-06","2024-07","2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08","2026-09","2026-10"],"rows":{"1":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[0,0,0,0],[3000,0,3000,150],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[0,0,0,0],[3000,0,3000,150],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0]],"2":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"3":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"4":[[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0],[5000,0,0,0]],"5":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"6":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,10000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,10000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,4000,0,0],[0,0,0,0],[0,0,0,0],[2000,6000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"7":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"8":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"9":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"10":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0]],"11":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0]],"12":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"13":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"14":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0]],"15":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0]],"16":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,2000,0,0],[0,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0]],"17":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"18":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,2000,0,0],[0,2000,0,0],[0,4000,0,0]],"19":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"20":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"21":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"22":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0]],"23":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,1000,50],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1000,50],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[1000,0,6000,300],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1000,50],[0,0,0,0],[0,0,0,0]],"24":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,6000,1200],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0]],"25":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,50],[0,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,1000,0,0],[0,1000,0,0],[0,0,0,0],[1000,1000,0,0],[0,0,0,0]],"26":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[0,0,0,0],[3000,0,3000,150],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[0,0,0,0]],"27":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"28":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"29":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"30":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,2000,0,0],[0,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"31":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"32":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,4000,300],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,6000,300],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"33":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,1000,50],[1000,0,1000,100],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,1000,50],[1000,0,3000,150],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[0,0,0,0]],"34":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"35":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"36":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"37":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"38":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"39":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,2000,100],[2000,0,2000,100],[0,0,0,0],[0,0,2000,100],[0,0,2000,100],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[2000,0,6000,300],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,4000,200],[0,0,0,0],[0,0,2000,100]],"40":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"41":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,4000,200],[2000,4000,0,0],[0,0,0,0],[0,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,200],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,8000,400],[0,0,0,0],[2000,0,2000,100],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0]],"42":[[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0],[6000,0,0,0]],"43":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[2000,0,4000,200],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,6000,300],[2000,0,0,0],[0,0,0,0],[0,0,0,0]],"44":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[2000,0,2000,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,4000,200],[0,0,0,0],[0,0,2000,100],[2000,0,4000,200],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,8000,400],[0,0,0,0],[0,0,4000,200]],"45":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,3000,150],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,3000,150],[0,0,0,0],[1000,0,4000,200],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0]],"46":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,2000,100],[0,0,1000,50],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,1000,50],[0,0,1000,50],[0,0,1000,50],[0,0,0,0],[0,0,0,0],[1000,0,6000,300],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,1000,50],[0,0,1000,50],[0,0,3000,150],[0,0,2000,100],[1000,0,2000,100],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0]],"47":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0]],"48":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"49":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100]],"50":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"51":[[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0],[3000,0,0,0]],"52":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,3000,150],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,3000,150],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,3000,150],[0,0,1000,50]],"53":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"54":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100]],"55":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,50],[2000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,0,14000,1800],[2000,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,6000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,10000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,8000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[2000,6000,2000,100],[0,0,0,0]],"56":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,600],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"57":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,4000,200],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,1000,50],[0,0,2000,100],[0,0,0,0],[1000,0,3000,150],[1000,0,0,0],[1000,0,0,0]],"58":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"59":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"60":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,100],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"61":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"62":[[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[1000,0,4000,200],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,2000,100],[0,0,0,0],[0,0,1000,50],[0,0,0,0],[0,0,3000,150],[0,0,1000,50],[0,0,0,0]],"63":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0]],"64":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"65":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"66":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,2000,100],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"67":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,1000,50],[0,0,1000,50],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0]],"68":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0]],"69":[[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0],[2000,0,0,0]],"70":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"71":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"72":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0]],"73":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,50],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,3000,150],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,0,0,0],[0,0,0,0],[1000,0,1000,50],[0,0,0,0],[1000,0,1000,50],[1000,0,0,0],[1000,1000,0,50],[0,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,1000,0,0],[0,0,0,0]],"74":[[1000,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,5000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,5000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,5000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,5000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"75":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,3000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,1000,0,0],[0,1000,0,0],[0,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],"76":[[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,4000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,1000,1000,50],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]],"77":[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[1000,0,11000,950],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,1000,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,2000,0,0],[0,0,0,0],[0,2000,0,0],[0,0,0,0],[0,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0],[1000,0,0,0]]}};
 const MONTHLY = [{"month": "Jun-23", "regular": 124000, "advance": 0, "due": 0, "fine": 0, "cng": 0, "expense": 6400}, {"month": "Jul-23", "regular": 124000, "advance": 4000, "due": 0, "fine": 0, "cng": 0, "expense": 300}, {"month": "Aug-23", "regular": 122000, "advance": 0, "due": 0, "fine": 50, "cng": 0, "expense": 0}, {"month": "Sep-23", "regular": 118000, "advance": 11000, "due": 1000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Oct-23", "regular": 109000, "advance": 0, "due": 5000, "fine": 300, "cng": 0, "expense": 0}, {"month": "Nov-23", "regular": 108000, "advance": 0, "due": 7000, "fine": 350, "cng": 0, "expense": 0}, {"month": "Dec-23", "regular": 108000, "advance": 11000, "due": 10000, "fine": 500, "cng": 0, "expense": 0}, {"month": "Jan-24", "regular": 112000, "advance": 0, "due": 11000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Feb-24", "regular": 116000, "advance": 0, "due": 2000, "fine": 100, "cng": 0, "expense": 0}, {"month": "Mar-24", "regular": 119000, "advance": 11000, "due": 3000, "fine": 200, "cng": 0, "expense": 0}, {"month": "Apr-24", "regular": 108000, "advance": 0, "due": 2000, "fine": 200, "cng": 0, "expense": 0}, {"month": "May-24", "regular": 104000, "advance": 4000, "due": 32000, "fine": 3800, "cng": 0, "expense": 0}, {"month": "Jun-24", "regular": 115000, "advance": 6000, "due": 12000, "fine": 600, "cng": 0, "expense": 0}, {"month": "Jul-24", "regular": 114000, "advance": 11000, "due": 8000, "fine": 550, "cng": 0, "expense": 0}, {"month": "Aug-24", "regular": 108000, "advance": 8000, "due": 8000, "fine": 1350, "cng": 0, "expense": 0}, {"month": "Sep-24", "regular": 108000, "advance": 3000, "due": 7000, "fine": 400, "cng": 0, "expense": 1000}, {"month": "Oct-24", "regular": 109000, "advance": 6000, "due": 5000, "fine": 250, "cng": 0, "expense": 1000}, {"month": "Nov-24", "regular": 111000, "advance": 2000, "due": 14000, "fine": 700, "cng": 0, "expense": 1300}, {"month": "Dec-24", "regular": 105000, "advance": 8000, "due": 4000, "fine": 200, "cng": 0, "expense": 1000}, {"month": "Jan-25", "regular": 113000, "advance": 14000, "due": 20000, "fine": 1000, "cng": 30000, "expense": 1000}, {"month": "Feb-25", "regular": 113000, "advance": 2000, "due": 12000, "fine": 750, "cng": 30000, "expense": 1250}, {"month": "Mar-25", "regular": 108000, "advance": 4000, "due": 3000, "fine": 150, "cng": 45000, "expense": 1400}, {"month": "Apr-25", "regular": 104000, "advance": 5000, "due": 10000, "fine": 500, "cng": 45000, "expense": 1000}, {"month": "May-25", "regular": 108000, "advance": 8000, "due": 18000, "fine": 950, "cng": 55000, "expense": 1000}, {"month": "Jun-25", "regular": 107000, "advance": 5000, "due": 7000, "fine": 350, "cng": 40000, "expense": 1000}, {"month": "Jul-25", "regular": 102000, "advance": 12000, "due": 9000, "fine": 450, "cng": 55000, "expense": 1250}, {"month": "Aug-25", "regular": 108000, "advance": 2000, "due": 24000, "fine": 1250, "cng": 55000, "expense": 4000}, {"month": "Sep-25", "regular": 105000, "advance": 10000, "due": 3000, "fine": 150, "cng": 57700, "expense": 3250}, {"month": "Oct-25", "regular": 108000, "advance": 3000, "due": 11000, "fine": 900, "cng": 55000, "expense": 1250}, {"month": "Nov-25", "regular": 114000, "advance": 5000, "due": 11000, "fine": 550, "cng": 93000, "expense": 1000}, {"month": "Dec-25", "regular": 109000, "advance": 0, "due": 10000, "fine": 500, "cng": 72000, "expense": 1000}, {"month": "Jan-26", "regular": 114000, "advance": 8000, "due": 3000, "fine": 150, "cng": 66000, "expense": 50697}, {"month": "Feb-26", "regular": 105000, "advance": 4000, "due": 10000, "fine": 500, "cng": 73000, "expense": 1000}, {"month": "Mar-26", "regular": 106000, "advance": 12000, "due": 8000, "fine": 400, "cng": 55000, "expense": 1000}, {"month": "Apr-26", "regular": 107000, "advance": 13000, "due": 20000, "fine": 1000, "cng": 118500, "expense": 100}, {"month": "May-26", "regular": 101000, "advance": 1000, "due": 5000, "fine": 300, "cng": 74000, "expense": 200}, {"month": "Jun-26", "regular": 107000, "advance": 5000, "due": 13000, "fine": 650, "cng": 127000, "expense": 100}, {"month": "Jul-26", "regular": 107000, "advance": 2000, "due": 7000, "fine": 350, "cng": 81000, "expense": 0}, {"month": "Aug-26", "regular": 109000, "advance": 2000, "due": 21000, "fine": 1050, "cng": 74000, "expense": 100}, {"month": "Sep-26", "regular": 104000, "advance": 10000, "due": 8000, "fine": 400, "cng": 88000, "expense": 200}, {"month": "Oct-26", "regular": 92000, "advance": 4000, "due": 11000, "fine": 550, "cng": 110000, "expense": 272.83}];
 const CNG     = [{"id": 1, "driver": "Zohir Ahmed", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 310000, "remaining": 128000, "status": "চলমান", "total_installments": 24, "paid_installments": 22}, {"id": 2, "driver": "Abu Taher", "type": "CNG", "invest": 250000, "total_payable": 294500, "collected": 272000, "remaining": 22500, "status": "চলমান", "total_installments": 24, "paid_installments": 21}, {"id": 3, "driver": "Zahedul Islam", "type": "CNG", "invest": 150000, "total_payable": 169000, "collected": 169000, "remaining": 0, "status": "সম্পন্ন", "total_installments": 12, "paid_installments": 15}, {"id": 4, "driver": "Sajal Barua", "type": "CNG", "invest": 350000, "total_payable": 438000, "collected": 232000, "remaining": 206000, "status": "চলমান", "total_installments": 24, "paid_installments": 17}, {"id": 5, "driver": "Nurul Abser", "type": "CNG", "invest": 300000, "total_payable": 375000, "collected": 131000, "remaining": 244000, "status": "চলমান", "total_installments": 24, "paid_installments": 11}, {"id": 6, "driver": "Abdul Malek", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 107500, "remaining": 230000, "status": "চলমান", "total_installments": 12, "paid_installments": 10}, {"id": 7, "driver": "Kamal Uddin", "type": "Auto", "invest": 100000, "total_payable": 112500, "collected": 42000, "remaining": 70500, "status": "চলমান", "total_installments": 12, "paid_installments": 7}, {"id": 8, "driver": "Mohammad Yousof", "type": "CNG", "invest": 300000, "total_payable": 337500, "collected": 82000, "remaining": 255500, "status": "চলমান", "total_installments": 12, "paid_installments": 7}, {"id": 9, "driver": "Mohammad Alamgir", "type": "CNG", "invest": 300000, "total_payable": 375000, "collected": 45000, "remaining": 330000, "status": "চলমান", "total_installments": 24, "paid_installments": 3}, {"id": 10, "driver": "Norul Alam (Babul)", "type": "Auto", "invest": 100000, "total_payable": 113000, "collected": 10000, "remaining": 103000, "status": "চলমান", "total_installments": 12, "paid_installments": 1}, {"id": 11, "driver": "Norul Amin", "type": "Auto", "invest": 150000, "total_payable": 169500, "collected": 10000, "remaining": 159500, "status": "চলমান", "total_installments": 12, "paid_installments": 1}];
 const LOAN    = [{"id": 1, "borrower": "Mohammad Faruk", "member_id": 33, "mobile": "1831797810", "invest": 80000, "total_payable": 94400, "collected": 94400, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "28 Mar 2024", "guarantor": "62,32,45,44,43", "interest_rate": 0.18, "duration": "0 Years 10 Months 4 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 2, "borrower": "Samsul Alam", "member_id": 26, "mobile": "1865394799", "invest": 100000, "total_payable": 127000, "collected": 27000, "remaining": 100000, "status": "চলমান", "disbursement_date": "02 May 2024", "guarantor": "05,53,14,07,26", "interest_rate": 0.18, "duration": "1 Years 6 Months 1 Days", "remarks": "Payment Received: 03/11/2025 _ Payment-27000/="}, {"id": 3, "borrower": "Abul Kashem", "member_id": 22, "mobile": "1873812598", "invest": 10000, "total_payable": 12700, "collected": 2700, "remaining": 10000, "status": "চলমান", "disbursement_date": "13 Jun 2024", "guarantor": "22", "interest_rate": 0.18, "duration": "1 Years 2 Months 15 Days", "remarks": "Payment Received: 28/08/2025 _ Payment-2700/="}, {"id": 4, "borrower": "Mohammad Abul Hashem", "member_id": 39, "mobile": "1873807617", "invest": 100000, "total_payable": 118000, "collected": 118000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "14 Jan 2025", "guarantor": "42", "interest_rate": 0.18, "duration": "1 Years 0 Months 0 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 5, "borrower": "Mohammad Kaisar", "member_id": 41, "mobile": "1830621990", "invest": 10000, "total_payable": 11800, "collected": 11800, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "19 Jan 2025", "guarantor": "41", "interest_rate": 0.18, "duration": "0 Years 8 Months 4 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 6, "borrower": "Sahidul Islam", "member_id": 45, "mobile": "1840409753", "invest": 150000, "total_payable": 177000, "collected": 176000, "remaining": 1000, "status": "সম্পন্ন", "disbursement_date": "19 Feb 2025", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "1 Years 0 Months 8 Days", "remarks": "Loan account has been successfully Closed. Tk.1000 Discounted & Approved."}, {"id": 7, "borrower": "Emon Hasan", "member_id": 43, "mobile": "971545640821", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "17 Mar 2025", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "0 Years 11 Months 10 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 8, "borrower": "Shibu Sankar Karmaker", "member_id": 7, "mobile": "1885946523", "invest": 50000, "total_payable": 59000, "collected": 59000, "remaining": 0, "status": "সম্পন্ন", "disbursement_date": "24 Jun 2025", "guarantor": "10,06", "interest_rate": 0.18, "duration": "0 Years 11 Months 14 Days", "remarks": "Loan account has been successfully Closed."}, {"id": 9, "borrower": "Monjur Alam", "member_id": 9, "mobile": "1811938007", "invest": 200000, "total_payable": 236000, "collected": 233500, "remaining": 2500, "status": "সম্পন্ন", "disbursement_date": "14 Aug 2025", "guarantor": "11,13,35", "interest_rate": 0.18, "duration": "0 Years 10 Months 0 Days", "remarks": "Loan account has been successfully Closed. Tk.2500 Discounted & Approved."}, {"id": 10, "borrower": "Mohammad Kaisar", "member_id": 41, "mobile": "1830621990", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান", "disbursement_date": "23 Sep 2025", "guarantor": "41", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 11, "borrower": "Md. Helal Uddin", "member_id": 24, "mobile": "1860493163", "invest": 25000, "total_payable": 25000, "collected": 0, "remaining": 25000, "status": "চলমান", "disbursement_date": "11 Nov 2025", "guarantor": "24", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 12, "borrower": "Joy Sankar Karmaker", "member_id": 63, "mobile": "1827204517", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "14 Jan 2026", "guarantor": "08, 23", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 13, "borrower": "Mohammad Abul Hashem", "member_id": 39, "mobile": "1873807617", "invest": 50000, "total_payable": 50000, "collected": 0, "remaining": 50000, "status": "চলমান", "disbursement_date": "14 Jan 2026", "guarantor": "0", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 14, "borrower": "Emon Hasan", "member_id": 43, "mobile": "971545640821", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "28 Feb 2026", "guarantor": "45,62,32,33,43,44", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 15, "borrower": "Aminul Hoque", "member_id": 49, "mobile": "0097433390829", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "12 May 2026", "guarantor": "54,52", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 16, "borrower": "Nurul Amin", "member_id": 62, "mobile": "1885316318", "invest": 25000, "total_payable": 25000, "collected": 0, "remaining": 25000, "status": "চলমান", "disbursement_date": "14 May 2026", "guarantor": "62", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 17, "borrower": "Abdul Sabur", "member_id": 59, "mobile": "1817246488", "invest": 200000, "total_payable": 200000, "collected": 0, "remaining": 200000, "status": "চলমান", "disbursement_date": "14 Jun 2026", "guarantor": "10,60,70,75", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 18, "borrower": "Abdul Sabur", "member_id": 59, "mobile": "1817246488", "invest": 100000, "total_payable": 100000, "collected": 0, "remaining": 100000, "status": "চলমান", "disbursement_date": "14 Jun 2026", "guarantor": "4", "interest_rate": 0.18, "duration": "—", "remarks": ""}, {"id": 19, "borrower": "Shibu Sankar Karmaker", "member_id": 7, "mobile": "1885946523", "invest": 40000, "total_payable": 40000, "collected": 0, "remaining": 40000, "status": "চলমান", "disbursement_date": "06 Jul 2026", "guarantor": "7", "interest_rate": 0.18, "duration": "—", "remarks": ""}];
@@ -2347,7 +2679,7 @@ function lookup(){
   $('m-id').textContent='MEMBER #'+String(v).padStart(3,'0');
   $('m-name').textContent=m.name;
   const mob=String(m.mobile||'').replace(/\D/g,'');
-  $('m-meta').textContent=(mob.length>=8?'📱 0'+mob.slice(-10)+'  ·  ':'')+m.shares+' শেয়ার · ৳ 1,000/শেয়ার/মাস';
+  $('m-meta').textContent=(mob.length>=8?'📱 '+((/^880/.test(mob.replace(/^00/,''))||/^0?1\d{9}$/.test(mob))?'0'+mob.slice(-10):'+'+mob.replace(/^00/,''))+'  ·  ':'')+m.shares+' শেয়ার · ৳ 1,000/শেয়ার/মাস';
 
   // Expected deposit
   $('m-expected').textContent='প্রত্যাশিত: '+fmt(m.expected)+' ('+KPI.total_months+' মাস)';
@@ -2405,6 +2737,7 @@ function lookup(){
     $('notice-warn-text').textContent=dueMonths+' মাসের বকেয়া ('+fmt(m.due_amount)+') রয়েছে। বকেয়া ৬ মাস অতিক্রম করলে সদস্যপদ বাতিল বলে বিবেচিত হবে।';
   }
 
+  try{ if(window.LPYOMC) LPYOMC.render(v); }catch(e){ console.warn('[mcx]',e); }
   mc.classList.remove('on'); void mc.offsetWidth; mc.classList.add('on');
   mc.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -3069,6 +3402,7 @@ function recordCardHTML(c,kind,forPreview=false){
         <div class="actions-row memo-actions">
           <button class="pbtn" onclick="previewMemo(${c.id},'${memoKind}')">👁️ Preview Memo</button>
           <button class="pbtn" onclick="downloadMemo(${c.id},'${memoKind}')">⬇️ Download PDF</button>
+          <button class="pbtn" onclick="finalMemoJpg(${c.id},'${memoKind}')">🖼️ Download JPG</button>
           <button class="pbtn" onclick="printMemo(${c.id},'${memoKind}')">🖨️ Print</button>
         </div>`:'';
 
@@ -3512,7 +3846,7 @@ window.addEventListener('afterprint', ()=>{ document.body.classList.remove('lm-p
     ? '<div class="mm-esign">✔ এটি কম্পিউটার-জেনারেটেড (ই-জেনারেটেড) মেমো — স্বাক্ষরের প্রয়োজন নেই। · This is an e-generated memo; no signature required.</div>'
     : '<div class="mm-sign"><div><u></u><span>চালক / সদস্যের স্বাক্ষর</span></div><div><u></u><span>প্রস্তুতকারী (কোষাধ্যক্ষ)</span></div><div><u></u><span>অনুমোদন (সভাপতি / সম্পাদক)</span></div></div>')+
 
-  '<footer class="mm-foot"><span>লোহাগাড়া প্রভাতী যুব সংগঠন · অফিসিয়াল ডকুমেন্ট</span><span>রসিদ '+receiptNo+' · তৈরি: '+bnD(now.toLocaleString('en-GB'))+'</span></footer>'+
+  '<div class="mm-foot"><span>লোহাগাড়া প্রভাতী যুব সংগঠন · অফিসিয়াল ডকুমেন্ট</span><span>রসিদ '+receiptNo+' · তৈরি: '+bnD(now.toLocaleString('en-GB'))+'</span></div>'+
 '</div>';
   }
 
@@ -3537,6 +3871,7 @@ window.addEventListener('afterprint', ()=>{ document.body.classList.remove('lm-p
       '<div class="actions-row memo-actions">'+
         '<button class="pbtn" onclick="mmPreview('+id+')">👁️ Preview Monthly Memo</button>'+
         '<button class="pbtn" onclick="mmDownload('+id+')">⬇️ Download PDF</button>'+
+        '<button class="pbtn" onclick="mmJpg('+id+')">🖼️ Download JPG</button>'+
         '<button class="pbtn" onclick="mmPrint('+id+')">🖨️ Print</button>'+
       '</div>';
   }
@@ -3555,14 +3890,22 @@ function mmKey(id){ var s=document.getElementById('mmSel-'+id); return s?s.value
 function mmPreview(id){
   var key=mmKey(id); if(!key){ showToast('⚠️ মাস নির্বাচন করুন'); return; }
   $('memoPreviewBody').innerHTML=MonthlyMemo.html(id,key,mmLogo(),{esign:MonthlyMemo.getESign()});
-  var o=$('memoPreviewOverlay'); o.dataset.id=id; o.dataset.kind='mm'; o.dataset.month=key; o.classList.add('on');
+  var o=$('memoPreviewOverlay'); o.dataset.id=id; o.dataset.kind='mm'; o.dataset.month=key; o.classList.add('on'); ['memoWaBtn','memoWaImgBtn'].forEach(function(i){var e=$(i); if(e) e.style.display='none';});
 }
 function mmPrint(id,key){
   key=key||mmKey(id); if(!key){ showToast('⚠️ মাস নির্বাচন করুন'); return; }
   closeMemoPreview();
   $('mmPrintWrap').innerHTML=MonthlyMemo.html(id,key,mmLogo(),{esign:MonthlyMemo.getESign()});
   document.body.classList.add('mm-printing');
-  setTimeout(function(){ window.print(); },60);
+  // Fit-to-one-page: measure at A4 printable width (182mm) and shrink if taller than 273mm.
+  var w=$('mmPrintWrap'), card=w.firstElementChild;
+  if(card){
+    w.style.cssText='display:block;position:absolute;left:-9999px;top:0;width:182mm';
+    card.style.zoom=''; var h=card.getBoundingClientRect().height;
+    var maxH=273*96/25.4, z=h>maxH?Math.floor(maxH/h*1000)/1000:1;
+    w.style.cssText=''; card.style.zoom=z;
+  }
+  setTimeout(function(){ window.print(); },80);
 }
 function mmDownload(id,key){
   key=key||mmKey(id);
@@ -3574,6 +3917,63 @@ function mmDownload(id,key){
   mmPrint(id,key);
 }
 window.addEventListener('afterprint',function(){ document.body.classList.remove('mm-printing'); });
+
+// ── JPG export (works on phones where PDF viewers are unavailable) ──
+var _h2c=null;
+function loadH2C(){
+  if(window.html2canvas) return Promise.resolve(window.html2canvas);
+  if(_h2c) return _h2c;
+  _h2c=new Promise(function(res,rej){
+    var s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.onload=function(){ window.html2canvas?res(window.html2canvas):rej(new Error('html2canvas')); };
+    s.onerror=function(){ _h2c=null; rej(new Error('offline')); };
+    document.head.appendChild(s);
+  });
+  return _h2c;
+}
+function memoJpg(html,fname){
+  showToast('🖼️ JPG তৈরি হচ্ছে…');
+  var box=document.createElement('div');
+  box.style.cssText='position:fixed;left:-10000px;top:0;width:780px;background:#fff;z-index:-1';
+  box.innerHTML=html; document.body.appendChild(box);
+  var card=box.firstElementChild;
+  return loadH2C().then(function(h2c){
+    return (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){
+      return h2c(card,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,windowWidth:780});
+    });
+  }).then(function(cv){
+    return new Promise(function(res){ cv.toBlob(function(b){ res(b); },'image/jpeg',0.95); });
+  }).then(function(blob){
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname+'.jpg';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500);
+    showToast('✅ JPG ডাউনলোড হয়েছে');
+  }).catch(function(e){
+    console.warn('[memo-jpg]',e); showToast('⚠️ JPG তৈরি হয়নি — ইন্টারনেট সংযোগ দেখুন বা PDF ব্যবহার করুন');
+  }).then(function(){ box.remove(); });
+}
+function mmJpg(id,key){
+  key=key||mmKey(id); if(!key){ showToast('⚠️ মাস নির্বাচন করুন'); return; }
+  var c=CNG.find(function(x){return x.id===id;}); if(!c) return;
+  var html=MonthlyMemo.html(id,key,mmLogo(),{esign:MonthlyMemo.getESign()});
+  if(html.indexOf('mm-err')>=0){ showToast('⚠️ মেমো তৈরি করা যাচ্ছে না'); return; }
+  return memoJpg(html,'LPYO_MonthlyMemo_'+(c.type||'CNG')+id+'_'+String(c.driver).trim().replace(/\s+/g,'_')+'_'+key);
+}
+function finalMemoJpg(id,kind){
+  var rec=findMemoRecord(id,kind);
+  if(!rec||!isCompleted(rec)){ showToast('⚠️ Memo is only available once the record is fully completed'); return; }
+  var ok=kind==='loan'?populateLoanMemo(id):populateCngMemo(id); if(!ok) return;
+  var el=document.querySelector('.lm-memo-wrap.lm-active .lm-receipt'); if(!el) return;
+  var who=String(kind==='loan'?rec.borrower:rec.driver).trim().replace(/\s+/g,'_');
+  return memoJpg('<div class="lm-shell">'+el.outerHTML+'</div>','LPYO_Memo_'+(kind==='loan'?'Loan':(rec.type||'CNG'))+id+'_'+who);
+}
+function memoModalJpg(){
+  var o=$('memoPreviewOverlay'), id=parseInt(o.dataset.id,10);
+  if(o.dataset.kind==='mc') return LPYOMC.jpg(id,o.dataset.month);
+  return o.dataset.kind==='mm' ? mmJpg(id,o.dataset.month) : finalMemoJpg(id,o.dataset.kind);
+}
+
 
 
 // ══════════════════════════════════════════════════════════
@@ -3608,14 +4008,17 @@ function previewMemo(id,kind){
   const overlay=$('memoPreviewOverlay');
   overlay.dataset.id=id; overlay.dataset.kind=kind;
   overlay.classList.add('on');
+  ['memoWaBtn','memoWaImgBtn'].forEach(function(i){var e=$(i); if(e) e.style.display='none';});
 }
 
 function closeMemoPreview(){
   $('memoPreviewOverlay').classList.remove('on');
+  var b1=$('memoWaBtn'),b2=$('memoWaImgBtn'); if(b1) b1.style.display='none'; if(b2) b2.style.display='none';
 }
 
 // Print the memo directly (skips the preview step).
 function printMemo(id,kind){
+  if(kind==='mc') return LPYOMC.print(id,$('memoPreviewOverlay').dataset.month);
   if(kind==='mm') return mmPrint(id,$('memoPreviewOverlay').dataset.month);
   const rec=findMemoRecord(id,kind);
   if(!rec || !isCompleted(rec)){ showToast('⚠️ Memo is only available once the record is fully completed'); return; }
@@ -3635,6 +4038,7 @@ function printMemo(id,kind){
 // so that destination suggests a sensible filename, then trigger the
 // same print flow as printMemo().
 function downloadMemo(id,kind){
+  if(kind==='mc') return LPYOMC.pdf(id,$('memoPreviewOverlay').dataset.month);
   if(kind==='mm') return mmDownload(id,$('memoPreviewOverlay').dataset.month);
   const rec=findMemoRecord(id,kind);
   if(!rec || !isCompleted(rec)){ showToast('⚠️ Memo is only available once the record is fully completed'); return; }
@@ -5210,8 +5614,43 @@ window.uiErrorState = function(title,sub){
     if (fo.deployment && fo.deployment.length === dep.length) dep = dep.map(function (it, n) { return { label: fo.deployment[n].label, amount: it.amount }; });
     var FUND_RECON = { income: inc, deployment: dep, total_income: ti, total_deployment: td, variance: vr, actual_net_fund: an };
 
+
+    /* ---------- MEMBER_MONTHS (সদস্য × মাস: Regular / Advance / Due Collection / Fine) — মাসিক চাঁদা রশিদের জন্য ----------
+       "Monthly Collection-YYYY" শিটগুলো থেকে হুবহু পড়া হয়; কোনো মান বদলানো বা অনুমান করা হয় না। ব্যর্থ হলে শুধু এই ব্লক খালি থাকে, বাকি ডেটা আপডেট হয়। */
+    var MEMBER_MONTHS = { months: [], rows: {} };
+    try {
+      var lastRec = MONTHLY.length ? MONTHLY[MONTHLY.length - 1].month : '', lm = String(lastRec).match(/^([A-Za-z]{3})-(\d{2})$/);
+      var lastKey = lm ? (2000 + (+lm[2])) + '-' + p2(MON.indexOf(lm[1]) + 1) : '9999-99';
+      var mcSheets = names.filter(function (n) { return /^Monthly Collection-\s*\d{4}/i.test(n); })
+        .sort(function (a, b) { return +a.match(/(\d{4})/)[1] - +b.match(/(\d{4})/)[1]; });
+      mcSheets.forEach(function (sn) {
+        var sr = rows(sn), hr = -1;
+        for (var a = 0; a < Math.min(sr.length, 10) && hr < 0; a++) { if ((sr[a] || []).some(function (c) { return labelKey(c) === 'regular deposit'; })) hr = a; }
+        if (hr < 1) return;
+        var hdr = sr[hr], dts = sr[hr - 1] || [], blocks = [];
+        hdr.forEach(function (c, k) {
+          if (labelKey(c) === 'regular deposit' && typeof dts[k] === 'number' &&
+              labelKey(hdr[k + 1]) === 'advance' && labelKey(hdr[k + 2]) === 'due collection' && labelKey(hdr[k + 3]) === 'fine') {
+            var o = serialToYMD(dts[k]), key = o.y + '-' + p2(o.m + 1);
+            if (key <= lastKey) blocks.push({ key: key, c: k });
+          }
+        });
+        blocks.forEach(function (b) { if (MEMBER_MONTHS.months.indexOf(b.key) < 0) MEMBER_MONTHS.months.push(b.key); });
+        for (var r1 = hr + 1; r1 < sr.length; r1++) {
+          var x1 = sr[r1]; if (!x1 || typeof x1[1] !== 'number') continue;
+          var mid = String(x1[1]), rec2 = MEMBER_MONTHS.rows[mid] || (MEMBER_MONTHS.rows[mid] = {});
+          blocks.forEach(function (b) { rec2[b.key] = [num(x1[b.c]), num(x1[b.c + 1]), num(x1[b.c + 2]), num(x1[b.c + 3])]; });
+        }
+      });
+      MEMBER_MONTHS.months.sort();
+      Object.keys(MEMBER_MONTHS.rows).forEach(function (mid) {
+        var rr = MEMBER_MONTHS.rows[mid];
+        MEMBER_MONTHS.rows[mid] = MEMBER_MONTHS.months.map(function (k) { return rr[k] || [0, 0, 0, 0]; });
+      });
+    } catch (e) { MEMBER_MONTHS = { months: [], rows: {} }; }
+
     return { MEMBERS: MEMBERS, MONTHLY: MONTHLY, CNG: CNG, LOAN: LOAN, CNG_PAYMENTS: CNG_PAYMENTS, CNG_EXTRA: CNG_EXTRA,
-             EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON };
+             EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON, MEMBER_MONTHS: MEMBER_MONTHS };
   }
 
   /* dashboard KPI cards: label cell -> value below, or to the right */
@@ -5247,12 +5686,12 @@ window.uiErrorState = function(title,sub){
     sheetjs: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
     expenseDesc: 'keep' // 'keep' = খরচের বিবরণ আগের মতো (সাধারণ পরিচালনা ব্যয়); 'sheet' = Excel-এর বিবরণ হুবহু
   };
-  var BLOCKS = ['MEMBERS', 'MONTHLY', 'CNG', 'LOAN', 'CNG_PAYMENTS', 'CNG_EXTRA', 'EXPENSES', 'KPI', 'PL', 'SHARE_MATURITY', 'FUND_RECON'];
+  var BLOCKS = ['MEMBERS', 'MONTHLY', 'CNG', 'LOAN', 'CNG_PAYMENTS', 'CNG_EXTRA', 'EXPENSES', 'KPI', 'PL', 'SHARE_MATURITY', 'FUND_RECON', 'MEMBER_MONTHS'];
   var status = { text: 'এম্বেড করা ডেটা চলছে', ok: true };
   var sheetPromise = null;
 
   function live() { return { MEMBERS: MEMBERS, MONTHLY: MONTHLY, CNG: CNG, LOAN: LOAN, CNG_PAYMENTS: CNG_PAYMENTS, CNG_EXTRA: CNG_EXTRA,
-    EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON }; }
+    EXPENSES: EXPENSES, KPI: KPI, PL: PL, SHARE_MATURITY: SHARE_MATURITY, FUND_RECON: FUND_RECON, MEMBER_MONTHS: MEMBER_MONTHS }; }
   function stable(o) {
     return JSON.stringify(o, function (k, v) {
       if (typeof v === 'number') return Math.round(v * 1e6) / 1e6; // floating-point noise উপেক্ষা
