@@ -554,6 +554,93 @@ footer{background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.1);paddi
   @page{margin:12mm 14mm;size:A4;}
 }
 
+/* ══ Monthly Member Memo v2 (mm-) ══ */
+.mm-card{--ink:#0f1a17;--ink2:#3b4a45;--ink3:#74837d;--teal:#0b3d35;--teal2:#0f5a4d;--gold:#b5802a;--gold2:#f2d472;--line:#e4dfd3;--paper:#fffdf8;--soft:#f6f2e8;--ok:#15803d;--bad:#b91c1c;
+  position:relative;max-width:780px;margin:0 auto;background:var(--paper);border-radius:16px;overflow:hidden;color:var(--ink);
+  font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif;font-size:13px;line-height:1.45;
+  box-shadow:0 0 0 1px rgba(181,128,42,.28),0 12px 40px rgba(11,61,53,.18)}
+.mm-card *{box-sizing:border-box}
+.mm-bar{height:6px;background:linear-gradient(90deg,#b91c1c 0 25%,#1d4ed8 25% 50%,#15803d 50% 75%,#c89b2f 75%)}
+.mm-head{display:flex;align-items:center;gap:16px;padding:20px 28px 14px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal2) 100%);color:#fff;position:relative}
+.mm-head::after{content:'';position:absolute;inset:auto 0 0 0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.mm-logo{width:68px;height:68px;border-radius:50%;object-fit:cover;border:3px solid var(--gold2);background:#fff;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.mm-org{flex:1;min-width:0}
+.mm-org-bn{font-size:21px;font-weight:700;line-height:1.15;color:#fff}
+.mm-org-en{font-family:'Playfair Display',serif;font-size:12.5px;color:var(--gold2);margin-top:2px;letter-spacing:.2px}
+.mm-org-addr{font-size:10.5px;color:rgba(255,255,255,.7);margin-top:3px}
+.mm-doc{text-align:right;flex-shrink:0;border-left:1px solid rgba(255,255,255,.22);padding-left:16px}
+.mm-doc-t{font-size:19px;font-weight:700;color:var(--gold2);line-height:1.15}
+.mm-doc-s{font-size:9.5px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(255,255,255,.65);margin-top:3px;font-family:'Inter',sans-serif}
+.mm-meta{display:grid;grid-template-columns:1.5fr 1.3fr 1fr;background:var(--soft);border-bottom:1px solid var(--line)}
+.mm-meta div{padding:9px 28px 9px 14px;border-right:1px solid var(--line)}
+.mm-meta div:first-child{padding-left:28px}.mm-meta div:last-child{border-right:none}
+.mm-meta i{display:block;font-style:normal;font-size:10px;color:var(--ink3)}
+.mm-meta b{font-size:13px;color:var(--teal);font-weight:700}
+.mm-meta div:first-child b{font-family:'Inter',sans-serif;font-size:11.5px;letter-spacing:.3px}
+.mm-hero{display:grid;grid-template-columns:1fr 250px;gap:16px;padding:18px 28px 6px;align-items:stretch}
+.mm-who{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;position:relative}
+.mm-who-l{font-size:10.5px;font-weight:600;color:var(--gold);letter-spacing:.4px}
+.mm-who-n{font-family:'Playfair Display','Hind Siliguri',serif;font-size:25px;font-weight:700;color:var(--ink);line-height:1.15;margin:3px 0 10px}
+.mm-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mm-chip{display:inline-flex;align-items:center;gap:5px;background:var(--soft);border:1px solid var(--line);border-radius:99px;padding:3px 11px;font-size:12px;color:var(--ink2)}
+.mm-chip b{color:var(--ink);font-weight:700}
+.mm-veh{background:#e7f3ef;border-color:#bfdcd3;color:var(--teal)}
+.mm-amt{position:relative;background:linear-gradient(145deg,var(--teal),#09302a);color:#fff;border-radius:14px;padding:15px 16px 14px;overflow:hidden;box-shadow:0 8px 20px rgba(11,61,53,.3)}
+.mm-amt::before{content:'৳';position:absolute;right:-8px;bottom:-26px;font-size:120px;font-weight:900;color:rgba(255,255,255,.05);font-family:'Playfair Display',serif;line-height:1}
+.mm-amt-l{font-size:11.5px;color:rgba(255,255,255,.75)}
+.mm-amt-v{font-family:'Playfair Display','Hind Siliguri',serif;font-size:33px;font-weight:900;color:var(--gold2);line-height:1.15;margin:3px 0 6px;letter-spacing:-.5px}
+.mm-amt-d{font-size:11px;color:rgba(255,255,255,.8);border-top:1px solid rgba(255,255,255,.15);padding-top:7px}
+.mm-stamp{position:absolute;right:12px;top:10px;width:62px;height:62px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-14deg);border:2px solid #86efac;color:#86efac;background:rgba(134,239,172,.1)}
+.mm-stamp b{font-size:12px;line-height:1;font-weight:700}.mm-stamp span{font-size:9px;opacity:.85;margin-top:1px}
+.mm-stamp-done{border-color:var(--gold2);color:var(--gold2);background:rgba(242,212,114,.12)}
+.mm-say{margin:12px 28px 0;padding:11px 15px;background:linear-gradient(90deg,#fbf3dc,#fffaf0);border-left:4px solid var(--gold);border-radius:8px;font-size:14px;color:var(--ink);line-height:1.6}
+.mm-say b{color:var(--teal)}
+.mm-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 28px 0}
+.mm-tile{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 13px;border-top:3px solid var(--ink3)}
+.mm-tile i{display:block;font-style:normal;font-size:11px;color:var(--ink3)}
+.mm-tile b{display:block;font-family:'Playfair Display','Hind Siliguri',serif;font-size:19px;font-weight:700;color:var(--ink);margin:1px 0}
+.mm-tile em{font-style:normal;font-size:10.5px;color:var(--ink3)}
+.mm-tile-g{border-top-color:var(--ok)}.mm-tile-g b{color:var(--ok)}
+.mm-tile-r{border-top-color:var(--bad)}.mm-tile-r b{color:var(--bad)}
+.mm-prog{padding:10px 28px 0}
+.mm-prog div{height:8px;border-radius:99px;background:#e9e4d6;overflow:hidden}
+.mm-prog span{display:block;height:100%;background:linear-gradient(90deg,#15803d,#0f5a4d);border-radius:99px}
+.mm-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 28px 0}
+.mm-box{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+.mm-box-t{background:var(--soft);padding:7px 14px;font-size:12px;font-weight:700;color:var(--teal);border-bottom:1px solid var(--line)}
+.mm-row{display:flex;justify-content:space-between;gap:10px;padding:6px 14px;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--ink2)}
+.mm-row:last-child{border-bottom:none}
+.mm-row b{color:var(--ink);font-weight:700;text-align:right}
+.mm-sum{background:#f1f8f5}.mm-sum span{color:var(--teal);font-weight:600}.mm-sum b{color:var(--teal)}
+.mm-note b{color:var(--gold)}
+.mm-status{display:flex;align-items:center;justify-content:space-between;margin:14px 28px 0;padding:9px 15px;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:600;color:var(--ink2)}
+.mm-pill{padding:4px 14px;border-radius:99px;font-size:12.5px}
+.mm-pill-ok{background:rgba(21,128,61,.1);color:var(--ok);border:1px solid rgba(21,128,61,.3)}
+.mm-pill-done{background:#fbf3dc;color:#8a5a0c;border:1px solid #e0c277}
+.mm-esign{margin:12px 28px 0;padding:8px 12px;text-align:center;font-size:11px;color:var(--ink3);border:1px dashed var(--line);border-radius:10px}
+.mm-sign{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:30px 28px 0}
+.mm-sign u{display:block;border-bottom:1px solid var(--ink3);height:26px;text-decoration:none}
+.mm-sign span{display:block;text-align:center;font-size:11px;color:var(--ink3);margin-top:4px}
+.mm-foot{display:flex;justify-content:space-between;gap:12px;margin-top:16px;padding:10px 28px;background:var(--teal);color:rgba(255,255,255,.7);font-size:10px}
+.mm-err{padding:26px;text-align:center;background:#fef2f2;color:#991b1b;border:1px solid #fecaca;border-radius:12px;font-weight:600}
+@media(max-width:680px){
+  .mm-head{flex-wrap:wrap;padding:16px 16px 12px}.mm-doc{border-left:none;padding-left:0;text-align:left;width:100%}
+  .mm-org-bn{font-size:17px}
+  .mm-meta{grid-template-columns:1fr 1fr}.mm-meta div{padding:8px 14px!important}.mm-meta div:last-child{grid-column:1/-1;border-top:1px solid var(--line)}
+  .mm-hero,.mm-cols{grid-template-columns:1fr;padding-left:16px;padding-right:16px}
+  .mm-say,.mm-status,.mm-esign{margin-left:16px;margin-right:16px}
+  .mm-tiles{padding-left:16px;padding-right:16px;gap:6px}.mm-tile{padding:8px}.mm-tile b{font-size:14.5px}
+  .mm-prog{padding-left:16px;padding-right:16px}
+  .mm-sign{grid-template-columns:1fr;margin-left:16px;margin-right:16px}
+  .mm-foot{flex-direction:column;padding:10px 16px}
+}
+#mmPrintWrap{display:none}
+@media print{
+  body.mm-printing .hd,body.mm-printing .main,body.mm-printing footer{display:none!important}
+  body.mm-printing #mmPrintWrap{display:block!important}
+  #mmPrintWrap .mm-card{box-shadow:none!important;border-radius:0!important;page-break-inside:avoid;max-width:100%}
+}
+
 /* ══ MEMO PREVIEW MODAL (on-screen preview before download/print) ══ */
 .memo-preview-overlay{display:none;position:fixed;inset:0;background:rgba(10,22,40,.72);z-index:999;padding:16px 12px;overflow-y:auto;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
 .memo-preview-overlay.on{display:flex;align-items:flex-start;justify-content:center}
@@ -1949,6 +2036,9 @@ input,select,button{font-size:15px}
   </div>
 </div>
 
+<!-- ══ MONTHLY MEMBER MEMO (print-only, filled by mmPrint()) ══ -->
+<div id="mmPrintWrap"></div>
+
 <!-- ══ MEMO PREVIEW MODAL — populated by previewMemo(id, kind) ══ -->
 <div class="memo-preview-overlay" id="memoPreviewOverlay">
   <div class="memo-preview-box">
@@ -3017,6 +3107,7 @@ function recordCardHTML(c,kind,forPreview=false){
         <div class="rec-section-title">📂 All Available Record Information</div>
         ${allInfoTableHTML(c)}
         ${memoActionsHtml}
+        ${(!isLoan && !forPreview && typeof MonthlyMemo!=='undefined') ? MonthlyMemo.sectionHTML(c) : ''}
       </div>
     </div>`;
 }
@@ -3260,6 +3351,231 @@ function populateCngMemo(id){
 
 window.addEventListener('afterprint', ()=>{ document.body.classList.remove('lm-printing'); });
 
+/* ══════════════════════════════════════════════════════════
+   MONTHLY MEMBER MEMO v2 — CNG / Auto  (driver-friendly, Bengali-first)
+   Depends only on: CNG, CNG_EXTRA, CNG_PAYMENTS (+ MEMBERS NOT used).
+   Rules: nothing is guessed. Member no./mobile appear ONLY if saved
+   for that record; otherwise the field is omitted from the memo.
+   Every memo is cross-checked against the ledger before it renders.
+   ══════════════════════════════════════════════════════════ */
+(function(){
+  var MON_BN=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+  var MON_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var BN_D='০১২৩৪৫৬৭৮৯';
+  function bnD(v){ return String(v).replace(/[0-9]/g,function(d){return BN_D[d];}); }
+  function money(n){ return '৳ '+bnD(Math.round(Number(n)||0).toLocaleString('en-IN')); }
+  function isoDate(s){ return s ? new Date(s+'T00:00:00') : null; }
+  function dBn(d){ return bnD(d.getDate())+' '+MON_BN[d.getMonth()]+' '+bnD(d.getFullYear()); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  /* ── optional member no. / mobile — saved per record, never guessed ── */
+  var PHONE_KEY='lpyo-cng-mobile', MNO_KEY='lpyo-cng-memberno', ESIGN_KEY='lpyo-mm-esign';
+  function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||'{}'); }catch(e){ return {}; } }
+  function lsSet(k,o){ try{ localStorage.setItem(k,JSON.stringify(o)); }catch(e){} }
+  function normMobile(v){
+    var m=String(v||'').replace(/\D/g,'');
+    if(!m) return '';
+    return (m.length>=8&&m.length<=11) ? '0'+m.slice(-10) : '+'+m.replace(/^0+/,'');
+  }
+  function memberInfo(c){
+    var mn=c.member_id||lsGet(MNO_KEY)[String(c.id)]||'';
+    var ph=c.mobile||lsGet(PHONE_KEY)[String(c.id)]||'';
+    return {no:String(mn||'').trim(), mobile:normMobile(ph), noFromData:!!c.member_id, mobFromData:!!c.mobile};
+  }
+  function saveMemberInfo(id,no,mobile){
+    var a=lsGet(MNO_KEY), b=lsGet(PHONE_KEY);
+    if(String(no||'').trim()) a[String(id)]=String(no).trim(); else delete a[String(id)];
+    if(String(mobile||'').trim()) b[String(id)]=String(mobile).trim(); else delete b[String(id)];
+    lsSet(MNO_KEY,a); lsSet(PHONE_KEY,b);
+  }
+  function getESign(){ var v=lsGet(ESIGN_KEY).v; return v===undefined ? true : !!v; }   // default: e-generated, no signature
+  function setESign(v){ lsSet(ESIGN_KEY,{v:!!v}); }
+
+  function monthsFor(id){
+    var list=(CNG_PAYMENTS[String(id)]||[]), map={}, order=[];
+    list.forEach(function(p){
+      var key=p.date.slice(0,7);
+      if(!map[key]){ map[key]={key:key,y:+key.slice(0,4),m:+key.slice(5,7)-1,pays:[],amount:0}; order.push(key); }
+      map[key].pays.push(p); map[key].amount+=p.amount;
+    });
+    order.sort();
+    return order.map(function(k){return map[k];});
+  }
+
+  /* ── Integrity check: refuse to print numbers that don't reconcile ── */
+  function verify(id){
+    var c=CNG.find(function(x){return x.id===id;});
+    if(!c) return {ok:false,msg:'রেকর্ড পাওয়া যায়নি'};
+    var ms=monthsFor(id), sum=ms.reduce(function(a,m){return a+m.amount;},0);
+    if(!ms.length) return {ok:false,msg:'কোনো পেমেন্ট রেকর্ড নেই'};
+    if(sum!==c.collected) return {ok:false,msg:'হিসাব মিলছে না: পেমেন্ট তালিকার যোগফল ('+sum+') ≠ মোট আদায় ('+c.collected+')'};
+    if(c.total_payable-c.collected!==c.remaining && !(c.remaining===0&&c.collected>=c.total_payable))
+      return {ok:false,msg:'হিসাব মিলছে না: মোট পরিশোধযোগ্য − আদায় ≠ বাকি'};
+    if(sum>c.total_payable) return {ok:false,msg:'মোট জমা পরিশোধযোগ্যের চেয়ে বেশি — যাচাই করুন'};
+    return {ok:true};
+  }
+
+  function compute(id,key){
+    var v=verify(id); if(!v.ok) return {error:v.msg};
+    var c=CNG.find(function(x){return x.id===id;}), ex=CNG_EXTRA[String(id)]||{};
+    var months=monthsFor(id), idx=months.findIndex(function(m){return m.key===key;});
+    if(idx<0) return {error:'নির্বাচিত মাসে কোনো পেমেন্ট নেই'};
+    var cur=months[idx], prev=0; for(var i=0;i<idx;i++) prev+=months[i].amount;
+    var total=prev+cur.amount, remaining=c.total_payable-total;
+    return {c:c,ex:ex,cur:cur,prev:prev,total:total,remaining:remaining,sched:ex.installmentAmount||0,
+      cleared:remaining<=0, pct:Math.min(Math.round(total/c.total_payable*100),100),
+      payDate:isoDate(cur.pays[cur.pays.length-1].date), mem:memberInfo(c)};
+  }
+
+  function memoHTML(id,key,logoSrc,opts){
+    opts=opts||{}; var esign=opts.esign!==undefined?opts.esign:getESign();
+    var r=compute(id,key);
+    if(r.error) return '<div class="mm-err">⚠️ মেমো তৈরি করা যাচ্ছে না — '+esc(r.error)+'</div>';
+    var c=r.c, ex=r.ex, now=new Date();
+    var typeBn=c.type==='Auto'?'অটোরিকশা':'সিএনজি', icon=c.type==='Auto'?'🛺':'🚕';
+    var receiptNo='LPYO-MM-'+(c.type==='Auto'?'AUTO':'CNG')+String(c.id).padStart(3,'0')+'-'+r.cur.y+String(r.cur.m+1).padStart(2,'0');
+    var monthBn=MON_BN[r.cur.m]+' '+bnD(r.cur.y);
+    var stamp=r.cleared?{cls:'done',t:'পরিশোধিত',s:'সম্পূর্ণ'}:{cls:'ok',t:'জমা',s:'গৃহীত'};
+
+    /* plain-language sentence (all numbers come straight from compute()) */
+    var sentence='<b>'+esc(c.driver)+'</b>, আপনি <b>'+monthBn+'</b> মাসে <b>'+money(r.cur.amount)+'</b> জমা দিয়েছেন। '+
+      'এ পর্যন্ত মোট <b>'+money(r.total)+'</b> জমা হয়েছে'+(r.cleared?' — <b>আপনার সব কিস্তি সম্পূর্ণ পরিশোধিত হয়েছে। ধন্যবাদ!</b>':', বাকি আছে <b>'+money(r.remaining)+'</b>।');
+
+    var diff='';
+    if(r.sched){
+      if(r.cur.amount===r.sched) diff='নির্ধারিত কিস্তির সমান';
+      else if(r.cur.amount<r.sched) diff=money(r.sched-r.cur.amount)+' কম';
+      else diff=money(r.cur.amount-r.sched)+' বেশি';
+    }
+    var term=ex.term?(function(){ var m=ex.term.match(/^(\d+)\s*year/i); return m?bnD(m[1])+' বছর':esc(ex.term); })():'';
+
+    var chips='';
+    if(r.mem.no)     chips+='<span class="mm-chip">সদস্য নং <b>'+esc(bnD(String(r.mem.no).padStart(2,'0')))+'</b></span>';
+    if(r.mem.mobile) chips+='<span class="mm-chip">📞 <b>'+esc(bnD(r.mem.mobile))+'</b></span>';
+
+    function row(l,v,cls){ return '<div class="mm-row'+(cls?' '+cls:'')+'"><span>'+l+'</span><b>'+v+'</b></div>'; }
+
+    return ''+
+'<div class="mm-card'+(esign?'':' mm-has-sign')+'">'+
+  '<div class="mm-bar"></div>'+
+  '<header class="mm-head">'+
+    '<img class="mm-logo" src="'+logoSrc+'" alt="">'+
+    '<div class="mm-org"><div class="mm-org-bn">লোহাগাড়া প্রভাতী যুব সংগঠন</div>'+
+      '<div class="mm-org-en">Lohagara Provati Youth Organisation</div>'+
+      '<div class="mm-org-addr">কামার পুকুর পাড়, উজির হাট, লোহাগাড়া, চট্টগ্রাম । স্থাপিত ২০২৩</div></div>'+
+    '<div class="mm-doc"><div class="mm-doc-t">মাসিক কিস্তি রসিদ</div><div class="mm-doc-s">Monthly Instalment Memo</div></div>'+
+  '</header>'+
+  '<div class="mm-meta"><div><i>রসিদ নম্বর</i><b>'+receiptNo+'</b></div><div><i>মেমো তৈরির তারিখ</i><b>'+dBn(now)+'</b></div><div><i>মাস</i><b>'+monthBn+'</b></div></div>'+
+
+  '<section class="mm-hero">'+
+    '<div class="mm-who"><div class="mm-who-l">সদস্য / চালক</div><div class="mm-who-n">'+esc(c.driver)+'</div>'+
+      '<div class="mm-chips"><span class="mm-chip mm-veh">'+icon+' '+typeBn+' · নং <b>'+bnD(c.id)+'</b></span>'+chips+'</div></div>'+
+    '<div class="mm-amt"><div class="mm-amt-l">'+monthBn+' মাসে জমা</div><div class="mm-amt-v">'+money(r.cur.amount)+'</div>'+
+      '<div class="mm-amt-d">পরিশোধের তারিখ: '+(r.cur.pays.length===1?dBn(r.payDate):r.cur.pays.map(function(p){return dBn(isoDate(p.date));}).join(', '))+'</div>'+
+      '<div class="mm-stamp mm-stamp-'+stamp.cls+'"><b>'+stamp.t+'</b><span>'+stamp.s+'</span></div></div>'+
+  '</section>'+
+
+  '<div class="mm-say">'+sentence+'</div>'+
+
+  '<section class="mm-tiles">'+
+    '<div class="mm-tile"><i>মোট পরিশোধযোগ্য</i><b>'+money(c.total_payable)+'</b><em>বিনিয়োগ + লাভ</em></div>'+
+    '<div class="mm-tile mm-tile-g"><i>এ পর্যন্ত মোট জমা</i><b>'+money(r.total)+'</b><em>'+bnD(r.pct)+'% পরিশোধিত</em></div>'+
+    '<div class="mm-tile '+(r.cleared?'mm-tile-g':'mm-tile-r')+'"><i>অবশিষ্ট বকেয়া</i><b>'+money(Math.max(r.remaining,0))+'</b><em>'+(r.cleared?'কোনো বকেয়া নেই':'এখনো দিতে হবে')+'</em></div>'+
+  '</section>'+
+  '<div class="mm-prog"><div><span style="width:'+r.pct+'%"></span></div></div>'+
+
+  '<section class="mm-cols">'+
+    '<div class="mm-box"><div class="mm-box-t">এই মাসের হিসাব</div>'+
+      row('পূর্বের মোট জমা',money(r.prev))+
+      row('+ '+MON_BN[r.cur.m]+' মাসের জমা',money(r.cur.amount))+
+      row('= এ পর্যন্ত মোট জমা',money(r.total),'mm-sum')+
+      row('মোট পরিশোধযোগ্য',money(c.total_payable))+
+      row('− এ পর্যন্ত জমা',money(r.total))+
+      row('= অবশিষ্ট বকেয়া',money(Math.max(r.remaining,0)),'mm-sum')+
+    '</div>'+
+    '<div class="mm-box"><div class="mm-box-t">গাড়ি ও কিস্তির তথ্য</div>'+
+      (ex.investmentDate?row('বিনিয়োগের তারিখ',dBn(isoDate(ex.investmentDate))):'')+
+      (ex.purchasePrice?row('গাড়ির ক্রয়মূল্য',money(ex.purchasePrice)):'')+
+      (ex.downPayment?row('ডাউন পেমেন্ট',money(ex.downPayment)):'')+
+      row('সংগঠনের বিনিয়োগ',money(c.invest))+
+      (term?row('মেয়াদ',term):'')+
+      (r.sched?row('নির্ধারিত মাসিক কিস্তি',money(r.sched)):'')+
+      (diff&&!r.cleared?row('এই মাসে',diff,'mm-note'):'')+
+    '</div>'+
+  '</section>'+
+
+  '<div class="mm-status"><span>পেমেন্ট স্ট্যাটাস</span>'+(r.cleared
+      ? '<b class="mm-pill mm-pill-done">● সম্পূর্ণ পরিশোধিত</b>'
+      : '<b class="mm-pill mm-pill-ok">● চলমান</b>')+'</div>'+
+
+  (esign
+    ? '<div class="mm-esign">✔ এটি কম্পিউটার-জেনারেটেড (ই-জেনারেটেড) মেমো — স্বাক্ষরের প্রয়োজন নেই। · This is an e-generated memo; no signature required.</div>'
+    : '<div class="mm-sign"><div><u></u><span>চালক / সদস্যের স্বাক্ষর</span></div><div><u></u><span>প্রস্তুতকারী (কোষাধ্যক্ষ)</span></div><div><u></u><span>অনুমোদন (সভাপতি / সম্পাদক)</span></div></div>')+
+
+  '<footer class="mm-foot"><span>লোহাগাড়া প্রভাতী যুব সংগঠন · অফিসিয়াল ডকুমেন্ট</span><span>রসিদ '+receiptNo+' · তৈরি: '+bnD(now.toLocaleString('en-GB'))+'</span></footer>'+
+'</div>';
+  }
+
+
+  /* ── Section shown inside the CNG record card (always, not only when completed) ── */
+  function sectionHTML(c){
+    var T='<div class="rec-section-title">📅 Monthly Member Memo — মাসিক কিস্তি মেমো</div>';
+    var ms=monthsFor(c.id), v=verify(c.id);
+    if(!ms.length) return T+'<div class="rec-note">কোনো পেমেন্ট রেকর্ড নেই — মেমো তৈরি করা যাবে না।</div>';
+    if(!v.ok) return T+'<div class="rec-note" style="color:#b91c1c">⚠️ '+esc(v.msg)+'</div>';
+    var mem=memberInfo(c), id=c.id;
+    var opts=ms.slice().reverse().map(function(m){ return '<option value="'+m.key+'">'+MON_BN[m.m]+' '+bnD(m.y)+' — ৳ '+bnD(m.amount.toLocaleString('en-IN'))+'</option>'; }).join('');
+    var st='width:100%;box-sizing:border-box;padding:8px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;font-size:13px;background:#fff;color:#0f2044';
+    return T+
+      '<div class="rec-note">যেকোনো মাস বেছে মেমো দেখুন, PDF করুন বা প্রিন্ট করুন — সম্পূর্ণ টাকা পরিশোধ না হলেও।</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0">'+
+        '<div style="grid-column:1/-1"><select id="mmSel-'+id+'" style="'+st+'">'+opts+'</select></div>'+
+        '<input id="mmNo-'+id+'" placeholder="সদস্য নং (ঐচ্ছিক)" value="'+esc(mem.no)+'" '+(mem.noFromData?'disabled ':'')+'onchange="MonthlyMemo.saveMemberInfo('+id+',this.value,document.getElementById(\'mmMob-'+id+'\').value)" style="'+st+'">'+
+        '<input id="mmMob-'+id+'" placeholder="মোবাইল (ঐচ্ছিক)" value="'+esc(mem.mobile)+'" '+(mem.mobFromData?'disabled ':'')+'onchange="MonthlyMemo.saveMemberInfo('+id+',document.getElementById(\'mmNo-'+id+'\').value,this.value)" style="'+st+'">'+
+      '</div>'+
+      '<label style="display:flex;gap:8px;align-items:center;font-size:12.5px;margin-bottom:8px"><input type="checkbox" '+(getESign()?'checked ':'')+'onchange="MonthlyMemo.setESign(this.checked)"> ই-জেনারেটেড মেমো — স্বাক্ষর লাগবে না</label>'+
+      '<div class="actions-row memo-actions">'+
+        '<button class="pbtn" onclick="mmPreview('+id+')">👁️ Preview Monthly Memo</button>'+
+        '<button class="pbtn" onclick="mmDownload('+id+')">⬇️ Download PDF</button>'+
+        '<button class="pbtn" onclick="mmPrint('+id+')">🖨️ Print</button>'+
+      '</div>';
+  }
+
+  window.MonthlyMemo={sectionHTML:sectionHTML,html:memoHTML,compute:compute,months:monthsFor,verify:verify,memberInfo:memberInfo,saveMemberInfo:saveMemberInfo,
+    getESign:getESign,setESign:setESign,MON_EN:MON_EN,MON_BN:MON_BN,bnD:bnD,esc:esc};
+})();
+
+// ══════════════════════════════════════════════════════════
+// MONTHLY MEMBER MEMO — glue (preview / download / print)
+// Works for ANY CNG/Auto record, completed or not. The Final
+// Payment Memo above is untouched and still completion-gated.
+// ══════════════════════════════════════════════════════════
+function mmLogo(){ var i=document.querySelector('.lm-rh-logo'); return i?i.src:''; }
+function mmKey(id){ var s=document.getElementById('mmSel-'+id); return s?s.value:''; }
+function mmPreview(id){
+  var key=mmKey(id); if(!key){ showToast('⚠️ মাস নির্বাচন করুন'); return; }
+  $('memoPreviewBody').innerHTML=MonthlyMemo.html(id,key,mmLogo(),{esign:MonthlyMemo.getESign()});
+  var o=$('memoPreviewOverlay'); o.dataset.id=id; o.dataset.kind='mm'; o.dataset.month=key; o.classList.add('on');
+}
+function mmPrint(id,key){
+  key=key||mmKey(id); if(!key){ showToast('⚠️ মাস নির্বাচন করুন'); return; }
+  closeMemoPreview();
+  $('mmPrintWrap').innerHTML=MonthlyMemo.html(id,key,mmLogo(),{esign:MonthlyMemo.getESign()});
+  document.body.classList.add('mm-printing');
+  setTimeout(function(){ window.print(); },60);
+}
+function mmDownload(id,key){
+  key=key||mmKey(id);
+  var c=CNG.find(function(x){return x.id===id;}); if(!c||!key) return;
+  var old=document.title;
+  document.title='LPYO_MonthlyMemo_'+(c.type||'CNG')+id+'_'+String(c.driver).trim().replace(/\s+/g,'_')+'_'+key;
+  var r=function(){ document.title=old; window.removeEventListener('afterprint',r); };
+  window.addEventListener('afterprint',r);
+  mmPrint(id,key);
+}
+window.addEventListener('afterprint',function(){ document.body.classList.remove('mm-printing'); });
+
+
 // ══════════════════════════════════════════════════════════
 // MEMO ACTIONS — Preview / Download PDF / Print
 // Shown ONLY for fully completed records (see isCompleted() /
@@ -3300,6 +3616,7 @@ function closeMemoPreview(){
 
 // Print the memo directly (skips the preview step).
 function printMemo(id,kind){
+  if(kind==='mm') return mmPrint(id,$('memoPreviewOverlay').dataset.month);
   const rec=findMemoRecord(id,kind);
   if(!rec || !isCompleted(rec)){ showToast('⚠️ Memo is only available once the record is fully completed'); return; }
   closeMemoPreview();
@@ -3318,6 +3635,7 @@ function printMemo(id,kind){
 // so that destination suggests a sensible filename, then trigger the
 // same print flow as printMemo().
 function downloadMemo(id,kind){
+  if(kind==='mm') return mmDownload(id,$('memoPreviewOverlay').dataset.month);
   const rec=findMemoRecord(id,kind);
   if(!rec || !isCompleted(rec)){ showToast('⚠️ Memo is only available once the record is fully completed'); return; }
 
@@ -4765,6 +5083,7 @@ window.uiErrorState = function(title,sub){
     var CNG = [], CNG_PAYMENTS = {}, CNG_EXTRA = {};
     var cNo = col(ch, 'CNG No'), cDr = col(ch, 'Driver'), cTi = col(ch, 'Total Installments'), cPi = col(ch, 'Paid Installments'),
         cInv = col(ch, 'Investment Amount'), cTp = ch.cols[Object.keys(ch.cols).filter(function (k) { return k.indexOf('total payable') === 0; })[0]],
+        cMn = ch.cols['member no'] != null ? ch.cols['member no'] : ch.cols['member id'], cMb = ch.cols['mobile'] != null ? ch.cols['mobile'] : ch.cols['mobile number'],
         cCo = col(ch, 'Collected Amount'), cRm = ch.cols[Object.keys(ch.cols).filter(function (k) { return k.indexOf('remaining amount with profit') === 0; })[0]];
     for (i = ch.row + 1; i < cr.length; i++) {
       var c = cr[i]; if (!c || typeof c[cNo] !== 'number') continue;
@@ -4773,6 +5092,9 @@ window.uiErrorState = function(title,sub){
       CNG.push({ id: cid, driver: str(c[cDr]), type: sh0 ? sh0.type : 'CNG', invest: num(c[cInv]), total_payable: payable,
                  collected: coll, remaining: remaining, status: remaining <= 0 ? '\u09B8\u09AE\u09CD\u09AA\u09A8\u09CD\u09A8' : '\u099A\u09B2\u09AE\u09BE\u09A8',
                  total_installments: num(c[cTi]), paid_installments: num(c[cPi]) });
+      /* ঐচ্ছিক কলাম: CNG Summary-তে "Member No" / "Mobile" থাকলে মাসিক মেমোতে বসবে; না থাকলে মেমোতে আসবে না */
+      if (cMn != null && num(c[cMn]) > 0) CNG[CNG.length - 1].member_id = num(c[cMn]);
+      if (cMb != null && str(c[cMb])) CNG[CNG.length - 1].mobile = str(c[cMb]);
       if (sh0) {
         var sr = rows(sh0.name), pay = [], ex = {}, inPay = false;
         for (var j = 0; j < sr.length; j++) {
@@ -4963,6 +5285,7 @@ window.uiErrorState = function(title,sub){
     try { if (on('tp-monthly') && typeof buildChart === 'function') buildChart(); } catch (e) {}
     try { if (on('tp-wamsg') && typeof renderWaMsgTab === 'function') renderWaMsgTab(); } catch (e) {}
     try { var mi = document.getElementById('minput'); if (mi && mi.value && typeof lookup === 'function') lookup(); } catch (e) {}
+    try { var ri = document.getElementById('memo-input'); if (ri && ri.value && typeof memoSearch === 'function') memoSearch(); } catch (e) {}
   }
 
   /* ডেটা পার্স → যাচাই → একসাথে প্রয়োগ (কোনো ত্রুটি হলে পুরনো ডেটা অক্ষত থাকে) */
